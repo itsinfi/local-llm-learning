@@ -1,41 +1,35 @@
 package de.raum7.local_llm_learning.ui.pages
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import de.raum7.local_llm_learning.R
+import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.ui.components.AppBar
+import de.raum7.local_llm_learning.ui.components.CreateLearningMaterialEFAB
+import de.raum7.local_llm_learning.ui.components.LearningMaterialCardList
+import de.raum7.local_llm_learning.ui.components.LearningMaterialEmptyPlaceholder
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
-var PAGE_TITLE = "Learning Material Library"
-
 @Composable
-fun LearningMaterialLibrary() {
+fun LearningMaterialLibrary(
+    learningMaterials: Array<LearningMaterial>,
+    onCreateButtonClick: () -> Unit,
+    onCardClick: () -> Unit,
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { AppBar(title = PAGE_TITLE) }
+        topBar = { AppBar(title = stringResource(R.string.lml)) },
+        floatingActionButton = { CreateLearningMaterialEFAB(onCreateButtonClick) }
     ) { innerPadding ->
-        Card (
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = "Hello World!",
-                modifier = Modifier.padding(16.dp)
-            )
+        if (learningMaterials.isNotEmpty()) {
+            LearningMaterialCardList(learningMaterials, onCardClick, innerPadding)
+        } else {
+            LearningMaterialEmptyPlaceholder(innerPadding)
         }
     }
 }
@@ -44,6 +38,10 @@ fun LearningMaterialLibrary() {
 @Composable
 fun LearningMaterialLibraryPreview() {
     AppTheme {
-        LearningMaterialLibrary()
+        LearningMaterialLibrary(
+            MOCK_LEARNING_MATERIALS,
+            onCreateButtonClick = {},
+            onCardClick = {}
+        )
     }
 }

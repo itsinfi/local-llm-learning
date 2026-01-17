@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import de.raum7.local_llm_learning.ui.pages.LearningMaterialLibrary
+import de.raum7.local_llm_learning.ui.navigation.AppNavHost
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                LearningMaterialLibrary()
+                AppNavHost()
             }
         }
     }

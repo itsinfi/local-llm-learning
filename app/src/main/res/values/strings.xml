@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Local LLM Learning</string>
+
+    <string name="lml">Learning Material Library</string>
+    <string name="lml_no_material">Noch nichts hier :C</string>
+    <string name="lml_questions">Fragen</string>
+    <string name="lml_progress">Fortschritt</string>
+    <string name="lml_add_learning_material">Erstelle neue Lernmaterialien</string>
+
+    <string name="lmca">Learning Material Creation Assistant</string>
+
+    <string name="srascqbq">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
 </resources>
