@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.screens.library.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add

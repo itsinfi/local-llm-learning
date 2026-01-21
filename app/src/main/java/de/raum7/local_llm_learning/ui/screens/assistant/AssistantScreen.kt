@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.pages
+package de.raum7.local_llm_learning.ui.screens.assistant
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
-fun LearningMaterialCreationAssistant() {
+fun AssistantScreen() {
     Scaffold { innerPadding ->
         Text(
             text = "Placeholder for LMCA",
@@ -20,8 +20,8 @@ fun LearningMaterialCreationAssistant() {
 
 @Preview(showBackground = true)
 @Composable
-fun LearningMaterialCreationAssistantPreview() {
+fun AssistantScreenPreview() {
     AppTheme {
-        LearningMaterialCreationAssistant()
+        AssistantScreen()
     }
 }

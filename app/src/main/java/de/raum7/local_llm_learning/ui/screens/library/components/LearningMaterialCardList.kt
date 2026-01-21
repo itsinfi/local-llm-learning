@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.screens.library.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,8 +16,8 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
 fun LearningMaterialCardList(
-    learningMaterials: Array<LearningMaterial>,
-    onCardClick: () -> Unit,
+    learningMaterials: List<LearningMaterial>,
+    onCardClick: (LearningMaterial) -> Unit,
     padding: PaddingValues
 ) {
     LazyColumn (
@@ -29,7 +29,7 @@ fun LearningMaterialCardList(
             .padding(top = 16.dp),
     ) {
         items(learningMaterials) { learningMaterial ->
-            LearningMaterialCard(learningMaterial, onClick = onCardClick)
+            LearningMaterialCard(learningMaterial, onClick = { onCardClick(learningMaterial) })
         }
     }
 }

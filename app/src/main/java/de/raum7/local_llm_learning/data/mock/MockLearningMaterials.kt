@@ -4,7 +4,7 @@ import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.Question
 
-val MOCK_LEARNING_MATERIALS = arrayOf(
+val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
 
     LearningMaterial(
         id = "lm1",

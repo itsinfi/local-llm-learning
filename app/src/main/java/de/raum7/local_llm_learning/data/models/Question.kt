@@ -1,10 +1,12 @@
 package de.raum7.local_llm_learning.data.models
 
+import de.raum7.local_llm_learning.data.base.BaseModel
+
 data class Question (
     val id: String,
     val question: String,
     val answers: Array<Answer>,
-) {
+): BaseModel() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
