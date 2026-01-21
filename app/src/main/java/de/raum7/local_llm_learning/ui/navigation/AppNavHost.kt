@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.ui.pages.LearningMaterialCreationAssistant
 import de.raum7.local_llm_learning.ui.pages.LearningMaterialLibrary
 import de.raum7.local_llm_learning.ui.pages.SpacedRepetitionAlgorithmSingleChoiceQuestionBasedQuiz
@@ -33,6 +34,7 @@ fun AppNavHost() {
 
         composable(Routes.LMCA) { LearningMaterialCreationAssistant() }
 
-        composable(Routes.SRASCQBQ) { SpacedRepetitionAlgorithmSingleChoiceQuestionBasedQuiz() }
+        composable(Routes.SRASCQBQ) { SpacedRepetitionAlgorithmSingleChoiceQuestionBasedQuiz(
+            learningMaterial = MOCK_LEARNING_MATERIALS[1]) } // TODO: fix routing for dynamic learning material selection
     }
 }

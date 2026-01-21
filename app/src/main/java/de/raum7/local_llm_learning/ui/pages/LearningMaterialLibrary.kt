@@ -11,8 +11,8 @@ import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.ui.components.AppBar
 import de.raum7.local_llm_learning.ui.components.CreateLearningMaterialEFAB
+import de.raum7.local_llm_learning.ui.components.EmptyPlaceholder
 import de.raum7.local_llm_learning.ui.components.LearningMaterialCardList
-import de.raum7.local_llm_learning.ui.components.LearningMaterialEmptyPlaceholder
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
@@ -22,14 +22,14 @@ fun LearningMaterialLibrary(
     onCardClick: () -> Unit,
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         topBar = { AppBar(title = stringResource(R.string.lml)) },
-        floatingActionButton = { CreateLearningMaterialEFAB(onCreateButtonClick) }
-    ) { innerPadding ->
+        floatingActionButton = { CreateLearningMaterialEFAB(onCreateButtonClick) },
+        modifier = Modifier.fillMaxSize(),
+    ) { padding ->
         if (learningMaterials.isNotEmpty()) {
-            LearningMaterialCardList(learningMaterials, onCardClick, innerPadding)
+            LearningMaterialCardList(learningMaterials, onCardClick, padding)
         } else {
-            LearningMaterialEmptyPlaceholder(innerPadding)
+            EmptyPlaceholder(stringResource(R.string.lml_no_material), padding)
         }
     }
 }

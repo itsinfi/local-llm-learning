@@ -11,13 +11,7 @@ data class LearningMaterial (
         if (javaClass != other?.javaClass) return false
 
         other as LearningMaterial
-
-        if (progress != other.progress) return false
-        if (id != other.id) return false
-        if (title != other.title) return false
-        if (!questions.contentEquals(other.questions)) return false
-
-        return true
+        return id == other.id
     }
 
     override fun hashCode(): Int {

@@ -10,12 +10,7 @@ data class Question (
         if (javaClass != other?.javaClass) return false
 
         other as Question
-
-        if (id != other.id) return false
-        if (question != other.question) return false
-        if (!answers.contentEquals(other.answers)) return false
-
-        return true
+        return id == other.id
     }
 
     override fun hashCode(): Int {
@@ -24,5 +19,4 @@ data class Question (
         result = 31 * result + answers.contentHashCode()
         return result
     }
-
 }

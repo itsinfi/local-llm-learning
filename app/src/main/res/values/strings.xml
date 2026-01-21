@@ -10,4 +10,11 @@
     <string name="lmca">Learning Material Creation Assistant</string>
 
     <string name="srascqbq">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
+    <string name="srascqbq_continue">Weiter</string>
+    <string name="srascqbq_correct_result">Richtig!</string>
+    <string name="srascqbq_incorrect_result">Falsch!</string>
+    <string name="srascqbq_your_answer">Deine Antwort</string>
+    <string name="srascqbq_actual_answer">Richtige Antwort</string>
+    <string name="srascqbq_error_invalid_quiz_phase">Ungültige Quizphase</string>
+    <string name="srascqbq_error_invalid_result">Ungültiges Ergebnis</string>
 </resources>

@@ -1,9 +1,7 @@
 package de.raum7.local_llm_learning.ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
 private val darkScheme = darkColorScheme(
     primary = primaryDark,
