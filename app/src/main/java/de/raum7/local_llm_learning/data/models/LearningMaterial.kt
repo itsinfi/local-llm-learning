@@ -5,7 +5,7 @@ import de.raum7.local_llm_learning.data.base.BaseModel
 data class LearningMaterial (
     val id: String,
     val title: String,
-    val questions: Array<Question>,
+    val questions: List<Question>,
     val progress: Double,
 ) : BaseModel() {
     override fun equals(other: Any?): Boolean {
@@ -20,7 +20,7 @@ data class LearningMaterial (
         var result = progress.hashCode()
         result = 31 * result + id.hashCode()
         result = 31 * result + title.hashCode()
-        result = 31 * result + questions.contentHashCode()
+        result = 31 * result + questions.toTypedArray().contentHashCode()
         return result
     }
 }

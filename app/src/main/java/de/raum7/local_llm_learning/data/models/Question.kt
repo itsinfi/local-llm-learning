@@ -5,7 +5,7 @@ import de.raum7.local_llm_learning.data.base.BaseModel
 data class Question (
     val id: String,
     val question: String,
-    val answers: Array<Answer>,
+    val answers: List<Answer>,
 ): BaseModel() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -18,7 +18,7 @@ data class Question (
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + question.hashCode()
-        result = 31 * result + answers.contentHashCode()
+        result = 31 * result + answers.toTypedArray().contentHashCode()
         return result
     }
 }

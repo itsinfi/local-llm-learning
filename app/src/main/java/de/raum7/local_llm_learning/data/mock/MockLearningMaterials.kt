@@ -10,11 +10,11 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
         id = "lm1",
         title = "Mittelalterliche Schwerter",
         progress = 0.33,
-        questions = arrayOf(
+        questions = listOf(
             Question(
                 id = "q1",
                 question = "Welches Schwert wurde hauptsächlich von Rittern verwendet?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Langschwert", true),
                     Answer("a2", "Katana", false),
                     Answer("a3", "Scimitar", false),
@@ -24,7 +24,7 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
             Question(
                 id = "q2",
                 question = "Wofür war ein Zweihänder bekannt?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Kampf in engen Gängen", false),
                     Answer("a2", "Durchbrechen von Pikenformationen", true),
                     Answer("a3", "Reiterkampf", false),
@@ -34,7 +34,7 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
             Question(
                 id = "q3",
                 question = "Welches Material wurde häufig für Klingen verwendet?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Bronze", false),
                     Answer("a2", "Eisen", true),
                     Answer("a3", "Aluminium", false),
@@ -48,11 +48,11 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
         id = "lm2",
         title = "Frequenzmodulation bei Synthesizern",
         progress = 0.66,
-        questions = arrayOf(
+        questions = listOf(
             Question(
                 id = "q1",
                 question = "Was moduliert bei der Frequenzmodulation den Träger?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Amplitude", false),
                     Answer("a2", "Frequenz", true),
                     Answer("a3", "Phase", false),
@@ -62,7 +62,7 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
             Question(
                 id = "q2",
                 question = "Welcher Synthesizer machte FM populär?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Moog Model D", false),
                     Answer("a2", "Yamaha DX7", true),
                     Answer("a3", "Roland TB-303", false),
@@ -72,7 +72,7 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
             Question(
                 id = "q3",
                 question = "FM-Synthese ist besonders bekannt für…",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "warme Pads", false),
                     Answer("a2", "metallische Klänge", true),
                     Answer("a3", "realistische Streicher", false),
@@ -86,11 +86,11 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
         id = "lm3",
         title = "Dungeons and Dragons",
         progress = 0.0,
-        questions = arrayOf(
+        questions = listOf(
             Question(
                 id = "q1",
                 question = "Welche Würfelart wird in D&D am häufigsten benutzt?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "W6", false),
                     Answer("a2", "W8", false),
                     Answer("a3", "W20", true),
@@ -100,7 +100,7 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
             Question(
                 id = "q2",
                 question = "Was ist die Rolle des Dungeon Masters?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Ein Spielercharakter", false),
                     Answer("a2", "Regelerfinder", false),
                     Answer("a3", "Spielleiter", true),
@@ -110,7 +110,7 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
             Question(
                 id = "q3",
                 question = "Welche Klasse wirkt typischerweise Zauber?",
-                answers = arrayOf(
+                answers = listOf(
                     Answer("a1", "Krieger", false),
                     Answer("a2", "Dieb", false),
                     Answer("a3", "Magier", true),

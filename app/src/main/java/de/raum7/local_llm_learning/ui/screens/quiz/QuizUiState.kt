@@ -21,9 +21,16 @@ data class QuizUiState(
             questionIndex: Int = 0,
             startedAt: Long = System.nanoTime()
         ): QuizUiState {
+
+            val question = learningMaterial.questions[questionIndex]
+
+            val questionWithShuffledAnswers = question.copy(
+                answers = question.answers.shuffled()
+            )
+
             return QuizUiState(
                 phase = QuizPhase.ANSWERING,
-                question = learningMaterial.questions[questionIndex],
+                question = questionWithShuffledAnswers,
                 selectedAnswer = null,
                 result = null,
                 questionIndex,
