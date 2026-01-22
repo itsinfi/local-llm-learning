@@ -13,19 +13,22 @@ data class QuizUiState(
     val result: QuizResult?,
     val questionIndex: Int,
     val totalQuestions: Int,
+    val startedAt: Long,
 ) : BaseUiState() {
     companion object {
         fun from(
             learningMaterial: LearningMaterial,
             questionIndex: Int = 0,
+            startedAt: Long = System.nanoTime()
         ): QuizUiState {
             return QuizUiState(
                 phase = QuizPhase.ANSWERING,
                 question = learningMaterial.questions[questionIndex],
                 selectedAnswer = null,
                 result = null,
-                questionIndex = questionIndex,
+                questionIndex,
                 totalQuestions = learningMaterial.questions.size,
+                startedAt,
             )
         }
     }

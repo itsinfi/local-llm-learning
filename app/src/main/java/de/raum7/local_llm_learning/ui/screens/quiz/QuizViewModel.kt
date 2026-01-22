@@ -39,6 +39,9 @@ class QuizViewModel(
     private fun showResults() {
         val quizUiState = uiState as QuizUiState
 
+        val endedAt: Long = System.nanoTime()
+        val elapsedNanoSeconds: Long = endedAt - quizUiState.startedAt
+
         val question = quizUiState.question
 
         val selectedAnswer = quizUiState.selectedAnswer
@@ -51,10 +54,11 @@ class QuizViewModel(
             phase = QuizPhase.RESULTS,
             result = QuizResult(
                 id = UUID.randomUUID().toString(),
-                question = question,
+                question,
                 isCorrect = selectedAnswer == correctAnswer,
-                selectedAnswer = selectedAnswer,
-                correctAnswer = correctAnswer,
+                selectedAnswer,
+                correctAnswer,
+                elapsedNanoSeconds,
             )
         )
     }

@@ -54,6 +54,7 @@ fun QuizScreenPreview_Answering() {
                 result = MOCK_QUIZ_RESULTS[0],
                 questionIndex = 0,
                 totalQuestions = 1,
+                startedAt = 0L,
             ),
             onContinue = {},
             onAnswerSelected = {},
@@ -73,6 +74,7 @@ fun QuizScreenPreview_CorrectResult() {
                 result = MOCK_QUIZ_RESULTS[0],
                 questionIndex = 0,
                 totalQuestions = 1,
+                startedAt = 0L
             ),
             onContinue = {},
             onAnswerSelected = {},
@@ -92,6 +94,7 @@ fun QuizScreenPreview_IncorrectResult() {
                 result = MOCK_QUIZ_RESULTS[1],
                 questionIndex = 0,
                 totalQuestions = 1,
+                startedAt = 0L
             ),
             onContinue = {},
             onAnswerSelected = {},
@@ -111,6 +114,7 @@ fun QuizScreenPreview_Invalid() {
                 result = null,
                 questionIndex = 0,
                 totalQuestions = 1,
+                startedAt = 0L
             ),
             onContinue = {},
             onAnswerSelected = {},

@@ -2,7 +2,6 @@ package de.raum7.local_llm_learning.ui.screens.library
 
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.base.BaseViewModelFactory
-import de.raum7.local_llm_learning.ui.screens.quiz.QuizViewModel
 
 class LibraryViewModelFactory(
     private val navigateToAssistantCallback: () -> Unit,

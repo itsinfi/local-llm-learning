@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -18,20 +22,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_QUIZ_RESULTS
 import de.raum7.local_llm_learning.data.models.QuizResult
+import de.raum7.local_llm_learning.ui.shared.components.InfoTextBlock
+import de.raum7.local_llm_learning.ui.shared.components.StatInfoItem
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
-fun ResultsPhaseCard(currentResult: QuizResult, onContinue: () -> Unit, padding: PaddingValues) {
+fun ResultsPhaseCard(result: QuizResult, onContinue: () -> Unit, padding: PaddingValues) {
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = when (currentResult.isCorrect) {
+            containerColor = when (result.isCorrect) {
                 true -> MaterialTheme.colorScheme.primary
                 false -> MaterialTheme.colorScheme.errorContainer
             }
@@ -46,40 +51,40 @@ fun ResultsPhaseCard(currentResult: QuizResult, onContinue: () -> Unit, padding:
             horizontalAlignment = Alignment.Start,
             modifier = Modifier.padding(16.dp)
         ) {
-            ResultsHeader(currentResult.isCorrect)
+            ResultsHeader(result)
 
-            InfoText(
-                header = stringResource(R.string.srascqbq_actual_answer),
-                body = currentResult.correctAnswer.answer,
+            InfoTextBlock(
+                title = stringResource(R.string.srascqbq_actual_answer),
+                content = result.correctAnswer.answer,
             )
 
-            InfoText(
-                header = stringResource(R.string.srascqbq_your_answer),
-                body = currentResult.selectedAnswer.answer,
+            InfoTextBlock(
+                title = stringResource(R.string.srascqbq_your_answer),
+                content = result.selectedAnswer.answer,
             )
 
             ContinueButton(
                 isEnabled = true,
                 onclick = onContinue,
-                isError = !currentResult.isCorrect,
+                isError = !result.isCorrect,
             )
         }
     }
 }
 
 @Composable
-fun ResultsHeader(isCorrect: Boolean) {
-    val text = when (isCorrect) {
+fun ResultsHeader(result: QuizResult) {
+    val text = when (result.isCorrect) {
         true -> stringResource(R.string.srascqbq_correct_result)
         false -> stringResource(R.string.srascqbq_incorrect_result)
     }
 
-    val imageVector = when(isCorrect) {
+    val imageVector = when(result.isCorrect) {
         true -> Icons.Default.CheckCircle
         false -> Icons.Default.Error
     }
 
-    val tint = when(isCorrect) {
+    val tint = when(result.isCorrect) {
         true -> MaterialTheme.colorScheme.primaryContainer
         false -> MaterialTheme.colorScheme.error
     }
@@ -91,35 +96,48 @@ fun ResultsHeader(isCorrect: Boolean) {
             .padding(bottom = 32.dp)
             .fillMaxWidth(),
     ) {
-        Icon(
-            imageVector,
-            contentDescription = text,
-            tint = tint,
-        )
-        Text(
-            text,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            Icon(
+                imageVector,
+                contentDescription = text,
+                tint = tint,
+            )
 
-@Composable
-fun InfoText(header: String, body: String) {
-    Text(
-        text = header,
-        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-    )
-    Text(
-        text = body,
-        style = MaterialTheme.typography.bodyLarge,
-        maxLines = 3,
-        overflow = TextOverflow.Ellipsis,
-        modifier = Modifier.padding(bottom = 16.dp)
-    )
+            Spacer(Modifier.width(4.dp))
+
+            Text(
+                text,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            StatInfoItem(
+                icon = Icons.Default.Timer,
+                contentDescription = stringResource(R.string.srascqbq_your_time),
+                value = result.elapsedNanoSeconds / 1_000_000_000.0,
+                unit = "s",
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            // TODO: replace value with the actual average time from previous attempts
+            StatInfoItem(
+                icon = Icons.Default.History,
+                contentDescription = stringResource(R.string.srascqbq_your_average_time),
+                value = result.elapsedNanoSeconds / 1_000_000_000.0,
+                unit = "s",
+            )
+        }
+    }
 }
 
 @Preview(showBackground = false)
@@ -127,7 +145,7 @@ fun InfoText(header: String, body: String) {
 fun ResultsPhaseCardPreview_CorrectAnswer() {
     AppTheme {
         ResultsPhaseCard(
-            currentResult = MOCK_QUIZ_RESULTS[0],
+            result = MOCK_QUIZ_RESULTS[0],
             onContinue = {},
             padding = PaddingValues.Zero,
         )
@@ -139,7 +157,7 @@ fun ResultsPhaseCardPreview_CorrectAnswer() {
 fun ResultsPhaseCardPreview_IncorrectAnswer() {
     AppTheme {
         ResultsPhaseCard(
-            currentResult = MOCK_QUIZ_RESULTS[1],
+            result = MOCK_QUIZ_RESULTS[1],
             onContinue = {},
             padding = PaddingValues.Zero,
         )

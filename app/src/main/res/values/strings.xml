@@ -15,6 +15,8 @@
     <string name="srascqbq_incorrect_result">Falsch!</string>
     <string name="srascqbq_your_answer">Deine Antwort</string>
     <string name="srascqbq_actual_answer">Richtige Antwort</string>
+    <string name="srascqbq_your_time">Deine Zeit</string>
+    <string name="srascqbq_your_average_time">Deine Durchschnittszeit</string>
     <string name="srascqbq_error_invalid_quiz_phase">Ungültige Quizphase</string>
     <string name="srascqbq_error_invalid_result">Ungültiges Ergebnis</string>
 </resources>
