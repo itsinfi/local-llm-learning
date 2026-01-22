@@ -31,6 +31,7 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 fun AnsweringPhaseCard(
     question: Question,
     selectedAnswer: Answer?,
+    elapsedTime: Long,
     onAnswerSelected: (Answer) -> Unit,
     onContinue: () -> Unit,
     padding: PaddingValues
@@ -49,6 +50,10 @@ fun AnsweringPhaseCard(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier.padding(16.dp)
         ) {
+            item {
+                TimerText(elapsedTime)
+            }
+
             item {
                 QuestionTitle(question)
             }
@@ -119,6 +124,7 @@ fun AnsweringPhaseCardPreview_Unselected() {
         AnsweringPhaseCard(
             question = MOCK_LEARNING_MATERIALS[0].questions[0],
             selectedAnswer = null,
+            elapsedTime = 1000L,
             onAnswerSelected = {},
             onContinue = {},
             padding = PaddingValues.Zero,
@@ -133,6 +139,7 @@ fun AnsweringPhaseCardPreview_Selected() {
         AnsweringPhaseCard(
             question = MOCK_LEARNING_MATERIALS[0].questions[0],
             selectedAnswer = MOCK_LEARNING_MATERIALS[0].questions[0].answers[0],
+            elapsedTime = 1000L,
             onAnswerSelected = {},
             onContinue = {},
             padding = PaddingValues.Zero,

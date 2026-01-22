@@ -14,6 +14,7 @@ data class QuizUiState(
     val questionIndex: Int,
     val totalQuestions: Int,
     val startedAt: Long,
+    val elapsedTime: Long,
 ) : BaseUiState() {
     companion object {
         fun from(
@@ -36,6 +37,7 @@ data class QuizUiState(
                 questionIndex,
                 totalQuestions = learningMaterial.questions.size,
                 startedAt,
+                elapsedTime = System.nanoTime() - startedAt,
             )
         }
     }

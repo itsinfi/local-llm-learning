@@ -1,3 +1,9 @@
 package de.raum7.local_llm_learning.data.base
 
-abstract class BaseUiState
+open class BaseUiState {
+    companion object {
+        fun from(repository: BaseRepository): BaseUiState {
+            return BaseUiState()
+        }
+    }
+}

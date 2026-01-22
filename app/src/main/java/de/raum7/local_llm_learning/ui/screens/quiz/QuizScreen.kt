@@ -1,8 +1,12 @@
 package de.raum7.local_llm_learning.ui.screens.quiz
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,13 +30,20 @@ fun QuizScreen(
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
         when (uiState.phase) {
-            QuizPhase.ANSWERING -> AnsweringPhaseCard(
-                question = uiState.question,
-                selectedAnswer = uiState.selectedAnswer,
-                onAnswerSelected,
-                onContinue,
-                padding
-            )
+            QuizPhase.ANSWERING -> Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier.fillMaxHeight(),
+            ) {
+                AnsweringPhaseCard(
+                    question = uiState.question,
+                    selectedAnswer = uiState.selectedAnswer,
+                    elapsedTime = uiState.elapsedTime,
+                    onAnswerSelected,
+                    onContinue,
+                    padding
+                )
+            }
 
             QuizPhase.RESULTS -> when (uiState.result) {
                 null -> EmptyPlaceholder(stringResource(R.string.srascqbq_error_invalid_result), padding)
@@ -55,6 +66,7 @@ fun QuizScreenPreview_Answering() {
                 questionIndex = 0,
                 totalQuestions = 1,
                 startedAt = 0L,
+                elapsedTime = 10000L,
             ),
             onContinue = {},
             onAnswerSelected = {},
@@ -74,7 +86,8 @@ fun QuizScreenPreview_CorrectResult() {
                 result = MOCK_QUIZ_RESULTS[0],
                 questionIndex = 0,
                 totalQuestions = 1,
-                startedAt = 0L
+                startedAt = 0L,
+                elapsedTime = 10000L,
             ),
             onContinue = {},
             onAnswerSelected = {},
@@ -94,7 +107,8 @@ fun QuizScreenPreview_IncorrectResult() {
                 result = MOCK_QUIZ_RESULTS[1],
                 questionIndex = 0,
                 totalQuestions = 1,
-                startedAt = 0L
+                startedAt = 0L,
+                elapsedTime = 10000L,
             ),
             onContinue = {},
             onAnswerSelected = {},
@@ -114,7 +128,8 @@ fun QuizScreenPreview_Invalid() {
                 result = null,
                 questionIndex = 0,
                 totalQuestions = 1,
-                startedAt = 0L
+                startedAt = 0L,
+                elapsedTime = 10000L,
             ),
             onContinue = {},
             onAnswerSelected = {},

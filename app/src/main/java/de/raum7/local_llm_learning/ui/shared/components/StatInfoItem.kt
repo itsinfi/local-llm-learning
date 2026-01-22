@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import de.raum7.local_llm_learning.data.mock.MOCK_QUIZ_RESULTS
+import de.raum7.local_llm_learning.ui.shared.utils.formatDoubleString
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 import java.util.Locale
 
@@ -27,8 +28,7 @@ fun StatInfoItem(icon: ImageVector, contentDescription: String, value: Double, u
             contentDescription,
         )
         Text(
-            // TODO: make locale dynamic
-            text = "${String.format(locale = Locale.GERMANY, format ="%.2f", value)}$unit",
+            text = formatDoubleString(value = value, unit = unit),
             style = MaterialTheme.typography.bodyLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

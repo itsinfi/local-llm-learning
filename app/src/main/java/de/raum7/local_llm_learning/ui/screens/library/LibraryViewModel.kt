@@ -1,8 +1,5 @@
 package de.raum7.local_llm_learning.ui.screens.library
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import de.raum7.local_llm_learning.data.base.BaseUiState
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 
@@ -12,11 +9,12 @@ class LibraryViewModel(
     private val repository: LibraryRepository
 ) : BaseViewModel(repository) {
     private val learningMaterial: List<LearningMaterial> =
-        repository.getLearningMaterials()
+        this.repository.getLearningMaterials()
 
-    override val _uiState: MutableState<BaseUiState> = mutableStateOf(
-        LibraryUiState.from(learningMaterial)
-    )
+    init {
+        val initialState = LibraryUiState.from(this.learningMaterial)
+        this._uiState.value = initialState
+    }
 
     fun onCreateButtonClick() {
         navigateToAssistantCallback()
@@ -25,8 +23,4 @@ class LibraryViewModel(
     fun onCardClick(learningMaterial: LearningMaterial) {
         navigateToQuizCallback(learningMaterial.id)
     }
-
-    override val uiState: BaseUiState get() = _uiState.value
-
-
 }

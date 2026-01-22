@@ -1,13 +1,16 @@
 package de.raum7.local_llm_learning.ui.screens.quiz
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.QuizResult
-import de.raum7.local_llm_learning.data.base.BaseUiState
 import de.raum7.local_llm_learning.data.base.BaseViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.UUID
+
+const val TIMER_UPDATE_CYCLE = 100L
 
 class QuizViewModel(
     learningMaterialId: String,
@@ -15,29 +18,54 @@ class QuizViewModel(
 ) : BaseViewModel(repository) {
 
     private val learningMaterial: LearningMaterial =
-        repository.getLearningMaterialById(learningMaterialId)
+        this.repository.getLearningMaterialById(learningMaterialId)
 
-    override val _uiState: MutableState<BaseUiState> = mutableStateOf(
-        QuizUiState.from(learningMaterial)
-    )
+    init {
+        val initialState = QuizUiState.from(this.learningMaterial)
+        this._uiState.value = initialState
+        startTimer(initialState.startedAt)
+    }
 
-    override val uiState: BaseUiState get() = _uiState.value
+    private var timerJob: Job? = null
+
+    private fun startTimer(startedAt: Long) {
+        this.timerJob?.cancel()
+
+        this.timerJob = viewModelScope.launch {
+            while (true) {
+                val elapsed = System.nanoTime() - startedAt
+
+                _uiState.value = (uiState as QuizUiState).copy(
+                    elapsedTime = elapsed
+                )
+
+                delay(TIMER_UPDATE_CYCLE)
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        this.timerJob?.cancel()
+        this.timerJob = null
+    }
 
     fun onAnswerSelected(answer: Answer) {
-        _uiState.value = (uiState as QuizUiState).copy(
+        this._uiState.value = (this.uiState as QuizUiState).copy(
             selectedAnswer = answer
         )
     }
 
     fun onContinue() {
-        when ((uiState as QuizUiState).phase) {
+        when ((this.uiState as QuizUiState).phase) {
             QuizPhase.ANSWERING -> showResults()
             QuizPhase.RESULTS -> showNextQuestion()
         }
     }
 
     private fun showResults() {
-        val quizUiState = uiState as QuizUiState
+        this.stopTimer()
+
+        val quizUiState = this.uiState as QuizUiState
 
         val endedAt: Long = System.nanoTime()
         val elapsedNanoSeconds: Long = endedAt - quizUiState.startedAt
@@ -50,27 +78,31 @@ class QuizViewModel(
         val correctAnswer = quizUiState.question.answers.firstOrNull { it.isCorrect }
             ?: error("No correct answer found")
 
-        _uiState.value = quizUiState.copy(
+        this._uiState.value = quizUiState.copy(
             phase = QuizPhase.RESULTS,
             result = QuizResult(
                 id = UUID.randomUUID().toString(),
-                question,
+                question = question,
                 isCorrect = selectedAnswer == correctAnswer,
-                selectedAnswer,
-                correctAnswer,
-                elapsedNanoSeconds,
-            )
+                selectedAnswer = selectedAnswer,
+                correctAnswer = correctAnswer,
+                elapsedNanoSeconds = elapsedNanoSeconds,
+            ),
+            elapsedTime = elapsedNanoSeconds,
         )
     }
 
     private fun showNextQuestion() {
-        val quizUiState = uiState as QuizUiState
+        val quizUiState = this.uiState as QuizUiState
 
         val questionIndex = (quizUiState.questionIndex + 1) % learningMaterial.questions.size
 
-        _uiState.value = QuizUiState.from(
+        val newState = QuizUiState.from(
             learningMaterial,
             questionIndex,
         )
+
+        this._uiState.value = newState
+        this.startTimer(newState.startedAt)
     }
 }

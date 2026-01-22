@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -121,7 +121,7 @@ fun ResultsHeader(result: QuizResult) {
             horizontalArrangement = Arrangement.Start,
         ) {
             StatInfoItem(
-                icon = Icons.Default.Timer,
+                icon = Icons.Outlined.Timer,
                 contentDescription = stringResource(R.string.srascqbq_your_time),
                 value = result.elapsedNanoSeconds / 1_000_000_000.0,
                 unit = "s",
