@@ -33,7 +33,11 @@ import de.raum7.local_llm_learning.ui.shared.components.StatInfoItem
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
-fun ResultsPhaseCard(result: QuizResult, onContinue: () -> Unit, padding: PaddingValues) {
+fun ResultsPhaseCard(
+    result: QuizResult,
+    onContinue: () -> Unit,
+    padding: PaddingValues,
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = when (result.isCorrect) {
@@ -129,11 +133,10 @@ fun ResultsHeader(result: QuizResult) {
 
             Spacer(Modifier.width(16.dp))
 
-            // TODO: replace value with the actual average time from previous attempts
             StatInfoItem(
                 icon = Icons.Default.History,
                 contentDescription = stringResource(R.string.srascqbq_your_average_time),
-                value = result.elapsedNanoSeconds / 1_000_000_000.0,
+                value = result.previousTime / 1_000_000_000.0,
                 unit = "s",
             )
         }

@@ -87,6 +87,7 @@ class QuizViewModel(
                 selectedAnswer = selectedAnswer,
                 correctAnswer = correctAnswer,
                 elapsedNanoSeconds = elapsedNanoSeconds,
+                previousNanoSeconds = elapsedNanoSeconds, // TODO: add previous average
             ),
             elapsedTime = elapsedNanoSeconds,
         )

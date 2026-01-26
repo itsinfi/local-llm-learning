@@ -9,6 +9,7 @@ data class QuizResult(
     val selectedAnswer: Answer,
     val correctAnswer: Answer,
     val elapsedNanoSeconds: Long,
+    val previousNanoSeconds: Long,
 ): BaseModel() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,6 +26,7 @@ data class QuizResult(
         result = 31 * result + selectedAnswer.hashCode()
         result = 31 * result + correctAnswer.hashCode()
         result = 31 * result + elapsedNanoSeconds.hashCode()
+        result = 31 * result + previousNanoSeconds.hashCode()
         return result
     }
 }

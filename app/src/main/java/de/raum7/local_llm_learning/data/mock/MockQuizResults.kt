@@ -10,7 +10,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[0].questions[0].answers[0],
         correctAnswer = MOCK_LEARNING_MATERIALS[0].questions[0].answers[0],
-        elapsedNanoSeconds = 1_000_000_000L * 1 // 1s
+        elapsedNanoSeconds = 1_000_000_000L * 1, // 1s
+        previousNanoSeconds = 1_000_000_000L * 1, // 1s
     ),
 
     QuizResult(
@@ -19,7 +20,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = false,
         selectedAnswer = MOCK_LEARNING_MATERIALS[0].questions[1].answers[0],
         correctAnswer = MOCK_LEARNING_MATERIALS[0].questions[1].answers[1],
-        elapsedNanoSeconds = 1_000_000_000L * 2 // 2s
+        elapsedNanoSeconds = 1_000_000_000L * 2, // 2s
+        previousNanoSeconds = 1_000_000_000L * 1, // 1s
     ),
 
     QuizResult(
@@ -28,7 +30,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[0].questions[2].answers[1],
         correctAnswer = MOCK_LEARNING_MATERIALS[0].questions[2].answers[1],
-        elapsedNanoSeconds = 1_000_000_000L * 3 // 3s
+        elapsedNanoSeconds = 1_000_000_000L * 3, // 3s
+        previousNanoSeconds = 1_000_000_000L * 1, // 1s
     ),
 
     QuizResult(
@@ -37,7 +40,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[1].questions[0].answers[3],
         correctAnswer = MOCK_LEARNING_MATERIALS[1].questions[0].answers[1],
-        elapsedNanoSeconds = 1_000_000_000L * 4 // 4s
+        elapsedNanoSeconds = 1_000_000_000L * 4, // 4s
+        previousNanoSeconds = 1_000_000_000L * 5, // 5s
     ),
 
     QuizResult(
@@ -46,7 +50,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = false,
         selectedAnswer = MOCK_LEARNING_MATERIALS[1].questions[1].answers[0],
         correctAnswer = MOCK_LEARNING_MATERIALS[1].questions[1].answers[1],
-        elapsedNanoSeconds = 1_000_000_000L * 5 // 5s
+        elapsedNanoSeconds = 1_000_000_000L * 5, // 5s
+        previousNanoSeconds = 1_000_000_000L * 1, // 1s
     ),
 
     QuizResult(
@@ -55,7 +60,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[1].questions[2].answers[1],
         correctAnswer = MOCK_LEARNING_MATERIALS[1].questions[2].answers[1],
-        elapsedNanoSeconds = 1_000_000_000L * 4 // 4s
+        elapsedNanoSeconds = 1_000_000_000L * 4, // 4s
+        previousNanoSeconds = 1_000_000_000L * 5, // 5s
     ),
 
     QuizResult(
@@ -64,7 +70,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[2].questions[0].answers[2],
         correctAnswer = MOCK_LEARNING_MATERIALS[2].questions[0].answers[2],
-        elapsedNanoSeconds = 1_000_000_000L * 3 // 3s
+        elapsedNanoSeconds = 1_000_000_000L * 3, // 3s
+        previousNanoSeconds = 1_000_000_000L * 10, // 10s
     ),
 
     QuizResult(
@@ -73,7 +80,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[2].questions[1].answers[2],
         correctAnswer = MOCK_LEARNING_MATERIALS[2].questions[1].answers[2],
-        elapsedNanoSeconds = 1_000_000_000L * 2 // 2s
+        elapsedNanoSeconds = 1_000_000_000L * 2, // 2s
+        previousNanoSeconds = 1_000_000_000L * 10, // 10s
     ),
 
     QuizResult(
@@ -82,7 +90,8 @@ val MOCK_QUIZ_RESULTS: List<QuizResult> = listOf(
         isCorrect = true,
         selectedAnswer = MOCK_LEARNING_MATERIALS[2].questions[2].answers[2],
         correctAnswer = MOCK_LEARNING_MATERIALS[2].questions[2].answers[2],
-        elapsedNanoSeconds = 1_000_000_000L * 10 // 10s
+        elapsedNanoSeconds = 1_000_000_000L * 10, // 10s
+        previousNanoSeconds = 1_000_000_000L * 10, // 10s
     ),
 
 )
