@@ -8,14 +8,17 @@ import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 fun LibraryRoute(
     navigateToAssistantCallback: () -> Unit,
     navigateToQuizCallback: (String) -> Unit,
-    viewModel: LibraryViewModel = viewModel(
+) {
+    val data = MOCK_LEARNING_MATERIALS
+
+    val viewModel: LibraryViewModel = viewModel(
         factory = LibraryViewModelFactory(
             navigateToAssistantCallback,
             navigateToQuizCallback,
-            repository = LibraryRepository(data = MOCK_LEARNING_MATERIALS),
+            repository = LibraryRepository(data),
         )
     )
-) {
+
     LibraryScreen(
         uiState = viewModel.uiState as LibraryUiState,
         onCreateButtonClick = viewModel::onCreateButtonClick,

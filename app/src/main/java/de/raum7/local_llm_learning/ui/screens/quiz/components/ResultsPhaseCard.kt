@@ -136,7 +136,7 @@ fun ResultsHeader(result: QuizResult) {
             StatInfoItem(
                 icon = Icons.Default.History,
                 contentDescription = stringResource(R.string.srascqbq_your_average_time),
-                value = result.previousTime / 1_000_000_000.0,
+                value = result.previousNanoSeconds / 1_000_000_000.0,
                 unit = "s",
             )
         }

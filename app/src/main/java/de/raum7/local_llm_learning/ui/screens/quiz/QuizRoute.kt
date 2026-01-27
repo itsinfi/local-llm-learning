@@ -7,13 +7,16 @@ import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 @Composable
 fun QuizRoute(
     learningMaterialId: String,
-    viewModel: QuizViewModel = viewModel(
+) {
+    val data = MOCK_LEARNING_MATERIALS
+
+    val viewModel: QuizViewModel = viewModel(
         factory = QuizViewModelFactory(
             learningMaterialId = learningMaterialId,
-            repository = QuizRepository(data = MOCK_LEARNING_MATERIALS),
+            repository = QuizRepository(data),
         )
     )
-) {
+
     QuizScreen(
         uiState = viewModel.uiState as QuizUiState,
         onAnswerSelected = viewModel::onAnswerSelected,
