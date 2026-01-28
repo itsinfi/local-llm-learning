@@ -36,6 +36,7 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 fun ResultsPhaseCard(
     result: QuizResult,
     onContinue: () -> Unit,
+    onEdit: () -> Unit,
     padding: PaddingValues,
 ) {
     Card(
@@ -58,20 +59,15 @@ fun ResultsPhaseCard(
             ResultsHeader(result)
 
             InfoTextBlock(
-                title = stringResource(R.string.srascqbq_actual_answer),
+                title = stringResource(R.string.quiz_actual_answer),
                 content = result.correctAnswer.answer,
             )
 
             InfoTextBlock(
-                title = stringResource(R.string.srascqbq_your_answer),
+                title = stringResource(R.string.quiz_your_answer),
                 content = result.selectedAnswer.answer,
             )
-
-            ContinueButton(
-                isEnabled = true,
-                onclick = onContinue,
-                isError = !result.isCorrect,
-            )
+            ButtonSection(isError = !result.isCorrect, onEdit, onContinue)
         }
     }
 }
@@ -79,8 +75,8 @@ fun ResultsPhaseCard(
 @Composable
 fun ResultsHeader(result: QuizResult) {
     val text = when (result.isCorrect) {
-        true -> stringResource(R.string.srascqbq_correct_result)
-        false -> stringResource(R.string.srascqbq_incorrect_result)
+        true -> stringResource(R.string.quiz_correct_result)
+        false -> stringResource(R.string.quiz_incorrect_result)
     }
 
     val imageVector = when(result.isCorrect) {
@@ -126,7 +122,7 @@ fun ResultsHeader(result: QuizResult) {
         ) {
             StatInfoItem(
                 icon = Icons.Outlined.Timer,
-                contentDescription = stringResource(R.string.srascqbq_your_time),
+                contentDescription = stringResource(R.string.quiz_your_time),
                 value = result.elapsedNanoSeconds / 1_000_000_000.0,
                 unit = "s",
             )
@@ -135,11 +131,32 @@ fun ResultsHeader(result: QuizResult) {
 
             StatInfoItem(
                 icon = Icons.Default.History,
-                contentDescription = stringResource(R.string.srascqbq_your_average_time),
+                contentDescription = stringResource(R.string.quiz_your_average_time),
                 value = result.previousNanoSeconds / 1_000_000_000.0,
                 unit = "s",
             )
         }
+    }
+}
+
+@Composable
+fun ButtonSection(isError: Boolean, onEdit: () -> Unit, onContinue: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
+    ) {
+        EditQuestionButton(
+            isEnabled = true,
+            onclick = onEdit,
+            isError = isError,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        ContinueButton(
+            isEnabled = true,
+            onclick = onContinue,
+            isError = isError
+        )
     }
 }
 
@@ -151,6 +168,7 @@ fun ResultsPhaseCardPreview_CorrectAnswer() {
             result = MOCK_QUIZ_RESULTS[0],
             onContinue = {},
             padding = PaddingValues.Zero,
+            onEdit = {}
         )
     }
 }
@@ -163,6 +181,7 @@ fun ResultsPhaseCardPreview_IncorrectAnswer() {
             result = MOCK_QUIZ_RESULTS[1],
             onContinue = {},
             padding = PaddingValues.Zero,
+            onEdit = {}
         )
     }
 }

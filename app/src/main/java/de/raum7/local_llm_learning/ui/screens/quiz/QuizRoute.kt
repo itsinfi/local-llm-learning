@@ -7,6 +7,7 @@ import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 @Composable
 fun QuizRoute(
     learningMaterialId: String,
+    navigateToEditQuestionCallback: (String, String) -> Unit,
 ) {
     val data = MOCK_LEARNING_MATERIALS
 
@@ -17,9 +18,16 @@ fun QuizRoute(
         )
     )
 
+    val quizUiState = viewModel.uiState as QuizUiState
+
+    val onEdit = {
+        navigateToEditQuestionCallback(learningMaterialId, quizUiState.question.id)
+    }
+
     QuizScreen(
         uiState = viewModel.uiState as QuizUiState,
         onAnswerSelected = viewModel::onAnswerSelected,
         onContinue = viewModel::onContinue,
+        onEdit = onEdit
     )
 }

@@ -34,6 +34,6 @@ fun EmptyPlaceholder(text: String, padding: PaddingValues) {
 @Composable
 fun EmptyPlaceholderPreview() {
     AppTheme {
-        EmptyPlaceholder(stringResource(R.string.lml_no_material), padding = PaddingValues.Zero)
+        EmptyPlaceholder(stringResource(R.string.library_no_material), padding = PaddingValues.Zero)
     }
 }

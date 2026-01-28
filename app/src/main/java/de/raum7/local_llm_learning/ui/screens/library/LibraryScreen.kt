@@ -22,14 +22,14 @@ fun LibraryScreen(
     onCardClick: (LearningMaterial) -> Unit,
 ) {
     Scaffold(
-        topBar = { AppBar(title = stringResource(R.string.lml)) },
+        topBar = { AppBar(title = stringResource(R.string.library)) },
         floatingActionButton = { CreateLearningMaterialEFAB(onCreateButtonClick) },
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
         if (uiState.learningMaterials.isNotEmpty()) {
             LearningMaterialCardList(uiState.learningMaterials, onCardClick, padding)
         } else {
-            EmptyPlaceholder(stringResource(R.string.lml_no_material), padding)
+            EmptyPlaceholder(stringResource(R.string.library_no_material), padding)
         }
     }
 }
