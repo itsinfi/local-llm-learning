@@ -5,7 +5,6 @@ import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.QuizResult
 import de.raum7.local_llm_learning.data.base.BaseViewModel
-import de.raum7.local_llm_learning.data.models.Question
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

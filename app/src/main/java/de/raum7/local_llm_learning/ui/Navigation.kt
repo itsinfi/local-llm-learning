@@ -11,11 +11,11 @@ import de.raum7.local_llm_learning.ui.screens.library.LibraryRoute
 import de.raum7.local_llm_learning.ui.screens.quiz.QuizRoute
 
 object Routes {
-    const val LIBRARY = "LIBRARY"
+    const val LIBRARY = "library"
 
-    const val ASSISTANT = "ASSISTANT"
+    const val ASSISTANT = "assistant"
 
-    const val QUIZ = "QUIZ/{learningMaterialId}"
+    const val QUIZ = "quiz/{learningMaterialId}"
     fun quiz(learningMaterialId: String): String = "quiz/$learningMaterialId"
 }
 
