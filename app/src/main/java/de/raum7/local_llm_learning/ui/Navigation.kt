@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import de.raum7.local_llm_learning.ui.screens.assistant.AssistantRoute
 import de.raum7.local_llm_learning.ui.screens.assistant.AssistantScreen
 import de.raum7.local_llm_learning.ui.screens.library.LibraryRoute
 import de.raum7.local_llm_learning.ui.screens.quiz.QuizRoute
@@ -32,12 +33,14 @@ fun AppNavHost() {
         composable(Routes.LIBRARY) {
             LibraryRoute(
                 navigateToAssistantCallback = { navController.navigate(Routes.ASSISTANT) },
-                navigateToQuizCallback = { learningMaterialId: String -> navController.navigate(Routes.quiz(learningMaterialId)) }
+                navigateToQuizCallback = { learningMaterialId: String -> navController.navigate("quiz/$learningMaterialId") },
             )
         }
 
         // Assistant Screen Route
-        composable(Routes.ASSISTANT) { AssistantScreen() }
+        composable(Routes.ASSISTANT) {
+            AssistantRoute()
+        }
 
         // Quiz Screen Route
         composable(
