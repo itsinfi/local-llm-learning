@@ -23,10 +23,11 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 fun QuizScreen(
     uiState: QuizUiState,
     onAnswerSelected: (Answer) -> Unit,
-    onContinue: () -> Unit
+    onContinue: () -> Unit,
+    onEdit: () -> Unit
 ) {
     Scaffold(
-        topBar = { AppBar(title = stringResource(R.string.srascqbq)) },
+        topBar = { AppBar(title = stringResource(R.string.quiz)) },
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
         when (uiState.phase) {
@@ -46,8 +47,8 @@ fun QuizScreen(
             }
 
             QuizPhase.RESULTS -> when (uiState.result) {
-                null -> EmptyPlaceholder(stringResource(R.string.srascqbq_error_invalid_result), padding)
-                else -> ResultsPhaseCard(uiState.result, onContinue, padding)
+                null -> EmptyPlaceholder(stringResource(R.string.quiz_error_invalid_result), padding)
+                else -> ResultsPhaseCard(uiState.result, onContinue, onEdit, padding)
             }
         }
     }
@@ -69,6 +70,7 @@ fun QuizScreenPreview_Answering() {
             ),
             onContinue = {},
             onAnswerSelected = {},
+            onEdit = {}
         )
     }
 }
@@ -89,6 +91,7 @@ fun QuizScreenPreview_CorrectResult() {
             ),
             onContinue = {},
             onAnswerSelected = {},
+            onEdit = {}
         )
     }
 }
@@ -109,6 +112,7 @@ fun QuizScreenPreview_IncorrectResult() {
             ),
             onContinue = {},
             onAnswerSelected = {},
+            onEdit = {}
         )
     }
 }
@@ -129,6 +133,7 @@ fun QuizScreenPreview_Invalid() {
             ),
             onContinue = {},
             onAnswerSelected = {},
+            onEdit = {}
         )
     }
 }

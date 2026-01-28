@@ -12,7 +12,7 @@ import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
-fun ContinueButton(
+fun EditQuestionButton(
     isEnabled: Boolean,
     onclick: () -> Unit,
     isError: Boolean = false,
@@ -39,15 +39,15 @@ fun ContinueButton(
         colors = colors,
         modifier = modifier
     ) {
-        Text(text = stringResource(R.string.quiz_continue))
+        Text(text = stringResource(R.string.quiz_edit_button))
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun ContinueButtonPreview_EnabledNoError() {
+fun EditButtonPreview_EnabledNoError() {
     AppTheme {
-        ContinueButton(
+        EditQuestionButton(
             isEnabled = true,
             onclick = {},
             isError = false,
@@ -57,9 +57,9 @@ fun ContinueButtonPreview_EnabledNoError() {
 
 @Preview(showBackground = false)
 @Composable
-fun ContinueButtonPreview_DisabledNoError() {
+fun EditButtonPreview_DisabledNoError() {
     AppTheme {
-        ContinueButton(
+        EditQuestionButton(
             isEnabled = false,
             onclick = {},
             isError = false,
@@ -69,9 +69,9 @@ fun ContinueButtonPreview_DisabledNoError() {
 
 @Preview(showBackground = false)
 @Composable
-fun ContinueButtonPreview_EnabledError() {
+fun EditButtonPreview_EnabledError() {
     AppTheme {
-        ContinueButton(
+        EditQuestionButton(
             isEnabled = true,
             onclick = {},
             isError = true,
@@ -81,9 +81,9 @@ fun ContinueButtonPreview_EnabledError() {
 
 @Preview(showBackground = false)
 @Composable
-fun ContinueButtonPreview_DisabledError() {
+fun EditButtonPreview_DisabledError() {
     AppTheme {
-        ContinueButton(
+        EditQuestionButton(
             isEnabled = false,
             onclick = {},
             isError = true,

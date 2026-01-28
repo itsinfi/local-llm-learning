@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import de.raum7.local_llm_learning.ui.screens.assistant.AssistantRoute
 import de.raum7.local_llm_learning.ui.screens.assistant.AssistantScreen
+import de.raum7.local_llm_learning.ui.screens.edit_question.EditQuestionRoute
 import de.raum7.local_llm_learning.ui.screens.library.LibraryRoute
 import de.raum7.local_llm_learning.ui.screens.quiz.QuizRoute
 
@@ -18,6 +19,9 @@ object Routes {
 
     const val QUIZ = "quiz/{learningMaterialId}"
     fun quiz(learningMaterialId: String): String = "quiz/$learningMaterialId"
+
+    const val EDIT_QUESTION = "editQuestion/{learningMaterialId}/{questionId}"
+    fun editQuestion(learningMaterialId: String, questionId: String): String = "editQuestion/$learningMaterialId/$questionId"
 }
 
 @Composable
@@ -50,9 +54,29 @@ fun AppNavHost() {
             val learningMaterialId = backStackEntry.arguments?.getString("learningMaterialId")
                 ?: error("Missing learningMaterialId")
 
-            QuizRoute(learningMaterialId)
+            QuizRoute(
+                learningMaterialId,
+                navigateToEditQuestionCallback = {
+                    learningMaterialId: String, questionId: String ->
+                    navController.navigate(Routes.editQuestion(learningMaterialId, questionId))
+                }
+            )
         }
 
-        // TODO: Edit Question Screen Route
+        // Edit Question Screen Route
+        composable(
+            Routes.EDIT_QUESTION,
+            listOf(
+                navArgument("learningMaterialId") { type = NavType.StringType },
+                navArgument("questionId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val learningMaterialId = backStackEntry.arguments?.getString("learningMaterialId")
+                ?: error("Missing learningMaterialId")
+            val questionId = backStackEntry.arguments?.getString("questionId")
+                ?: error("Missing questionId")
+
+            EditQuestionRoute(learningMaterialId, questionId)
+        }
     }
 }

@@ -1,6 +1,7 @@
 package de.raum7.local_llm_learning.ui.screens.quiz.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,10 +64,16 @@ fun AnsweringPhaseCard(
             }
 
             item {
-                ContinueButton(
-                    isEnabled = selectedAnswer != null,
-                    onclick = onContinue
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    ContinueButton(
+                        isEnabled = selectedAnswer != null,
+                        onclick = onContinue,
+                        modifier = Modifier.align(Alignment.CenterEnd)
+                    )
+                }
             }
         }
     }

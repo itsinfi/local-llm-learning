@@ -65,7 +65,7 @@ fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "${learningMaterial.questions.size} ${stringResource(R.string.lml_questions)}",
+            text = "${learningMaterial.questions.size} ${stringResource(R.string.library_questions)}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
             maxLines = 1,
@@ -73,7 +73,7 @@ fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
         )
         Text(
             text ="${(learningMaterial.progress * 100).roundToInt()}% ${stringResource(
-                R.string.lml_progress)}",
+                R.string.library_progress)}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
             maxLines = 1,

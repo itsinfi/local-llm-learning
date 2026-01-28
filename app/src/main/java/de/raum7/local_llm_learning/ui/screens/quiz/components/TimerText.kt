@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.shared.utils.formatDoubleString
 import de.raum7.local_llm_learning.ui.theme.AppTheme
-import java.util.Locale
 
 @Composable
 fun TimerText(elapsedNanoSeconds: Long) {
@@ -35,7 +34,7 @@ fun TimerText(elapsedNanoSeconds: Long) {
 
         Icon(
             imageVector = Icons.Outlined.Timer,
-            contentDescription = stringResource(R.string.srascqbq_your_time),
+            contentDescription = stringResource(R.string.quiz_your_time),
             tint = color,
         )
 
