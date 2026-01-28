@@ -15,11 +15,11 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 @Composable
 fun AssistantScreen(uiState: AssistantUiState) {
     Scaffold(
-        topBar = { AppBar(title = stringResource(R.string.lmca)) },
+        topBar = { AppBar(title = stringResource(R.string.assistant)) },
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
         Text(
-            text = "Assistant:\n\n${uiState.toString()}",
+            text = "Assistant:\n\n${uiState}",
             modifier = Modifier.padding(innerPadding)
         )
     }
