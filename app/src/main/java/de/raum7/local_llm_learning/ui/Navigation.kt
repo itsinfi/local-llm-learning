@@ -27,6 +27,8 @@ fun AppNavHost() {
         navController = navController,
         startDestination = Routes.LIBRARY,
     ) {
+
+        // Library Screen Route
         composable(Routes.LIBRARY) {
             LibraryRoute(
                 navigateToAssistantCallback = { navController.navigate(Routes.ASSISTANT) },
@@ -34,8 +36,10 @@ fun AppNavHost() {
             )
         }
 
+        // Assistant Screen Route
         composable(Routes.ASSISTANT) { AssistantScreen() }
 
+        // Quiz Screen Route
         composable(
             Routes.QUIZ,
             listOf(navArgument("learningMaterialId") { type = NavType.StringType })
@@ -45,5 +49,7 @@ fun AppNavHost() {
 
             QuizRoute(learningMaterialId)
         }
+
+        // TODO: Edit Question Screen Route
     }
 }
