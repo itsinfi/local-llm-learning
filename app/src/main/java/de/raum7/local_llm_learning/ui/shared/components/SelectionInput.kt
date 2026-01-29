@@ -9,11 +9,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.ui.theme.AppTheme
@@ -45,7 +47,7 @@ data class SelectionUiState(
 }
 
 @Composable
-fun getTranslation(value: String, translations: Map<String, String>?): String = translations?.get(value) ?: value
+private fun getTranslation(value: String, translations: Map<String, String>?): String = translations?.get(value) ?: value
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +65,12 @@ fun SelectionInput(
             .padding(bottom = 16.dp)
             .fillMaxWidth(),
     ) {
-        Text(title)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
 
         ExposedDropdownMenuBox(
             uiState.expanded,
