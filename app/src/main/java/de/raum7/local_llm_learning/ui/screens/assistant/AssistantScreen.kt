@@ -43,8 +43,8 @@ fun AssistantScreen(
             onBack = onBack,
             modifier = Modifier
                 .padding(padding)
-                .padding(top = 16.dp)
-                .padding(horizontal = 16.dp)
+                .padding(top = 64.dp)
+                .padding(horizontal = 16.dp),
         ) {
             when (uiState.assistantCard.phase) {
                 AssistantPhase.INITIAL_DESCRIPTION ->

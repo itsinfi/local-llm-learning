@@ -38,7 +38,7 @@ fun LearningMaterialCard(learningMaterial: LearningMaterial, onClick: () -> Unit
 }
 
 @Composable
-fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
+private fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
@@ -58,7 +58,7 @@ fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
 }
 
 @Composable
-fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
+private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top,

@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
@@ -34,8 +35,8 @@ fun AssistantCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val containerColor = MaterialTheme.colorScheme.secondaryContainer
-    val contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+    val containerColor = MaterialTheme.colorScheme.surfaceContainer
+    val contentColor = MaterialTheme.colorScheme.onSurface
 
     Card(
         colors = CardDefaults.cardColors().copy(
@@ -50,10 +51,29 @@ fun AssistantCard(
             modifier = Modifier
                 .padding(16.dp)
         ) {
+            Title(uiState.phase)
             content()
             ButtonSection(uiState, onContinue, onBack)
+            PageIndicator(uiState.phase)
         }
     }
+}
+
+@Composable
+private fun Title(phase: AssistantPhase) {
+    Text(
+        text = stringResource(
+            when(phase) {
+                AssistantPhase.INITIAL_DESCRIPTION -> R.string.assistant_initial_description
+                AssistantPhase.PARAMETER_SELECTION -> R.string.assistant_parameter_selection
+                AssistantPhase.FURTHER_SPECIFICATION -> R.string.assistant_further_specification
+            }
+        ),
+        style = MaterialTheme.typography.headlineSmall,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.padding(bottom = 32.dp)
+    )
 }
 
 @Composable
@@ -62,9 +82,13 @@ private fun ButtonSection(
     onContinue: () -> Unit,
     onBack: () -> Unit,
 ) {
+    val modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 8.dp)
+
     when(uiState.phase) {
         AssistantPhase.INITIAL_DESCRIPTION ->
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(modifier) {
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_continue),
                     isEnabled = uiState.isContinueEnabled,
@@ -78,7 +102,7 @@ private fun ButtonSection(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier,
             ) {
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_back),
@@ -100,7 +124,7 @@ private fun ButtonSection(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier,
             ) {
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_back),

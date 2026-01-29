@@ -18,21 +18,20 @@ fun InitialDescriptionForm(
     uiState: InitialDescriptionUiState,
     onChanged: (AssistantUiStateChange) -> Unit,
 ) {
-    // file input
-    FileInput(
-        title = stringResource(R.string.assistant_file),
-        placeholder = stringResource(R.string.assistant_file_placeholder),
-        mimeTypes = MIME_TYPES,
-        pathToSelectedFile = uiState.filePath,
-        onFileSelected = { uri -> onChanged(AssistantUiStateChange(filePath = uri)) },
-    )
-
     // prompt input
     TextInput(
         title = stringResource(R.string.assistant_prompt),
         placeholder = stringResource(R.string.assistant_prompt_placeholder),
         value = uiState.prompt,
         onValueChange = { value -> onChanged(AssistantUiStateChange(prompt = value)) },
+    )
+
+    // file input
+    FileInput(
+        placeholder = stringResource(R.string.assistant_file_placeholder),
+        mimeTypes = MIME_TYPES,
+        pathToSelectedFile = uiState.filePath,
+        onFileSelected = { uri -> onChanged(AssistantUiStateChange(filePath = uri)) },
     )
 }
 

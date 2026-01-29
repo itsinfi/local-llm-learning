@@ -1,5 +1,6 @@
 package de.raum7.local_llm_learning.ui.screens.assistant
 
+import android.net.Uri
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantCardUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantPhase
@@ -14,13 +15,17 @@ class AssistantViewModel(
         this._uiState.value = initialState
     }
 
-    private fun isContinueAllowed(phase: AssistantPhase? = null): Boolean {
+    private fun isContinueAllowed(
+        phase: AssistantPhase? = null,
+        prompt: String? = null,
+        filePath: Uri? = null,
+    ): Boolean {
         val state = this.uiState as AssistantUiState
 
         return when(phase ?: state.assistantCard.phase) {
             AssistantPhase.INITIAL_DESCRIPTION ->
-                state.initialDescription.prompt.isNotEmpty() &&
-                state.initialDescription.filePath != null
+                (prompt ?: state.initialDescription.prompt).isNotEmpty() ||
+                    (filePath ?: state.initialDescription.filePath) != null
 
             else -> true
         }
@@ -65,7 +70,10 @@ class AssistantViewModel(
     fun onChanged(change: AssistantUiStateChange) {
         val state = this.uiState as AssistantUiState
 
-        val isContinueEnabled = isContinueAllowed()
+        val isContinueEnabled = isContinueAllowed(
+            prompt = change.prompt,
+            filePath = change.filePath,
+        )
 
         this._uiState.value = state.copy(
             assistantCard = state.assistantCard.copy(

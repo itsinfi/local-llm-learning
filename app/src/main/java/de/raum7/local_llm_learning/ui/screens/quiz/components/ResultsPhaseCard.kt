@@ -67,7 +67,7 @@ fun ResultsPhaseCard(
 }
 
 @Composable
-fun ButtonSection(isError: Boolean, onEdit: () -> Unit, onContinue: () -> Unit) {
+private fun ButtonSection(isError: Boolean, onEdit: () -> Unit, onContinue: () -> Unit) {
     val buttonStatus: ButtonStatus = when(isError) {
         false -> ButtonStatus.SUCCESS
         true -> ButtonStatus.ERROR

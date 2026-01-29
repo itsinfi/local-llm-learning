@@ -66,7 +66,7 @@ private fun isValidFile(uri: Uri, context: Context, mimeTypes: Map<String, Strin
 
 @Composable
 fun FileInput(
-    title: String,
+    title: String? = null,
     placeholder: String,
     pathToSelectedFile: Uri?,
     onFileSelected: (Uri) -> Unit,
@@ -89,18 +89,19 @@ fun FileInput(
         verticalArrangement = Arrangement.Top,
         modifier = Modifier.padding(bottom = 16.dp),
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        if (title != null) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
-            modifier = Modifier
-                .padding(top = 8.dp),
         ) {
             CustomElevatedButton(
                 onclick = { launcher.launch((mimeTypes.values).toTypedArray()) },
@@ -125,7 +126,7 @@ fun FileInput(
 }
 
 @Composable
-fun FileInfo(icon: ImageVector, text: String) {
+private fun FileInfo(icon: ImageVector, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,

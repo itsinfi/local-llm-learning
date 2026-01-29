@@ -8,12 +8,15 @@
     <string name="library_add_learning_material">Erstelle neue Lernmaterialien</string>
 
     <string name="assistant">Learning Material Creation Assistant</string>
+    <string name="assistant_initial_description">Was möchtest du lernen?</string>
+    <string name="assistant_parameter_selection">Parameter</string>
+    <string name="assistant_further_specification">Weitere Angaben</string>
     <string name="assistant_continue">Weiter</string>
     <string name="assistant_generate">Generieren</string>
     <string name="assistant_back">Zurück</string>
-    <string name="assistant_file">Datei</string>
+    <string name="assistant_file">Datei anhängen</string>
     <string name="assistant_file_placeholder">.pdf, .docx oder .txt hochladen</string>
-    <string name="assistant_prompt">Thema</string>
+    <string name="assistant_prompt">Themenbeschreibung</string>
     <string name="assistant_prompt_placeholder">Über welches Thema möchtest du lernen?</string>
     <string name="assistant_question_count">Anzahl der Fragen</string>
     <string name="assistant_question_count_placeholder">Wähle die Anzahl der Fragen</string>
