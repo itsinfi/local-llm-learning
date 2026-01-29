@@ -3,6 +3,8 @@ package de.raum7.local_llm_learning.ui.screens.edit_question
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.models.Answer
+import de.raum7.local_llm_learning.ui.screens.edit_question.EditQuestionUiState
 
 @Composable
 fun EditQuestionRoute(
@@ -20,6 +22,7 @@ fun EditQuestionRoute(
     )
 
     EditQuestionScreen(
-        uiState = viewModel.uiState as EditQuestionUiState
+        uiState = viewModel.uiState as EditQuestionUiState,
+        onEditableAnswerSelected = viewModel::onEditableAnswerSelected,
     )
 }
