@@ -17,6 +17,7 @@ import de.raum7.local_llm_learning.ui.screens.quiz.components.AnsweringPhaseCard
 import de.raum7.local_llm_learning.ui.shared.components.AppBar
 import de.raum7.local_llm_learning.ui.shared.components.EmptyPlaceholder
 import de.raum7.local_llm_learning.ui.screens.quiz.components.ResultsPhaseCard
+import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable

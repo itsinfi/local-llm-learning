@@ -3,7 +3,6 @@ package de.raum7.local_llm_learning.ui.screens.assistant
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -11,20 +10,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.screens.assistant.components.BasePhaseCard
-import de.raum7.local_llm_learning.ui.screens.assistant.components.SelectionInput
-import de.raum7.local_llm_learning.ui.screens.assistant.components.TextInput
+import de.raum7.local_llm_learning.ui.screens.assistant.components.FurtherSpecificationForm
+import de.raum7.local_llm_learning.ui.screens.assistant.components.InitialDescriptionForm
+import de.raum7.local_llm_learning.ui.screens.assistant.components.ParameterSelectionForm
+import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantPhase
+import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
+import de.raum7.local_llm_learning.ui.screens.assistant.types.DepthOfTopic
+import de.raum7.local_llm_learning.ui.screens.assistant.types.FurtherSpecification
+import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescription
+import de.raum7.local_llm_learning.ui.screens.assistant.types.ParameterSelection
+import de.raum7.local_llm_learning.ui.screens.assistant.types.QuestionCount
 import de.raum7.local_llm_learning.ui.shared.components.AppBar
+import de.raum7.local_llm_learning.ui.shared.components.SelectionUiState
 import de.raum7.local_llm_learning.ui.theme.AppTheme
-
-// TODO: move phase cards to new files
 
 @Composable
 fun AssistantScreen(
     uiState: AssistantUiState,
     onContinue: () -> Unit,
     onChanged: (AssistantUiStateChange) -> Unit,
-    onSelected: (String, AssistantSelectionUiStateType) -> Unit,
-    onExpandedChange: (Boolean, AssistantSelectionUiStateType) -> Unit,
 ) {
 
     Scaffold(
@@ -41,81 +45,25 @@ fun AssistantScreen(
         ) {
             when (uiState.phase) {
                 AssistantPhase.INITIAL_DESCRIPTION ->
-                    InitialDescriptionCard(uiState, onChanged)
+                    InitialDescriptionForm(
+                        uiState = uiState.initialDescription,
+                        onChanged = onChanged
+                    )
 
                 AssistantPhase.PARAMETER_SELECTION ->
-                    ParameterSelectionCard(uiState, onSelected, onExpandedChange)
+                    ParameterSelectionForm(
+                        uiState = uiState.parameterSelection,
+                        onChanged = onChanged,
+                    )
 
                 AssistantPhase.FURTHER_SPECIFICATION ->
-                    FurtherSpecificationCard(uiState, onChanged)
+                    FurtherSpecificationForm(
+                        uiState = uiState.furtherSpecification,
+                        onChanged = onChanged,
+                    )
             }
         }
     }
-}
-
-@Composable
-fun InitialDescriptionCard(
-    uiState: AssistantUiState,
-    onChanged: (AssistantUiStateChange) -> Unit,
-) {
-    // TODO: implement file input component
-    Text("FILE INPUT PLACEHOLDER", modifier = Modifier.padding(bottom = 16.dp))
-
-    TextInput(
-        title = stringResource(R.string.assistant_prompt),
-        placeholder = stringResource(R.string.assistant_prompt_placeholder),
-        value = uiState.prompt,
-        onValueChange = { value -> onChanged(AssistantUiStateChange(prompt = value)) },
-    )
-}
-
-@Composable
-fun ParameterSelectionCard(
-    uiState: AssistantUiState,
-    onSelected: (String, AssistantSelectionUiStateType) -> Unit,
-    onExpandedChange: (Boolean, AssistantSelectionUiStateType) -> Unit,
-) {
-    SelectionInput(
-        title = stringResource(R.string.assistant_question_count),
-        placeholder = stringResource(R.string.assistant_question_count_placeholder),
-        type = AssistantSelectionUiStateType.QUESTION_COUNT,
-        options = uiState.questionCountSelectionUiState.options,
-        selected = uiState.questionCountSelectionUiState.selected,
-        expanded = uiState.questionCountSelectionUiState.expanded,
-        onSelected = onSelected,
-        onExpandedChange = onExpandedChange,
-    )
-
-    SelectionInput(
-        title = stringResource(R.string.assistant_depth_of_topic),
-        placeholder = stringResource(R.string.assistant_depth_of_topic_placeholder),
-        type = AssistantSelectionUiStateType.DEPTH_OF_TOPIC,
-        options = uiState.depthOfTopicSelectionUiState.options,
-        selected = uiState.depthOfTopicSelectionUiState.selected,
-        expanded = uiState.depthOfTopicSelectionUiState.expanded,
-        onSelected = onSelected,
-        onExpandedChange = onExpandedChange,
-    )
-}
-
-@Composable
-fun FurtherSpecificationCard(
-    uiState: AssistantUiState,
-    onChanged: (AssistantUiStateChange) -> Unit,
-) {
-    TextInput(
-        title = stringResource(R.string.assistant_topic_specification),
-        placeholder = stringResource(R.string.assistant_topic_specification_placeholder),
-        value = uiState.topicSpecification,
-        onValueChange = { value -> onChanged(AssistantUiStateChange(topicSpecification = value)) },
-    )
-
-    TextInput(
-        title = stringResource(R.string.assistant_goal),
-        placeholder = stringResource(R.string.assistant_goal_placeholder),
-        value = uiState.goal,
-        onValueChange = { value -> onChanged(AssistantUiStateChange(goal = value)) },
-    )
 }
 
 // TODO: implement further preview states
@@ -127,30 +75,32 @@ fun AssistantScreenPreview_initial() {
         AssistantScreen(
             AssistantUiState(
                 phase = DEFAULT_ASSISTANT_PHASE,
-                filePath = null,
-                prompt = "",
-                questionCount = DEFAULT_QUESTION_COUNT,
-                depthOfTopic = DEFAULT_DEPTH_OF_TOPIC,
-                topicSpecification = "",
-                goal = "",
                 isContinueEnabled = true,
-                questionCountSelectionUiState = AssistantSelectionUiState(
-                    options = listOf("Option 1", "Option 2", "Option 3"),
-                    selected = "Option 1",
-                    expanded = false,
-                    type = AssistantSelectionUiStateType.QUESTION_COUNT,
+                initialDescription = InitialDescription(
+                    filePath = null,
+                    prompt = "",
                 ),
-                depthOfTopicSelectionUiState = AssistantSelectionUiState(
-                    options = listOf("Option 1", "Option 2", "Option 3"),
-                    selected = "Option 1",
-                    expanded = false,
-                    type = AssistantSelectionUiStateType.DEPTH_OF_TOPIC,
+                parameterSelection = ParameterSelection(
+                    questionCount = SelectionUiState(
+                        options = QuestionCount.entries.map { it.value.toString() },
+                        selected = DEFAULT_QUESTION_COUNT.value.toString(),
+                        expanded = false,
+                        translations = null,
+                    ),
+                    depthOfTopic = SelectionUiState(
+                        options = DepthOfTopic.entries.map { it.toString() },
+                        selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
+                        expanded = false,
+                        translations = DepthOfTopic.getTranslations(),
+                    )
+                ),
+                furtherSpecification = FurtherSpecification(
+                    topicSpecification = "",
+                    goal = "",
                 )
             ),
             onContinue = {},
             onChanged = {},
-            onSelected = { _: String, _: AssistantSelectionUiStateType -> },
-            onExpandedChange = { _: Boolean, _: AssistantSelectionUiStateType -> },
         )
     }
 }

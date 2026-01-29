@@ -15,6 +15,9 @@
     <string name="assistant_question_count">Anzahl der Fragen</string>
     <string name="assistant_question_count_placeholder">Wähle die Anzahl der Fragen</string>
     <string name="assistant_depth_of_topic">Thematische Tiefe</string>
+    <string name="assistant_depth_of_topic_basic_overview">Überblick</string>
+    <string name="assistant_depth_of_topic_intermediate">Fortgeschritten</string>
+    <string name="assistant_depth_of_topic_deep_dive">Deep Dive</string>
     <string name="assistant_depth_of_topic_placeholder">Wähle das Level, das du erreichen willst</string>
     <string name="assistant_topic_specification">Eingrenzung (optional)</string>
     <string name="assistant_topic_specification_placeholder">
