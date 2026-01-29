@@ -8,6 +8,9 @@
     <string name="library_add_learning_material">Erstelle neue Lernmaterialien</string>
 
     <string name="assistant">Learning Material Creation Assistant</string>
+    <string name="assistant_continue">Weiter</string>
+    <string name="assistant_generate">Generieren</string>
+    <string name="assistant_back">Zurück</string>
     <string name="assistant_file">Datei</string>
     <string name="assistant_file_placeholder">.pdf, .docx oder .txt hochladen</string>
     <string name="assistant_prompt">Thema</string>

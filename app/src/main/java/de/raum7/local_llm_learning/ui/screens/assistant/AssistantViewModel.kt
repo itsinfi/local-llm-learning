@@ -1,6 +1,7 @@
 package de.raum7.local_llm_learning.ui.screens.assistant
 
 import de.raum7.local_llm_learning.data.base.BaseViewModel
+import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantCardUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantPhase
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
 
@@ -13,31 +14,63 @@ class AssistantViewModel(
         this._uiState.value = initialState
     }
 
-    fun onContinue() {
-        // TODO: finish
+    private fun isContinueAllowed(phase: AssistantPhase? = null): Boolean {
         val state = this.uiState as AssistantUiState
 
-        val phase = when(state.phase) {
+        return when(phase ?: state.assistantCard.phase) {
+            AssistantPhase.INITIAL_DESCRIPTION ->
+                state.initialDescription.prompt.isNotEmpty() &&
+                state.initialDescription.filePath != null
+
+            else -> true
+        }
+    }
+
+    fun onContinue() {
+        val state = this.uiState as AssistantUiState
+
+        val phase = when(state.assistantCard.phase) {
             AssistantPhase.INITIAL_DESCRIPTION -> AssistantPhase.PARAMETER_SELECTION
-            AssistantPhase.PARAMETER_SELECTION -> AssistantPhase.FURTHER_SPECIFICATION
-            AssistantPhase.FURTHER_SPECIFICATION -> AssistantPhase.INITIAL_DESCRIPTION
+            else -> AssistantPhase.FURTHER_SPECIFICATION // TODO: handle output generation
         }
 
-        val isContinueEnabled = true
+        val isContinueEnabled = isContinueAllowed(phase)
 
         this._uiState.value = state.copy(
-            phase = phase,
-            isContinueEnabled = isContinueEnabled,
+            assistantCard = AssistantCardUiState(
+                phase = phase,
+                isContinueEnabled = isContinueEnabled,
+            )
+        )
+    }
+
+    fun onBack() {
+        val state = this.uiState as AssistantUiState
+
+        val phase = when(state.assistantCard.phase) {
+            AssistantPhase.FURTHER_SPECIFICATION -> AssistantPhase.PARAMETER_SELECTION
+            else -> AssistantPhase.INITIAL_DESCRIPTION
+        }
+
+        val isContinueEnabled = isContinueAllowed(phase)
+
+        this._uiState.value = state.copy(
+            assistantCard = AssistantCardUiState(
+                phase = phase,
+                isContinueEnabled = isContinueEnabled
+            )
         )
     }
 
     fun onChanged(change: AssistantUiStateChange) {
         val state = this.uiState as AssistantUiState
 
-        val isContinueEnabled = true // TODO:
+        val isContinueEnabled = isContinueAllowed()
 
         this._uiState.value = state.copy(
-            isContinueEnabled = isContinueEnabled,
+            assistantCard = state.assistantCard.copy(
+                isContinueEnabled = isContinueEnabled,
+            ),
             initialDescription = state.initialDescription.copy(
                 filePath = change.filePath ?: state.initialDescription.filePath,
                 prompt = change.prompt ?: state.initialDescription.prompt,

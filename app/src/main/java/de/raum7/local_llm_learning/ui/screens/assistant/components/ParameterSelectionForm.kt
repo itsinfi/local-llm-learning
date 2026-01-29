@@ -9,7 +9,7 @@ import de.raum7.local_llm_learning.ui.screens.assistant.DEFAULT_DEPTH_OF_TOPIC
 import de.raum7.local_llm_learning.ui.screens.assistant.DEFAULT_QUESTION_COUNT
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
 import de.raum7.local_llm_learning.ui.screens.assistant.types.DepthOfTopic
-import de.raum7.local_llm_learning.ui.screens.assistant.types.ParameterSelection
+import de.raum7.local_llm_learning.ui.screens.assistant.types.ParameterSelectionUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.QuestionCount
 import de.raum7.local_llm_learning.ui.shared.components.SelectionInput
 import de.raum7.local_llm_learning.ui.shared.components.SelectionUiState
@@ -17,7 +17,7 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
 fun ParameterSelectionForm(
-    uiState: ParameterSelection,
+    uiState: ParameterSelectionUiState,
     onChanged: (AssistantUiStateChange) -> Unit,
 ) {
     val translatedDepthOfTopicUiState = uiState.depthOfTopic.copy(
@@ -75,7 +75,7 @@ fun ParameterSelectionFormPreview() {
     AppTheme {
         Column {
             ParameterSelectionForm(
-                uiState = ParameterSelection(
+                uiState = ParameterSelectionUiState(
                     questionCount = SelectionUiState(
                         options = QuestionCount.entries.map { it.value.toString() },
                         selected = DEFAULT_QUESTION_COUNT.value.toString(),

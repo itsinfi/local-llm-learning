@@ -42,13 +42,13 @@ fun CustomElevatedButton(
 
     val containerColorSecondary: Color = MaterialTheme.colorScheme.secondary
     val contentColorSecondary: Color = MaterialTheme.colorScheme.onSecondary
-    val disabledContainerColorSecondary: Color = containerColor.copy(alpha = 0.5f)
-    val disabledContentColorSecondary: Color = contentColor.copy(alpha = 0.5f)
+    val disabledContainerColorSecondary: Color = containerColorSecondary.copy(alpha = 0.5f)
+    val disabledContentColorSecondary: Color = contentColorSecondary.copy(alpha = 0.5f)
 
     val containerColorErrorSecondary: Color = MaterialTheme.colorScheme.onError
     val contentColorErrorSecondary: Color = MaterialTheme.colorScheme.error
-    val disabledContainerColorErrorSecondary: Color = containerColorError.copy(alpha = 0.5f)
-    val disabledContentColorErrorSecondary: Color = contentColorError.copy(alpha = 0.5f)
+    val disabledContainerColorErrorSecondary: Color = containerColorErrorSecondary.copy(alpha = 0.5f)
+    val disabledContentColorErrorSecondary: Color = contentColorErrorSecondary.copy(alpha = 0.5f)
 
     // color selection
     val colors: ButtonColors = when(buttonClass) {

@@ -1,32 +1,33 @@
 package de.raum7.local_llm_learning.ui.screens.assistant
 
 import de.raum7.local_llm_learning.data.base.BaseUiState
-import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantPhase
+import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantCardUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.DepthOfTopic
-import de.raum7.local_llm_learning.ui.screens.assistant.types.FurtherSpecification
-import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescription
-import de.raum7.local_llm_learning.ui.screens.assistant.types.ParameterSelection
+import de.raum7.local_llm_learning.ui.screens.assistant.types.FurtherSpecificationUiState
+import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescriptionUiState
+import de.raum7.local_llm_learning.ui.screens.assistant.types.ParameterSelectionUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.QuestionCount
 import de.raum7.local_llm_learning.ui.shared.components.SelectionUiState
 
 data class AssistantUiState(
-    val phase: AssistantPhase,
-    val isContinueEnabled: Boolean,
-    val initialDescription: InitialDescription,
-    val parameterSelection: ParameterSelection,
-    val furtherSpecification: FurtherSpecification,
+    val assistantCard: AssistantCardUiState,
+    val initialDescription: InitialDescriptionUiState,
+    val parameterSelection: ParameterSelectionUiState,
+    val furtherSpecification: FurtherSpecificationUiState,
 ) : BaseUiState() {
 
     companion object {
         fun from(): AssistantUiState {
             return AssistantUiState(
-                phase = DEFAULT_ASSISTANT_PHASE,
-                isContinueEnabled = false,
-                initialDescription = InitialDescription(
+                assistantCard = AssistantCardUiState(
+                    phase = DEFAULT_ASSISTANT_PHASE,
+                    isContinueEnabled = false,
+                ),
+                initialDescription = InitialDescriptionUiState(
                     filePath = null,
                     prompt = "",
                 ),
-                parameterSelection = ParameterSelection(
+                parameterSelection = ParameterSelectionUiState(
                     questionCount = SelectionUiState.from(
                         options = QuestionCount.entries.map { it.value.toString() },
                         selected = DEFAULT_QUESTION_COUNT.value.toString(),
@@ -36,7 +37,7 @@ data class AssistantUiState(
                         selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
                     )
                 ),
-                furtherSpecification = FurtherSpecification(
+                furtherSpecification = FurtherSpecificationUiState(
                     topicSpecification = "",
                     goal = "",
                 ),

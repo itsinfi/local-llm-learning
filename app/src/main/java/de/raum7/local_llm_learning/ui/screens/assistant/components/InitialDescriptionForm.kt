@@ -8,14 +8,14 @@ import androidx.core.net.toUri
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.screens.assistant.MIME_TYPES
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
-import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescription
+import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescriptionUiState
 import de.raum7.local_llm_learning.ui.shared.components.FileInput
 import de.raum7.local_llm_learning.ui.shared.components.TextInput
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
 fun InitialDescriptionForm(
-    uiState: InitialDescription,
+    uiState: InitialDescriptionUiState,
     onChanged: (AssistantUiStateChange) -> Unit,
 ) {
     // file input
@@ -42,7 +42,7 @@ fun InitialDescriptionFormPreview_Filled() {
     AppTheme {
         Column {
             InitialDescriptionForm(
-                uiState = InitialDescription(
+                uiState = InitialDescriptionUiState(
                     filePath = null,
                     prompt = "",
                 ),
@@ -58,7 +58,7 @@ fun InitialDescriptionFormPreview_Selected() {
     AppTheme {
         Column {
             InitialDescriptionForm(
-                uiState = InitialDescription(
+                uiState = InitialDescriptionUiState(
                     filePath = "lorem-ipsum/dolor-sit-amet-consectetur-adipiscing-elit-sed.pdf".toUri(),
                     prompt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                 ),
