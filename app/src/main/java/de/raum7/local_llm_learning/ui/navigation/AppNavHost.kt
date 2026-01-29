@@ -8,11 +8,13 @@ import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.ui.pages.LearningMaterialCreationAssistant
 import de.raum7.local_llm_learning.ui.pages.LearningMaterialLibrary
 import de.raum7.local_llm_learning.ui.pages.SpacedRepetitionAlgorithmSingleChoiceQuestionBasedQuiz
+import de.raum7.local_llm_learning.ui.screens.assistant.AssistantScreen
 
 object Routes {
     const val LML = "LML"
     const val LMCA = "LMCA"
-    const val SRASCQBQ = "SRASCQBQ"
+    const val QUIZ = "QUIZ"
+    const val ASSISTANT = "ASSISTANT"
 }
 
 @Composable
@@ -27,12 +29,14 @@ fun AppNavHost() {
             LearningMaterialLibrary(
                 learningMaterials = MOCK_LEARNING_MATERIALS,
                 onCreateButtonClick = { navController.navigate(Routes.LMCA) },
-                onCardClick = { navController.navigate(Routes.SRASCQBQ) }
+                onCardClick = { navController.navigate(Routes.ASSISTANT) }
             )
         }
 
         composable(Routes.LMCA) { LearningMaterialCreationAssistant() }
 
-        composable(Routes.SRASCQBQ) { SpacedRepetitionAlgorithmSingleChoiceQuestionBasedQuiz() }
+        composable(Routes.ASSISTANT) { AssistantScreen() }
+
+        composable(Routes.QUIZ) { SpacedRepetitionAlgorithmSingleChoiceQuestionBasedQuiz() }
     }
 }
