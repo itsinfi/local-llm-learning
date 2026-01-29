@@ -19,13 +19,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.Question
+import de.raum7.local_llm_learning.ui.shared.components.CustomElevatedButton
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
@@ -68,10 +71,11 @@ fun AnsweringPhaseCard(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    ContinueButton(
+                    CustomElevatedButton(
+                        label = stringResource(R.string.quiz_continue),
                         isEnabled = selectedAnswer != null,
                         onclick = onContinue,
-                        modifier = Modifier.align(Alignment.CenterEnd)
+                        modifier = Modifier.align(Alignment.CenterEnd),
                     )
                 }
             }

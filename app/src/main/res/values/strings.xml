@@ -8,6 +8,20 @@
     <string name="library_add_learning_material">Erstelle neue Lernmaterialien</string>
 
     <string name="assistant">Learning Material Creation Assistant</string>
+    <string name="assistant_file">Datei</string>
+    <string name="assistant_file_placeholder">.pdf, .docx oder .txt hochladen</string>
+    <string name="assistant_prompt">Thema</string>
+    <string name="assistant_prompt_placeholder">Über welches Thema möchtest du lernen?</string>
+    <string name="assistant_question_count">Anzahl der Fragen</string>
+    <string name="assistant_question_count_placeholder">Wähle die Anzahl der Fragen</string>
+    <string name="assistant_depth_of_topic">Thematische Tiefe</string>
+    <string name="assistant_depth_of_topic_placeholder">Wähle das Level, das du erreichen willst</string>
+    <string name="assistant_topic_specification">Eingrenzung (optional)</string>
+    <string name="assistant_topic_specification_placeholder">
+        Welche Bestandteile des Themas möchtest du ein- bzw. ausklammern?
+    </string>
+    <string name="assistant_goal">Zielsetzung (optional)</string>
+    <string name="assistant_goal_placeholder">Was möchtest du mit dem Lernen erreichen?</string>
 
     <string name="quiz">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
     <string name="quiz_continue">Weiter</string>
@@ -21,5 +35,5 @@
     <string name="quiz_error_invalid_result">Ungültiges Ergebnis</string>
     <string name="quiz_edit_button">Bearbeiten</string>
 
-    <string name="edit_question">Frage Bearbeiten</string>
+    <string name="edit_question">Frage bearbeiten</string>
 </resources>

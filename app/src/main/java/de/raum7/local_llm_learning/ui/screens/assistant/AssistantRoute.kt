@@ -11,5 +11,11 @@ fun AssistantRoute() {
         )
     )
 
-    AssistantScreen(uiState = viewModel.uiState as AssistantUiState)
+    AssistantScreen(
+        uiState = viewModel.uiState as AssistantUiState,
+        onContinue = viewModel::onContinue,
+        onChanged = viewModel::onChanged,
+        onSelected = viewModel::onSelected,
+        onExpandedChange = viewModel::onExpandedChange,
+    )
 }
