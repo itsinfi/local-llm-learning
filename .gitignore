@@ -9,8 +9,9 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+app/src/main/assets/models/model.gguf
 /captures
 .externalNativeBuild
 .cxx
 local.properties
-.kotlin/*
+.kotlin/*app/src/main/assets/models/model.gguf
