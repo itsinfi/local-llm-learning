@@ -15,4 +15,4 @@ app/src/main/assets/models/model.gguf
 .cxx
 local.properties
 .kotlin/*app/src/main/assets/models/model.gguf
-app/src/main/assets/models/model.gguf
+app/src/main/assets/models/
