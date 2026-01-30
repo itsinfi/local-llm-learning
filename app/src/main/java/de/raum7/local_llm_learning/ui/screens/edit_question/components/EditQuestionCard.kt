@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.TextField
@@ -42,7 +43,7 @@ fun EditQuestionCard(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            contentColor = MaterialTheme.colorScheme.surfaceContainer
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
         ),
         modifier = Modifier
             .padding(padding)
@@ -96,9 +97,9 @@ fun EditableAnswerSelection(
                 role = Role.RadioButton
             )
     ) {
-        RadioButton(
-            selected = isSelected,
-            onClick = null,
+        Checkbox(
+            checked = isSelected,
+            onCheckedChange = null,
         )
 
         Spacer(modifier = Modifier.width(16.dp))
