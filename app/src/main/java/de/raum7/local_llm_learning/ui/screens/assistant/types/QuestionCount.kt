@@ -3,9 +3,9 @@ package de.raum7.local_llm_learning.ui.screens.assistant.types
 import de.raum7.local_llm_learning.ui.screens.assistant.DEFAULT_QUESTION_COUNT
 
 enum class QuestionCount(val value: Int) {
-    TEN(10),
-    TWENTY(20),
-    FIFTY(50);
+    ONE(1),
+    TWO(2),
+    FIVE(5);
 
     companion object {
         private val byValue = entries.associateBy { it.value }

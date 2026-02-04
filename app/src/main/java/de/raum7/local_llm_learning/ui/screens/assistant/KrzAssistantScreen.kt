@@ -26,7 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import de.raum7.local_llm_learning.ui.components.AppBar
+import de.raum7.local_llm_learning.ui.shared.components.AppBar
 
 /**
  * Hauptscreen für den Assistant.
