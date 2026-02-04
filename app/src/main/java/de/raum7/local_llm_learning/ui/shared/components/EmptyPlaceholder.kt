@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.shared.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +16,9 @@ import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
-fun LearningMaterialEmptyPlaceholder(padding: PaddingValues) {
+fun EmptyPlaceholder(text: String, padding: PaddingValues) {
     Text(
-        text = stringResource(R.string.lml_no_material),
+        text,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.bodySmall,
         maxLines = 1,
@@ -32,8 +32,8 @@ fun LearningMaterialEmptyPlaceholder(padding: PaddingValues) {
 
 @Preview(showBackground = true)
 @Composable
-fun LearningMaterialEmptyPlaceholderPreview() {
+fun EmptyPlaceholderPreview() {
     AppTheme {
-        LearningMaterialEmptyPlaceholder(padding = PaddingValues.Zero)
+        EmptyPlaceholder(stringResource(R.string.library_no_material), padding = PaddingValues.Zero)
     }
 }

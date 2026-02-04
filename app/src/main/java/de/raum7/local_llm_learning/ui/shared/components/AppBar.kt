@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.shared.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api

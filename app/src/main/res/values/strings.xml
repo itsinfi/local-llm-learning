@@ -1,13 +1,51 @@
 <resources>
     <string name="app_name">Local LLM Learning</string>
 
-    <string name="lml">Learning Material Library</string>
-    <string name="lml_no_material">Noch nichts hier :C</string>
-    <string name="lml_questions">Fragen</string>
-    <string name="lml_progress">Fortschritt</string>
-    <string name="lml_add_learning_material">Erstelle neue Lernmaterialien</string>
+    <string name="library">Learning Material Library</string>
+    <string name="library_no_material">Noch nichts hier :C</string>
+    <string name="library_questions">Fragen</string>
+    <string name="library_progress">Fortschritt</string>
+    <string name="library_add_learning_material">Erstelle neue Lernmaterialien</string>
 
-    <string name="lmca">Learning Material Creation Assistant</string>
+    <string name="assistant">Learning Material Creation Assistant</string>
+    <string name="assistant_initial_description">Was möchtest du lernen?</string>
+    <string name="assistant_parameter_selection">Parameter</string>
+    <string name="assistant_further_specification">Weitere Angaben</string>
+    <string name="assistant_continue">Weiter</string>
+    <string name="assistant_generate">Generieren</string>
+    <string name="assistant_back">Zurück</string>
+    <string name="assistant_file">Datei anhängen</string>
+    <string name="assistant_file_placeholder">.pdf, .docx oder .txt hochladen</string>
+    <string name="assistant_prompt">Themenbeschreibung</string>
+    <string name="assistant_prompt_placeholder">Über welches Thema möchtest du lernen?</string>
+    <string name="assistant_question_count">Anzahl der Fragen</string>
+    <string name="assistant_question_count_placeholder">Wähle die Anzahl der Fragen</string>
+    <string name="assistant_depth_of_topic">Thematische Tiefe</string>
+    <string name="assistant_depth_of_topic_basic_overview">Überblick</string>
+    <string name="assistant_depth_of_topic_intermediate">Fortgeschritten</string>
+    <string name="assistant_depth_of_topic_deep_dive">Deep Dive</string>
+    <string name="assistant_depth_of_topic_placeholder">Wähle das Level, das du erreichen willst</string>
+    <string name="assistant_topic_specification">Eingrenzung (optional)</string>
+    <string name="assistant_topic_specification_placeholder">
+        Welche Bestandteile des Themas möchtest du ein- bzw. ausklammern?
+    </string>
+    <string name="assistant_goal">Zielsetzung (optional)</string>
+    <string name="assistant_goal_placeholder">Was möchtest du mit dem Lernen erreichen?</string>
 
-    <string name="srascqbq">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
+    <string name="quiz">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
+    <string name="quiz_continue">Weiter</string>
+    <string name="quiz_correct_result">Richtig!</string>
+    <string name="quiz_incorrect_result">Falsch!</string>
+    <string name="quiz_your_answer">Deine Antwort</string>
+    <string name="quiz_actual_answer">Richtige Antwort</string>
+    <string name="quiz_your_time">Deine Zeit</string>
+    <string name="quiz_your_average_time">Deine Durchschnittszeit</string>
+    <string name="quiz_error_invalid_quiz_phase">Ungültige Quizphase</string>
+    <string name="quiz_error_invalid_result">Ungültiges Ergebnis</string>
+    <string name="quiz_edit_button">Bearbeiten</string>
+
+    <string name="edit_question">Frage bearbeiten</string>
+
+    <string name="file_input_select">Datei auswählen...</string>
+    <string name="file_input_change">Datei ändern...</string>
 </resources>

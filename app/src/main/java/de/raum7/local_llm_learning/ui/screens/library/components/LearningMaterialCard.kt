@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.screens.library.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +38,7 @@ fun LearningMaterialCard(learningMaterial: LearningMaterial, onClick: () -> Unit
 }
 
 @Composable
-fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
+private fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
@@ -58,14 +58,14 @@ fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
 }
 
 @Composable
-fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
+private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "${learningMaterial.questions.size} ${stringResource(R.string.lml_questions)}",
+            text = "${learningMaterial.questions.size} ${stringResource(R.string.library_questions)}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
             maxLines = 1,
@@ -73,7 +73,7 @@ fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
         )
         Text(
             text ="${(learningMaterial.progress * 100).roundToInt()}% ${stringResource(
-                R.string.lml_progress)}",
+                R.string.library_progress)}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
             maxLines = 1,

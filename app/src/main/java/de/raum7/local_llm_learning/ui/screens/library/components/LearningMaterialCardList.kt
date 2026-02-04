@@ -1,9 +1,10 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.screens.library.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,11 +16,11 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
 fun LearningMaterialCardList(
-    learningMaterials: Array<LearningMaterial>,
-    onCardClick: () -> Unit,
+    learningMaterials: List<LearningMaterial>,
+    onCardClick: (LearningMaterial) -> Unit,
     padding: PaddingValues
 ) {
-    Column (
+    LazyColumn (
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
@@ -27,8 +28,8 @@ fun LearningMaterialCardList(
             .padding(horizontal = 16.dp)
             .padding(top = 16.dp),
     ) {
-        learningMaterials.forEach {
-            LearningMaterialCard(learningMaterial = it, onClick = onCardClick)
+        items(learningMaterials) { learningMaterial ->
+            LearningMaterialCard(learningMaterial, onClick = { onCardClick(learningMaterial) })
         }
     }
 }

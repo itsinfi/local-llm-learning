@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.components
+package de.raum7.local_llm_learning.ui.screens.library.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,11 +15,11 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 fun CreateLearningMaterialEFAB(onClick: () -> Unit) {
     ExtendedFloatingActionButton(
         onClick = { onClick() },
-        text = { Text(stringResource(R.string.lml_add_learning_material)) },
+        text = { Text(stringResource(R.string.library_add_learning_material)) },
         icon = {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = stringResource(R.string.lml_add_learning_material),
+                contentDescription = stringResource(R.string.library_add_learning_material),
             )
         },
     )
