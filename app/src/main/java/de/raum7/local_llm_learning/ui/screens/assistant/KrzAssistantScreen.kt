@@ -34,7 +34,7 @@ import de.raum7.local_llm_learning.ui.components.AppBar
  */
 @Composable
 fun AssistantScreen(
-    vm: AssistantViewModel = viewModel()
+    vm: KrzAssistantViewModel = viewModel()
 ) {
     // State aus dem ViewModel abonnieren
     val state by vm.state.collectAsState()

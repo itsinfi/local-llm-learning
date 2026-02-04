@@ -7,24 +7,22 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import de.raum7.local_llm_learning.llm.LlmGenerationService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 /**
  * ViewModel für den Assistant Screen.
  * Verwaltet den UI State und die Kommunikation mit dem LlmGenerationService.
  */
-class AssistantViewModel(app: Application) : AndroidViewModel(app) {
+class KrzAssistantViewModel(app: Application) : AndroidViewModel(app) {
 
     // Interner, veränderbarer State
-    private val _state = MutableStateFlow(AssistantUiState())
+    private val _state = MutableStateFlow(KrzAssistantUiState())
 
     // Exponierter, nur lesbarer State für die UI
-    val state: StateFlow<AssistantUiState> = _state
+    val state: StateFlow<KrzAssistantUiState> = _state
 
     // Application Context, damit kein Activity-Leak entsteht
     private val appCtx: Context = app.applicationContext
