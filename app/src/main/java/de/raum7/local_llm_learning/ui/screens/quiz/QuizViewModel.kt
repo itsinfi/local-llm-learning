@@ -5,12 +5,11 @@ import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.QuizResult
 import de.raum7.local_llm_learning.data.base.BaseViewModel
+import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
-
-const val TIMER_UPDATE_CYCLE = 100L
 
 class QuizViewModel(
     learningMaterialId: String,
@@ -50,13 +49,17 @@ class QuizViewModel(
     }
 
     fun onAnswerSelected(answer: Answer) {
-        this._uiState.value = (this.uiState as QuizUiState).copy(
+        val state = this.uiState as QuizUiState
+
+        this._uiState.value = state.copy(
             selectedAnswer = answer
         )
     }
 
     fun onContinue() {
-        when ((this.uiState as QuizUiState).phase) {
+        val state = this.uiState as QuizUiState
+
+        when (state.phase) {
             QuizPhase.ANSWERING -> showResults()
             QuizPhase.RESULTS -> showNextQuestion()
         }
@@ -65,17 +68,17 @@ class QuizViewModel(
     private fun showResults() {
         this.stopTimer()
 
-        val quizUiState = this.uiState as QuizUiState
+        val state = this.uiState as QuizUiState
 
         val endedAt: Long = System.nanoTime()
-        val elapsedNanoSeconds: Long = endedAt - quizUiState.startedAt
+        val elapsedNanoSeconds: Long = endedAt - state.startedAt
 
-        val question = quizUiState.question
+        val question = state.question
 
-        val selectedAnswer = quizUiState.selectedAnswer
+        val selectedAnswer = state.selectedAnswer
             ?: error("No answer selected")
 
-        val correctAnswer = quizUiState.question.answers.firstOrNull { it.isCorrect }
+        val correctAnswer = state.question.answers.firstOrNull { it.isCorrect }
             ?: error("No correct answer found")
 
         val result = QuizResult(
@@ -88,7 +91,7 @@ class QuizViewModel(
             previousNanoSeconds = elapsedNanoSeconds, // TODO: add previous average
         )
 
-        this._uiState.value = quizUiState.copy(
+        this._uiState.value = state.copy(
             phase = QuizPhase.RESULTS,
             result = result,
             elapsedTime = elapsedNanoSeconds,
@@ -96,10 +99,10 @@ class QuizViewModel(
     }
 
     private fun showNextQuestion() {
-        val quizUiState = this.uiState as QuizUiState
+        val state = this.uiState as QuizUiState
 
         // TODO: only temporary code, please add question selection via spaced repetition
-        val questionIndex = (this.learningMaterial.questions.indexOf(quizUiState.question) + 1) % learningMaterial.questions.size
+        val questionIndex = (this.learningMaterial.questions.indexOf(state.question) + 1) % learningMaterial.questions.size
 
         // val questionId = ?
 

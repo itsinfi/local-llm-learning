@@ -5,6 +5,7 @@ import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.Question
 import de.raum7.local_llm_learning.data.models.QuizResult
 import de.raum7.local_llm_learning.data.base.BaseUiState
+import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 
 data class QuizUiState(
     val phase: QuizPhase,

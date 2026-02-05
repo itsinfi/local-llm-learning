@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.screens.assistant.components
+package de.raum7.local_llm_learning.ui.shared.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn

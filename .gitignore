@@ -8,4 +8,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-.kotlin/*
+/.kotlin
+app/src/main/assets/models
+app/src/main/cpp/llama.cpp

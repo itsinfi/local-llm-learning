@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.screens.assistant
+package de.raum7.local_llm_learning.ui.screens.assistant.types
 
 enum class AssistantPhase {
     INITIAL_DESCRIPTION, // file and/or prompt

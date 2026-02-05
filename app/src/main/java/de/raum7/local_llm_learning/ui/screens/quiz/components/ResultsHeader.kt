@@ -42,7 +42,7 @@ fun ResultsHeader(result: QuizResult) {
 }
 
 @Composable
-fun ResultsSummary(result: QuizResult) {
+private fun ResultsSummary(result: QuizResult) {
     val text = when (result.isCorrect) {
         true -> stringResource(R.string.quiz_correct_result)
         false -> stringResource(R.string.quiz_incorrect_result)
@@ -80,7 +80,7 @@ fun ResultsSummary(result: QuizResult) {
 }
 
 @Composable
-fun TimeStats(result: QuizResult) {
+private fun TimeStats(result: QuizResult) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,

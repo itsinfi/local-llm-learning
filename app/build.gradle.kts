@@ -16,26 +16,77 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters += setOf(
+                "arm64-v8a"
+                // "x86_64" // nur aktivieren, wenn du wirklich auf Emulator testen willst
+            )
+        }
+
+        externalNativeBuild {
+            cmake {
+                cppFlags += "-std=c++17"
+
+                arguments += listOf(
+                    "-DANDROID_STL=c++_shared",
+                    "-DANDROID_PLATFORM=android-33"
+                )
+            }
+        }
     }
 
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
+
+    // Empfohlen: Setze die NDK Version explizit auf die bei dir installierte Version
+    // Android Studio: SDK Manager -> SDK Tools -> NDK (Side by side)
+    ndkVersion = "26.3.11579264"
+
     buildTypes {
+        debug {
+            // hilft beim Debuggen von Native Crashes
+            isJniDebuggable = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // optional: Native Symbole behalten, wenn du Release Crashes analysieren willst
+            // ndk { debugSymbolLevel = "SYMBOL_TABLE" }
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // Java 17 ist bei neueren Android Gradle Plugin Versionen der Standard
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+        resources {
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "META-INF/*"
+            )
+        }
     }
 }
 
@@ -51,6 +102,7 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended)
+    implementation("androidx.lifecycle:lifecycle-service:2.8.7")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
