@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "de.raum7.local_llm_learning"
-        minSdk = 33
+        minSdk = 33 // 33 Normal 31 Altes Handy
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"

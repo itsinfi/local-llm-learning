@@ -63,7 +63,7 @@ fun AssistantCard(
 private fun Title(phase: AssistantPhase) {
     Text(
         text = stringResource(
-            when(phase) {
+            when (phase) {
                 AssistantPhase.INITIAL_DESCRIPTION -> R.string.assistant_initial_description
                 AssistantPhase.PARAMETER_SELECTION -> R.string.assistant_parameter_selection
                 AssistantPhase.FURTHER_SPECIFICATION -> R.string.assistant_further_specification
@@ -86,12 +86,15 @@ private fun ButtonSection(
         .fillMaxWidth()
         .padding(vertical = 8.dp)
 
-    when(uiState.phase) {
+    val canNavigate = !uiState.isLocked
+    val canContinue = uiState.isContinueEnabled && canNavigate
+
+    when (uiState.phase) {
         AssistantPhase.INITIAL_DESCRIPTION ->
             Box(modifier) {
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_continue),
-                    isEnabled = uiState.isContinueEnabled,
+                    isEnabled = canContinue,
                     onclick = onContinue,
                     buttonClass = ButtonClass.PRIMARY,
                     modifier = Modifier.align(Alignment.CenterEnd),
@@ -106,6 +109,7 @@ private fun ButtonSection(
             ) {
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_back),
+                    isEnabled = canNavigate,
                     onclick = onBack,
                     buttonClass = ButtonClass.SECONDARY,
                 )
@@ -114,7 +118,7 @@ private fun ButtonSection(
 
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_generate),
-                    isEnabled = uiState.isContinueEnabled,
+                    isEnabled = canContinue,
                     onclick = onContinue,
                     buttonClass = ButtonClass.PRIMARY,
                 )
@@ -128,6 +132,7 @@ private fun ButtonSection(
             ) {
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_back),
+                    isEnabled = canNavigate,
                     onclick = onBack,
                     buttonClass = ButtonClass.SECONDARY,
                 )
@@ -136,7 +141,7 @@ private fun ButtonSection(
 
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_continue),
-                    isEnabled = uiState.isContinueEnabled,
+                    isEnabled = canContinue,
                     onclick = onContinue,
                     buttonClass = ButtonClass.PRIMARY,
                 )
@@ -152,6 +157,7 @@ fun AssistantCardPreview_InitialDescriptionEnabled() {
             uiState = AssistantCardUiState(
                 phase = AssistantPhase.INITIAL_DESCRIPTION,
                 isContinueEnabled = true,
+                isLocked = false,
             ),
             onContinue = {},
             onBack = {},
@@ -170,6 +176,7 @@ fun AssistantCardPreview_InitialDescriptionDisabled() {
             uiState = AssistantCardUiState(
                 phase = AssistantPhase.INITIAL_DESCRIPTION,
                 isContinueEnabled = false,
+                isLocked = false,
             ),
             onContinue = {},
             onBack = {},
@@ -188,6 +195,7 @@ fun AssistantCardPreview_ParameterSelectionEnabled() {
             uiState = AssistantCardUiState(
                 phase = AssistantPhase.PARAMETER_SELECTION,
                 isContinueEnabled = true,
+                isLocked = false,
             ),
             onContinue = {},
             onBack = {},
@@ -206,6 +214,7 @@ fun AssistantCardPreview_ParameterSelectionDisabled() {
             uiState = AssistantCardUiState(
                 phase = AssistantPhase.PARAMETER_SELECTION,
                 isContinueEnabled = false,
+                isLocked = false,
             ),
             onContinue = {},
             onBack = {},
@@ -224,6 +233,7 @@ fun AssistantCardPreview_FurtherSpecificationEnabled() {
             uiState = AssistantCardUiState(
                 phase = AssistantPhase.FURTHER_SPECIFICATION,
                 isContinueEnabled = true,
+                isLocked = false,
             ),
             onContinue = {},
             onBack = {},
@@ -242,6 +252,7 @@ fun AssistantCardPreview_FurtherDescriptionDisabled() {
             uiState = AssistantCardUiState(
                 phase = AssistantPhase.FURTHER_SPECIFICATION,
                 isContinueEnabled = false,
+                isLocked = false,
             ),
             onContinue = {},
             onBack = {},

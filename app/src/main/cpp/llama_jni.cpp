@@ -40,11 +40,11 @@ struct EngineState {
     int32_t generated = 0;   // Anzahl generierter Tokens
 
     // Sampling Parameter
-    float temperature = 0.7f;
+    float temperature = 0.2f;
     float topP = 0.95f;
 
     // Generationslimit
-    int32_t maxTokens = 256;
+    int32_t maxTokens = 900;
 
     // Status Flags
     bool started = false;

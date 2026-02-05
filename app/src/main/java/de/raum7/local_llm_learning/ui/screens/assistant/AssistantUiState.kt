@@ -14,6 +14,10 @@ data class AssistantUiState(
     val initialDescription: InitialDescriptionUiState,
     val parameterSelection: ParameterSelectionUiState,
     val furtherSpecification: FurtherSpecificationUiState,
+
+    val isGenerating: Boolean = false,
+    val generationResult: String = "",
+    val generationError: String? = null,
 ) : BaseUiState() {
 
     companion object {
