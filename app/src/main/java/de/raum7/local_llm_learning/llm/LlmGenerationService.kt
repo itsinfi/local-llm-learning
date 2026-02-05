@@ -47,12 +47,12 @@ class LlmGenerationService : LifecycleService() {
 
     // Konfiguration für die Generierung
     private val config = LlmConfig(
-        contextLength = 1024,
+        contextLength = 2028,
         threads = 4,
-        temperature = 0.7f,
+        temperature = 0.2f,
         topP = 0.95f,
         seed = 0,
-        maxTokens = 256
+        maxTokens = 700
     )
 
     override fun onCreate() {
@@ -114,6 +114,8 @@ class LlmGenerationService : LifecycleService() {
                     isReady = true
                 }
 
+
+
                 // Ergebnis akkumulieren
                 val result = StringBuilder()
 
@@ -121,27 +123,44 @@ class LlmGenerationService : LifecycleService() {
                 var tokenCount = 0
 
                 // Token Stream sammeln
+                val endMarker = "<END_JSON>"
+
                 repo.generate(prompt, config).collect { ev ->
                     when (ev) {
 
-                        // Einzelnes Token erhalten
                         is LlmEvent.Token -> {
                             result.append(ev.text)
                             tokenCount += 1
 
-                            // Notification alle 50 Tokens aktualisieren
+                            val current = result.toString()
+                            val markerIndex = current.indexOf(endMarker)
+
+                            // Sobald das Modell den Marker erzeugt -> sofort stoppen
+                            if (markerIndex >= 0) {
+                                val jsonOnly = current.substring(0, markerIndex).trim()
+
+                                finishSuccess(jsonOnly)
+
+                                // Coroutine sauber abbrechen
+                                throw CancellationException("Stopped after END_JSON")
+                            }
+
                             if (tokenCount % 50 == 0) {
                                 updateRunningNotification("Generierung läuft, Tokens: $tokenCount")
                             }
                         }
 
-                        // Generierung abgeschlossen
-                        is LlmEvent.Completed -> finishSuccess(result.toString())
+                        is LlmEvent.Completed -> {
+                            val out = result.toString()
+                            val idx = out.indexOf(endMarker)
+                            val jsonOnly = if (idx >= 0) out.substring(0, idx).trim() else out.trim()
+                            finishSuccess(jsonOnly)
+                        }
 
-                        // Fehler im Stream
                         is LlmEvent.Error -> finishError(ev.message)
                     }
                 }
+
             } catch (ce: CancellationException) {
                 // Abbruch durch stopGeneration
                 stopForeground(STOP_FOREGROUND_REMOVE)

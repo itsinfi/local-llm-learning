@@ -3,31 +3,42 @@ package de.raum7.local_llm_learning.data.parsing
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.Question
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
 
 object LearningMaterialJsonParser {
 
     fun parse(raw: String): LearningMaterial {
-        val json = extractJsonObject(raw)
+        val json = extractAndSanitizeJson(raw)
         val root = JSONObject(json)
 
         val title = root.optString("title", "Unbenannt").ifBlank { "Unbenannt" }
-        val questionsArr = root.getJSONArray("questions")
+        val questionsArr = root.optJSONArray("questions")
+            ?: throw IllegalArgumentException("JSON missing 'questions' array")
 
         val questions = mutableListOf<Question>()
 
         for (i in 0 until questionsArr.length()) {
-            val qObj = questionsArr.getJSONObject(i)
-            val qText = qObj.getString("question")
+            val qObj = questionsArr.optJSONObject(i) ?: continue
 
-            val answersArr = qObj.getJSONArray("answers")
+            val qText = qObj.optString("question", "").trim()
+            if (qText.isBlank()) continue
+
+            val answersArr = qObj.optJSONArray("answers") ?: JSONArray()
             val answers = mutableListOf<Answer>()
 
             for (a in 0 until answersArr.length()) {
-                val aObj = answersArr.getJSONObject(a)
-                val text = aObj.getString("text")
-                val correct = aObj.getBoolean("correct")
+                val aObj = answersArr.optJSONObject(a) ?: continue
+
+                val text = aObj.optString("text", aObj.optString("answer", "")).trim()
+                val correct = when {
+                    aObj.has("correct") -> aObj.optBoolean("correct", false)
+                    aObj.has("isCorrect") -> aObj.optBoolean("isCorrect", false)
+                    else -> false
+                }
+
+                if (text.isBlank()) continue
 
                 answers.add(
                     Answer(
@@ -38,6 +49,8 @@ object LearningMaterialJsonParser {
                 )
             }
 
+            if (answers.isEmpty()) continue
+
             questions.add(
                 Question(
                     id = UUID.randomUUID().toString(),
@@ -45,6 +58,10 @@ object LearningMaterialJsonParser {
                     answers = answers
                 )
             )
+        }
+
+        if (questions.isEmpty()) {
+            throw IllegalArgumentException("No questions parsed from model output")
         }
 
         return LearningMaterial(
@@ -55,12 +72,13 @@ object LearningMaterialJsonParser {
         )
     }
 
-    private fun extractJsonObject(raw: String): String {
+    private fun extractAndSanitizeJson(raw: String): String {
         val cleaned = raw
             .trim()
-            .removePrefix("```json")
-            .removePrefix("```")
-            .removeSuffix("```")
+            .replace("\uFEFF", "") // BOM
+            .replace("```json", "")
+            .replace("```", "")
+            .replace("<END_JSON>", "")
             .trim()
 
         val start = cleaned.indexOf('{')
@@ -70,6 +88,22 @@ object LearningMaterialJsonParser {
             throw IllegalArgumentException("No JSON object found in model output")
         }
 
-        return cleaned.substring(start, end + 1)
+        var json = cleaned.substring(start, end + 1)
+
+        // Smart quotes zu normalen Quotes
+        json = json
+            .replace('“', '"')
+            .replace('”', '"')
+            .replace('„', '"')
+            .replace('’', '\'')
+            .replace('‘', '\'')
+
+        // Trailing commas entfernen: , } oder , ]
+        json = json.replace(Regex(",\\s*([}\\]])"), "$1")
+
+        // Steuerzeichen entfernen, die JSON brechen können
+        json = json.replace(Regex("[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F]"), "")
+
+        return json
     }
 }

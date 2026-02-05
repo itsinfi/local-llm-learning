@@ -10,6 +10,8 @@ import de.raum7.local_llm_learning.llm.LlmGenerationService
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantCardUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantPhase
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
+import kotlin.math.max
+import kotlin.math.min
 
 class AssistantViewModel(
     private val repository: AssistantRepository,
@@ -67,6 +69,7 @@ class AssistantViewModel(
             AssistantPhase.INITIAL_DESCRIPTION ->
                 (prompt ?: state.initialDescription.prompt).isNotBlank() ||
                         (filePath ?: state.initialDescription.filePath) != null
+
             else -> true
         }
     }
@@ -198,50 +201,48 @@ class AssistantViewModel(
         val goal = state.furtherSpecification.goal.trim()
 
         return """
-You are a learning content generator.
-USER CONTEXT:
-The User wants to quickly understand and get familiar with the topic. Questions should support fast onboarding and practical understanding.
+You generate learning quizzes as STRICT JSON.
 
-Create ${'$'}count single choice questions about the following topic.
+Task:
+Create exact $count single choice questions.
 
-TOPIC:
-${'$'}topic
+Topic:
+$topic
 
-DEPTH LEVEL:
-${'$'}depth
+Depth:
+$depth
 
-ADDITIONAL SPECIFICATION:
-${'$'}spec
+Additional specification:
+$spec
 
-LEARNING GOAL:
-${'$'}goal
+Learning goal:
+$goal
 
-USER CONTENT (optional learning material from files, notes, or pasted text):
-${'$'}user_content
+Hard rules:
+1) Output ONLY valid JSON. No markdown. No code fences. No comments.
+2) Use double quotes for all strings.
+3) No trailing commas anywhere.
+4) Exactly 4 answers per question.
+5) Exactly 1 answer has "correct": true, the other 3 are false.
+6) No explanations.
 
-Rules:
-
-- Language: German or English depends on the user's request
-- Each question must have exactly 4 answers
-- Only one answer is correct
-- No explanations
-- Respond only with valid JSON that strictly follows the format below
-
-JSON format:
+Return JSON schema exactly:
 {
-"title": "string",
-"questions": [
-{
-"question": "string",
-"answers": [
-{ "text": "string", "correct": true },
-{ "text": "string", "correct": false },
-{ "text": "string", "correct": false },
-{ "text": "string", "correct": false }
-]
+  "title": "string",
+  "questions": [
+    {
+      "question": "string",
+      "answers": [
+        { "text": "string", "correct": true },
+        { "text": "string", "correct": false },
+        { "text": "string", "correct": false },
+        { "text": "string", "correct": false }
+      ]
+    }
+  ]
 }
-]
-}
+
+End your output with: <END_JSON>
 """.trimIndent()
     }
 }
