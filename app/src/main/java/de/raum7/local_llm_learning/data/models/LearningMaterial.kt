@@ -6,10 +6,10 @@ import de.raum7.local_llm_learning.data.base.BaseModel
 
 @Entity(tableName = "LearningMaterial")
 data class LearningMaterial (
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val title: String,
-    val questions: List<Question>,
+    //val questions: List<Question>,
     val progress: Double,
 ) : BaseModel() {
 //    override fun equals(other: Any?): Boolean {

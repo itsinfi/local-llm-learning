@@ -37,6 +37,7 @@ import de.raum7.local_llm_learning.ui.theme.AppTheme
 @Composable
 fun EditQuestionCard(
     question: Question,
+    answers: List<Answer>,
     selectedEditableAnswer: Answer?,
     onEditableAnswerSelected: (Answer) -> Unit,
     padding: PaddingValues
@@ -59,7 +60,7 @@ fun EditQuestionCard(
                 QuestionTitle(question)
             }
 
-            items(question.answers) { answer: Answer ->
+            items(answers) { answer: Answer ->
                 EditableAnswerSelection(answer, isSelected = answer == selectedEditableAnswer, onClick = { onEditableAnswerSelected(answer) })
             }
 
@@ -118,6 +119,7 @@ fun EditQuestionCardTest() {
     AppTheme {
         EditQuestionCard(
             question = MOCK_LEARNING_MATERIALS[0].questions[0],
+            answers =
             selectedEditableAnswer = null,
             onEditableAnswerSelected = {},
             padding = PaddingValues.Zero,

@@ -19,9 +19,9 @@ import de.raum7.local_llm_learning.data.base.BaseModel
     indices = [Index("learningMaterialId")]
 )
 data class Question (
-    @PrimaryKey
-    val id: String,
-    val learningMaterialId: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val learningMaterialId: Int,
     val question: String,
 //    val answers: List<Answer>,
 ): BaseModel() {
