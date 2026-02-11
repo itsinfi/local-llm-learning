@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface AnswerDao {
 
     @Query("SELECT * FROM answer WHERE questionId = :questionId")
-    suspend fun getAnswersForQuestion(questionId: String): Flow<List<Answer>>
+    suspend fun getAnswersForQuestion(questionId: Int): List<Answer>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAnswers(answers: List<Answer>)

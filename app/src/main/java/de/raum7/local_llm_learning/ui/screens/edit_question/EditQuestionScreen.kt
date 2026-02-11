@@ -30,6 +30,7 @@ fun EditQuestionScreen(
         ) {
             EditQuestionCard(
                 question = uiState.question,
+                answers = uiState.answers,
                 selectedEditableAnswer = uiState.selectedEditableAnswer,
                 onEditableAnswerSelected,
                 padding,

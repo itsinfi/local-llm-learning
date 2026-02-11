@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 interface QuestionDao {
 
     @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId")
-    suspend fun getQuestionsForLearningMaterial(learningMaterialId: String): Flow<List<Question>>
+    suspend fun getQuestionsForLearningMaterial(learningMaterialId: Int): List<Question>
 
     @Query("SELECT * FROM question WHERE id = :id")
-    suspend fun getQuestionById(id: String): Question?
+    suspend fun getQuestionById(id: Int): Question
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertQuestion(question: Question)

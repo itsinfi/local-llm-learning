@@ -4,8 +4,8 @@ import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.base.BaseViewModelFactory
 
 class EditQuestionViewModelFactory(
-    private val learningMaterialId: String,
-    private val questionId: String,
+    private val learningMaterialId: Int,
+    private val questionId: Int,
     private val repository: EditQuestionRepository
 
 ) : BaseViewModelFactory(repository) {

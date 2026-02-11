@@ -6,13 +6,15 @@ import de.raum7.local_llm_learning.data.models.Answer
 
 data class EditQuestionUiState(
     val question: Question,
+    val answers: List<Answer>,
     val selectedEditableAnswer: Answer?,
 ) : BaseUiState() {
     companion object {
-        fun from(question: Question): EditQuestionUiState {
+        fun from(question: Question, answers: List<Answer>): EditQuestionUiState {
             return EditQuestionUiState(
                 question = question,
-                selectedEditableAnswer = question.answers.firstOrNull {it.isCorrect == true}
+                answers = answers,
+                selectedEditableAnswer = answers.firstOrNull {it.isCorrect == true}
             )
         }
     }

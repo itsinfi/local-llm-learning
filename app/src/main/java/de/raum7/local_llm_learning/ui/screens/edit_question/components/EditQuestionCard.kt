@@ -27,7 +27,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTIONS
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.Question
 import de.raum7.local_llm_learning.ui.screens.quiz.components.QuestionTitle
@@ -118,8 +120,8 @@ fun EditableAnswerSelection(
 fun EditQuestionCardTest() {
     AppTheme {
         EditQuestionCard(
-            question = MOCK_LEARNING_MATERIALS[0].questions[0],
-            answers =
+            question = MOCK_QUESTIONS[0],
+            answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2], MOCK_ANSWERS[3]),
             selectedEditableAnswer = null,
             onEditableAnswerSelected = {},
             padding = PaddingValues.Zero,

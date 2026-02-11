@@ -5,7 +5,7 @@ import de.raum7.local_llm_learning.data.models.LearningMaterial
 
 class LibraryRepository(
     private val data: List<LearningMaterial>
-) : BaseRepository(data) {
+) : BaseRepository() {
     fun getLearningMaterials(): List<LearningMaterial> {
         return data
     }

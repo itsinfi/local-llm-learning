@@ -6,8 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.room.Database
+import androidx.room.Room
+import de.raum7.local_llm_learning.data.database.dao.AnswerDao
+import de.raum7.local_llm_learning.data.database.dao.LearningMaterialDao
+import de.raum7.local_llm_learning.data.database.dao.QuestionDao
 import de.raum7.local_llm_learning.ui.screens.assistant.AssistantRoute
-import de.raum7.local_llm_learning.ui.screens.assistant.AssistantScreen
 import de.raum7.local_llm_learning.ui.screens.edit_question.EditQuestionRoute
 import de.raum7.local_llm_learning.ui.screens.library.LibraryRoute
 import de.raum7.local_llm_learning.ui.screens.quiz.QuizRoute
@@ -25,7 +29,7 @@ object Routes {
 }
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(questionDao: QuestionDao, answerDao: AnswerDao, learningMaterialDao: LearningMaterialDao) {
     val navController = rememberNavController()
 
     NavHost(
@@ -76,7 +80,7 @@ fun AppNavHost() {
             val questionId = backStackEntry.arguments?.getString("questionId")
                 ?: error("Missing questionId")
 
-            EditQuestionRoute(learningMaterialId, questionId)
+            EditQuestionRoute(learningMaterialId, questionId, questionDao, answerDao)
         }
     }
 }

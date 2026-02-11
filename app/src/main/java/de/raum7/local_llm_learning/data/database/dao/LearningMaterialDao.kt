@@ -14,7 +14,7 @@ interface LearningMaterialDao {
     suspend fun getAllMaterials(): Flow<List<LearningMaterial>>
 
     @Query("SELECT * FROM learningmaterial WHERE id = :id")
-    suspend fun getMaterialById(id: String): LearningMaterial?
+    suspend fun getMaterialById(id: Int): LearningMaterial?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertMaterial(learningMaterial: LearningMaterial)
