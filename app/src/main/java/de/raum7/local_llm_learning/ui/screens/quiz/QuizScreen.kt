@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import de.raum7.local_llm_learning.R
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
 import de.raum7.local_llm_learning.data.mock.MOCK_QUIZ_RESULTS
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.ui.screens.quiz.components.AnsweringPhaseCard
@@ -39,6 +40,7 @@ fun QuizScreen(
             ) {
                 AnsweringPhaseCard(
                     question = uiState.question,
+                    answers = uiState.answers,
                     selectedAnswer = uiState.selectedAnswer,
                     elapsedTime = uiState.elapsedTime,
                     onAnswerSelected,
@@ -63,6 +65,7 @@ fun QuizScreenPreview_Answering() {
             uiState = QuizUiState(
                 phase = QuizPhase.ANSWERING,
                 question = MOCK_QUIZ_RESULTS[0].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[0].selectedAnswer,
                 result = MOCK_QUIZ_RESULTS[0],
                 totalQuestions = 1,
@@ -84,6 +87,7 @@ fun QuizScreenPreview_CorrectResult() {
             uiState = QuizUiState(
                 phase = QuizPhase.RESULTS,
                 question = MOCK_QUIZ_RESULTS[0].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[0].selectedAnswer,
                 result = MOCK_QUIZ_RESULTS[0],
                 totalQuestions = 1,
@@ -105,6 +109,7 @@ fun QuizScreenPreview_IncorrectResult() {
             uiState = QuizUiState(
                 phase = QuizPhase.RESULTS,
                 question = MOCK_QUIZ_RESULTS[1].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[1].selectedAnswer,
                 result = MOCK_QUIZ_RESULTS[1],
                 totalQuestions = 1,
@@ -126,6 +131,7 @@ fun QuizScreenPreview_Invalid() {
             uiState = QuizUiState(
                 phase = QuizPhase.RESULTS,
                 question = MOCK_QUIZ_RESULTS[0].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[0].selectedAnswer,
                 result = null,
                 totalQuestions = 1,

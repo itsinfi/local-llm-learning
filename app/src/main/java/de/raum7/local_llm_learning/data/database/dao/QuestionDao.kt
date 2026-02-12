@@ -24,4 +24,7 @@ interface QuestionDao {
 
     @Query("SELECT COUNT(id) from question WHERE learningMaterialId = :learningMaterialId")
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int
+
+    @Query("SELECT * FROM question WHERE id > :id AND learningMaterialId = :learningMaterialId ORDER BY id asc LIMIT 1")
+    suspend fun getNextQuestionById(id: Int, learningMaterialId: Int): Question
 }

@@ -6,8 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.room.Database
-import androidx.room.Room
 import de.raum7.local_llm_learning.data.database.dao.AnswerDao
 import de.raum7.local_llm_learning.data.database.dao.LearningMaterialDao
 import de.raum7.local_llm_learning.data.database.dao.QuestionDao
@@ -42,6 +40,8 @@ fun AppNavHost(questionDao: QuestionDao, answerDao: AnswerDao, learningMaterialD
             LibraryRoute(
                 navigateToAssistantCallback = { navController.navigate(Routes.ASSISTANT) },
                 navigateToQuizCallback = { learningMaterialId: String -> navController.navigate("quiz/$learningMaterialId") },
+                learningMaterialDao = learningMaterialDao,
+                questionDao = questionDao,
             )
         }
 
@@ -59,11 +59,14 @@ fun AppNavHost(questionDao: QuestionDao, answerDao: AnswerDao, learningMaterialD
                 ?: error("Missing learningMaterialId")
 
             QuizRoute(
-                learningMaterialId,
+                learningMaterialId, // TODO: fix to integer
                 navigateToEditQuestionCallback = {
                     learningMaterialId: String, questionId: String ->
                     navController.navigate(Routes.editQuestion(learningMaterialId, questionId))
-                }
+                },
+                questionDao: QuestionDao,
+                answerDao: AnswerDao,
+                learningMaterialDao: LearningMaterialDao,
             )
         }
 

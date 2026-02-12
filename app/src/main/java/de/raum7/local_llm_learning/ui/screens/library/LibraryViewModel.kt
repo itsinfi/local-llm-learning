@@ -14,7 +14,8 @@ class LibraryViewModel(
     init {
         viewModelScope.launch {
             val learningMaterial: List<LearningMaterial> = this@LibraryViewModel.repository.getLearningMaterials()
-            val initialState = LibraryUiState.from(learningMaterial)
+            val learningMaterialQuestionCounts = learningMaterial.associate { it.id to repository.getQuestionCountForLearningMaterial(it.id) }
+            val initialState = LibraryUiState.from(learningMaterial, learningMaterialQuestionCounts)
             this@LibraryViewModel._uiState.value = initialState
         }
 

@@ -16,6 +16,7 @@ import de.raum7.local_llm_learning.data.models.Question
         Answer::class,
     ],
     version = 1,
+    exportSchema = false
 )
 abstract class Database : RoomDatabase() {
     abstract fun learningMaterialDao(): LearningMaterialDao

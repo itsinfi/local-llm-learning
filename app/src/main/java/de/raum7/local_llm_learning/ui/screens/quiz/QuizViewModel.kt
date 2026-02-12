@@ -1,6 +1,7 @@
 package de.raum7.local_llm_learning.ui.screens.quiz
 
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.QuizResult
@@ -12,17 +13,23 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 class QuizViewModel(
-    learningMaterialId: String,
+    learningMaterialId: Int,
     private val repository: QuizRepository
 ) : BaseViewModel(repository) {
 
-    private val learningMaterial: LearningMaterial =
-        this.repository.getLearningMaterialById(learningMaterialId)
+    private var learningMaterial: LearningMaterial = TODO()
 
     init {
-        val initialState = QuizUiState.from(this.learningMaterial)
-        this._uiState.value = initialState
-        startTimer(initialState.startedAt)
+        viewModelScope.launch() {
+            this@QuizViewModel.learningMaterial = this@QuizViewModel.repository.getLearningMaterialById(learningMaterialId)
+            val question = repository.getNextQuestionById(-1, this@QuizViewModel.learningMaterial.id)
+            val answers = repository.getAnswersForQuestion(question.id)
+            val questionCount = repository.getQuestionCountForLearningMaterial(learningMaterial.id)
+            val initialState = QuizUiState.from(this@QuizViewModel.learningMaterial, questionCount, question, answers)
+            this@QuizViewModel._uiState.value = initialState
+            startTimer(initialState.startedAt)
+        }
+
     }
 
     private var timerJob: Job? = null
@@ -78,7 +85,7 @@ class QuizViewModel(
         val selectedAnswer = state.selectedAnswer
             ?: error("No answer selected")
 
-        val correctAnswer = state.question.answers.firstOrNull { it.isCorrect }
+        val correctAnswer = state.answers.firstOrNull { it.isCorrect }
             ?: error("No correct answer found")
 
         val result = QuizResult(
@@ -99,20 +106,25 @@ class QuizViewModel(
     }
 
     private fun showNextQuestion() {
-        val state = this.uiState as QuizUiState
+        viewModelScope.launch() {
+            val state = this@QuizViewModel.uiState as QuizUiState
 
-        // TODO: only temporary code, please add question selection via spaced repetition
-        val questionIndex = (this.learningMaterial.questions.indexOf(state.question) + 1) % learningMaterial.questions.size
+            // TODO: only temporary code, please add question selection via spaced repetition
+            val question = repository.getNextQuestionById(state.question.id, this@QuizViewModel.learningMaterial.id)
+            val answers = repository.getAnswersForQuestion(state.question.id)
+            val questionCount = repository.getQuestionCountForLearningMaterial(learningMaterial.id)
 
-        // val questionId = ?
+            // TODO: use from function signature with questionId as a parameter
+            val newState = QuizUiState.from(
+                learningMaterial,
+                questionCount,
+                question,
+                answers
+            )
 
-        // TODO: use from function signature with questionId as a parameter
-        val newState = QuizUiState.from(
-            learningMaterial,
-            questionIndex,
-        )
+            this@QuizViewModel._uiState.value = newState
+            this@QuizViewModel.startTimer(newState.startedAt)
+        }
 
-        this._uiState.value = newState
-        this.startTimer(newState.startedAt)
     }
 }

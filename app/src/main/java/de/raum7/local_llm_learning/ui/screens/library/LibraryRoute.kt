@@ -13,6 +13,7 @@ fun LibraryRoute(
     learningMaterialDao: LearningMaterialDao,
     questionDao: QuestionDao,
 ) {
+    // TODO: remove mock data
     val data = MOCK_LEARNING_MATERIALS
 
     val viewModel: LibraryViewModel = viewModel(

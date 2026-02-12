@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTION_COUNTS
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
 fun LearningMaterialCardList(
     learningMaterials: List<LearningMaterial>,
+    learningMaterialsQuestionCount: Map<Int, Int>,
     onCardClick: (LearningMaterial) -> Unit,
     padding: PaddingValues
 ) {
@@ -29,7 +31,7 @@ fun LearningMaterialCardList(
             .padding(top = 16.dp),
     ) {
         items(learningMaterials) { learningMaterial ->
-            LearningMaterialCard(learningMaterial, onClick = { onCardClick(learningMaterial) })
+            LearningMaterialCard(learningMaterial, questionCount = learningMaterialsQuestionCount.getValue(learningMaterial.id), onClick = { onCardClick(learningMaterial) })
         }
     }
 }
@@ -40,6 +42,7 @@ fun LearningMaterialCardListPreview() {
     AppTheme {
         LearningMaterialCardList(
             learningMaterials = MOCK_LEARNING_MATERIALS,
+            learningMaterialsQuestionCount = MOCK_QUESTION_COUNTS,
             onCardClick = {},
             padding = PaddingValues.Zero,
         )
