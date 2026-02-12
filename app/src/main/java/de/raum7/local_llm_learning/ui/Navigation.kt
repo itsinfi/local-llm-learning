@@ -55,7 +55,7 @@ fun AppNavHost(
             )
         }
 
-        // Assistant Wizard (fehlte vorher, daher Crash)
+        // Assistant Screen
         composable(Routes.ASSISTANT) {
             AssistantRoute(
                 navigateToResult = {
@@ -118,31 +118,30 @@ fun AppNavHost(
                     navController.navigate(Routes.editQuestion(lmId, qId))
                 }
             )
+        }
 
 
 
+        // Edit Question Screen
+        composable(
+            Routes.EDIT_QUESTION,
+            listOf(
+                navArgument("learningMaterialId") { type = NavType.StringType },
+                navArgument("questionId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val learningMaterialId =
+                backStackEntry.arguments?.getString("learningMaterialId")
+                    ?: error("Missing learningMaterialId")
 
-            // Edit Question Screen
-            composable(
-                Routes.EDIT_QUESTION,
-                listOf(
-                    navArgument("learningMaterialId") { type = NavType.StringType },
-                    navArgument("questionId") { type = NavType.StringType }
-                )
-            ) { backStackEntry ->
-                val learningMaterialId =
-                    backStackEntry.arguments?.getString("learningMaterialId")
-                        ?: error("Missing learningMaterialId")
+            val questionId =
+                backStackEntry.arguments?.getString("questionId")
+                    ?: error("Missing questionId")
 
-                val questionId =
-                    backStackEntry.arguments?.getString("questionId")
-                        ?: error("Missing questionId")
-
-                EditQuestionRoute(
-                    learningMaterialId = learningMaterialId,
-                    questionId = questionId
-                )
-            }
+            EditQuestionRoute(
+                learningMaterialId = learningMaterialId,
+                questionId = questionId
+            )
         }
     }
 }
