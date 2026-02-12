@@ -18,7 +18,7 @@ fun AppBar(title: String) {
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineLarge
             )
         },
     )

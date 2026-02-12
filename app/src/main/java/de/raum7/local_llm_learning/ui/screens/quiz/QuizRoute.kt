@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.store.LearningMaterialStore
 import de.raum7.local_llm_learning.ui.shared.components.EmptyPlaceholder
 
@@ -12,13 +13,15 @@ fun QuizRoute(
     learningMaterialId: String,
     navigateToEditQuestionCallback: (String, String) -> Unit,
 ) {
-    val data by LearningMaterialStore.items.collectAsState(initial = emptyList())
+    /*val data by LearningMaterialStore.items.collectAsState(initial = emptyList())
 
     val materialExists = data.any { it.id == learningMaterialId }
     if (!materialExists) {
         androidx.compose.material3.Text("Lernmaterial nicht gefunden")
         return
-    }
+    }*/
+
+    val data = MOCK_LEARNING_MATERIALS // TODO: remove
 
 
     val viewModel: QuizViewModel = viewModel(

@@ -104,13 +104,14 @@ fun AppNavHost(
                 backStackEntry.arguments?.getString("learningMaterialId")
                     ?: error("Missing learningMaterialId")
 
-            val material = LearningMaterialStore.getById(learningMaterialId)
+            // is this required?
+            /*val material = LearningMaterialStore.getById(learningMaterialId)
             if (material == null) {
                 navController.navigate(Routes.LIBRARY) {
                     popUpTo(Routes.LIBRARY) { inclusive = true }
                 }
                 return@composable
-            }
+            }*/
 
             QuizRoute(
                 learningMaterialId = learningMaterialId,
