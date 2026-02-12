@@ -14,7 +14,6 @@ fun EditQuestionRoute(
     questionDao: QuestionDao,
     answerDao: AnswerDao,
 ) {
-    val data = MOCK_LEARNING_MATERIALS
 
     val viewModel: EditQuestionViewModel = viewModel(
         factory = EditQuestionViewModelFactory(
@@ -27,5 +26,6 @@ fun EditQuestionRoute(
     EditQuestionScreen(
         uiState = viewModel.uiState as EditQuestionUiState,
         onEditableAnswerSelected = viewModel::onEditableAnswerSelected,
+        onQuestionSave = viewModel::onQuestionSave,
     )
 }

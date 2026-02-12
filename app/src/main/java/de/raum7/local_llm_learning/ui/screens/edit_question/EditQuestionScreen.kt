@@ -18,6 +18,7 @@ import de.raum7.local_llm_learning.ui.shared.components.AppBar
 fun EditQuestionScreen(
     uiState: EditQuestionUiState,
     onEditableAnswerSelected: (Answer) -> Unit,
+    onQuestionSave: (List<Answer>) -> Unit
 ) {
     Scaffold(
         topBar = { AppBar(title = stringResource(R.string.edit_question)) },
@@ -32,8 +33,9 @@ fun EditQuestionScreen(
                 question = uiState.question,
                 answers = uiState.answers,
                 selectedEditableAnswer = uiState.selectedEditableAnswer,
-                onEditableAnswerSelected,
-                padding,
+                onEditableAnswerSelected = onEditableAnswerSelected,
+                onQuestionSave = onQuestionSave,
+                padding = padding,
             )
         }
     }

@@ -1,6 +1,7 @@
 package de.raum7.local_llm_learning.ui.screens.edit_question
 
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.Question
@@ -14,9 +15,6 @@ class EditQuestionViewModel(
     questionId: Int,
     private val repository: EditQuestionRepository
 ) : BaseViewModel(repository) {
-
-//    private val question: Question =
-//        this.repository.getQuestion(questionId, learningMaterialId)
 
     init {
         viewModelScope.launch {
@@ -33,5 +31,12 @@ class EditQuestionViewModel(
         this._uiState.value = (this.uiState as EditQuestionUiState).copy(
             selectedEditableAnswer = answer
         )
+    }
+
+    fun onQuestionSave(answers: List<Answer>) {
+        viewModelScope.launch {
+            this@EditQuestionViewModel.repository.upsertAnswers(answers)
+        }
+
     }
 }
