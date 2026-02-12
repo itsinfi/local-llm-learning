@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Local LLM Learning</string>
 
-    <string name="library">Learning Material Library</string>
+    <string name="library">Bereit fürs Level Up?</string>
     <string name="library_no_material">Noch nichts hier :C</string>
     <string name="library_questions">Fragen</string>
     <string name="library_progress">Fortschritt</string>

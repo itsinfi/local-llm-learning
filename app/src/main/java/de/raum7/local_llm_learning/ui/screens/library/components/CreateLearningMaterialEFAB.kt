@@ -1,7 +1,7 @@
 package de.raum7.local_llm_learning.ui.screens.library.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -18,7 +18,7 @@ fun CreateLearningMaterialEFAB(onClick: () -> Unit) {
         text = { Text(stringResource(R.string.library_add_learning_material)) },
         icon = {
             Icon(
-                imageVector = Icons.Default.Add,
+                imageVector = Icons.Default.AddCircle,
                 contentDescription = stringResource(R.string.library_add_learning_material),
             )
         },
