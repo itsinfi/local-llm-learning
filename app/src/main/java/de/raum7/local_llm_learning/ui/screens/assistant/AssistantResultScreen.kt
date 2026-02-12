@@ -42,7 +42,7 @@ fun AssistantResultScreen(
             CustomElevatedButton(
                 label = "In Bibliothek speichern",
                 onclick = onSaveToLibrary,
-                buttonClass = ButtonClass.PRIMARY,
+                // buttonClass = ButtonClass.PRIMARY, TODO:
                 isEnabled = parsed != null
             )
 
@@ -51,7 +51,7 @@ fun AssistantResultScreen(
             CustomElevatedButton(
                 label = "Zur Bibliothek",
                 onclick = onBackToLibrary,
-                buttonClass = ButtonClass.SECONDARY
+                // buttonClass = ButtonClass.SECONDARY TODO:
             )
 
             Spacer(modifier = Modifier.height(16.dp))

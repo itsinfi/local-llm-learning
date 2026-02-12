@@ -7,7 +7,7 @@
     <string name="library_progress">Fortschritt</string>
     <string name="library_add_learning_material">Erstelle neue Lernmaterialien</string>
 
-    <string name="assistant">Learning Material Creation Assistant</string>
+    <string name="assistant">Assistant</string>
     <string name="assistant_initial_description">Was möchtest du lernen?</string>
     <string name="assistant_parameter_selection">Parameter</string>
     <string name="assistant_further_specification">Weitere Angaben</string>
@@ -32,7 +32,7 @@
     <string name="assistant_goal">Zielsetzung (optional)</string>
     <string name="assistant_goal_placeholder">Was möchtest du mit dem Lernen erreichen?</string>
 
-    <string name="quiz">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
+    <string name="quiz">Quiz</string>
     <string name="quiz_continue">Weiter</string>
     <string name="quiz_correct_result">Richtig!</string>
     <string name="quiz_incorrect_result">Falsch!</string>

@@ -34,9 +34,16 @@ fun LibraryScreen(
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
         if (uiState.learningMaterials.isNotEmpty()) {
-            LearningMaterialCardList(uiState.learningMaterials, onCardClick, padding)
+            LearningMaterialCardList(
+                uiState.learningMaterials,
+                onCardClick,
+                Modifier.padding(padding)
+            )
         } else {
-            EmptyPlaceholder(stringResource(R.string.library_no_material), padding)
+            EmptyPlaceholder(
+                stringResource(R.string.library_no_material),
+                Modifier.padding(padding),
+            )
         }
     }
 }
@@ -62,7 +69,7 @@ private fun LibraryScreenAppBar() {
 
 @Preview(showBackground = true)
 @Composable
-fun LibraryScreenPreview_NotEmpty() {
+private fun LibraryScreenPreview_NotEmpty() {
     AppTheme {
         LibraryScreen(
             LibraryUiState(MOCK_LEARNING_MATERIALS),
@@ -74,7 +81,7 @@ fun LibraryScreenPreview_NotEmpty() {
 
 @Preview(showBackground = true)
 @Composable
-fun LibraryScreenPreview_Empty() {
+private fun LibraryScreenPreview_Empty() {
     AppTheme {
         LibraryScreen(
             LibraryUiState(emptyList()),

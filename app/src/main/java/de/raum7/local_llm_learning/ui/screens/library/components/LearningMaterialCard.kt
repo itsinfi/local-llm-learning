@@ -1,16 +1,11 @@
 package de.raum7.local_llm_learning.ui.screens.library.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,18 +19,18 @@ import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.models.LearningMaterial
-import de.raum7.local_llm_learning.ui.shared.components.BlurredBox
+import de.raum7.local_llm_learning.ui.shared.components.CustomCard
+import de.raum7.local_llm_learning.ui.shared.components.ProgressBar
 import de.raum7.local_llm_learning.ui.theme.AppTheme
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 @Composable
-fun LearningMaterialCard(learningMaterial: LearningMaterial, onClick: () -> Unit) {
-    Card (
-        onClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        ),
+fun LearningMaterialCard(
+    learningMaterial: LearningMaterial,
+    onClick: () -> Unit,
+) {
+    CustomCard(
+        onClick = onClick,
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxWidth()
@@ -43,21 +38,11 @@ fun LearningMaterialCard(learningMaterial: LearningMaterial, onClick: () -> Unit
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.primary,
                 shape = CardDefaults.shape,
-            )
+            ),
     ) {
-        BlurredBox(
-            backgroundContent = {
-                LearningMaterialCardContent(
-                    learningMaterial,
-                    modifier = Modifier.padding(8.dp)
-                )
-            },
-            foregroundContent = {
-                LearningMaterialCardContent(
-                    learningMaterial,
-                    modifier = Modifier.padding(16.dp)
-                )
-            },
+        LearningMaterialCardContent(
+            learningMaterial,
+            modifier = Modifier.padding(16.dp)
         )
     }
 }

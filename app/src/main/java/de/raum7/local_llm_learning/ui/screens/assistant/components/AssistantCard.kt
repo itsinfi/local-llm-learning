@@ -39,7 +39,7 @@ fun AssistantCard(
     val contentColor = MaterialTheme.colorScheme.onSurface
 
     Card(
-        colors = CardDefaults.cardColors().copy(
+        colors = CardDefaults.cardColors(
             containerColor = containerColor,
             contentColor = contentColor,
         ),
@@ -96,7 +96,7 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_continue),
                     isEnabled = canContinue,
                     onclick = onContinue,
-                    buttonClass = ButtonClass.PRIMARY,
+                    // buttonClass = ButtonClass.PRIMARY, TODO:
                     modifier = Modifier.align(Alignment.CenterEnd),
                 )
             }
@@ -111,7 +111,7 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_back),
                     isEnabled = canNavigate,
                     onclick = onBack,
-                    buttonClass = ButtonClass.SECONDARY,
+                    // buttonClass = ButtonClass.SECONDARY, TODO:
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -120,7 +120,7 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_generate),
                     isEnabled = canContinue,
                     onclick = onContinue,
-                    buttonClass = ButtonClass.PRIMARY,
+                    // buttonClass = ButtonClass.PRIMARY, TODO:
                 )
             }
 
@@ -134,7 +134,7 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_back),
                     isEnabled = canNavigate,
                     onclick = onBack,
-                    buttonClass = ButtonClass.SECONDARY,
+                    // buttonClass = ButtonClass.SECONDARY, TODO:
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -143,7 +143,7 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_continue),
                     isEnabled = canContinue,
                     onclick = onContinue,
-                    buttonClass = ButtonClass.PRIMARY,
+                    // buttonClass = ButtonClass.PRIMARY, TODO:
                 )
             }
     }

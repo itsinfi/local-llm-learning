@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -15,24 +16,46 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
+val DEFAULT_BLUR_RADIUS = 8.dp
+const val DEFAULT_ALPHA = 0.2f
+const val DEFAULT_SATURATION = 0.5f
+const val DEFAULT_SCALE = 1.25f
+
+
+data class BlurredBoxOptions(
+    val blurRadius: Dp,
+    val alpha: Float,
+    val saturation: Float,
+    val scale: Float,
+) {
+    companion object {
+        val DEFAULT = BlurredBoxOptions(
+            blurRadius = DEFAULT_BLUR_RADIUS,
+            alpha = DEFAULT_ALPHA,
+            saturation = DEFAULT_SATURATION,
+            scale = DEFAULT_SCALE,
+        )
+    }
+}
+
 @Composable
 fun BlurredBox(
     backgroundContent: @Composable (() -> Unit),
     foregroundContent: @Composable (() -> Unit),
-    blurRadius: Dp = 20.dp,
-    alpha: Float = 0.4f,
-    saturation: Float = 0.1f,
+    options: BlurredBoxOptions = BlurredBoxOptions.DEFAULT,
+    modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(modifier) {
         Box(
             Modifier
-                .blur(blurRadius)
-                .alpha(alpha)
+                .blur(options.blurRadius)
+                .alpha(options.alpha)
                 .graphicsLayer {
                     colorFilter = ColorFilter.colorMatrix(
-                        ColorMatrix().apply { setToSaturation(saturation) }
+                        ColorMatrix().apply { setToSaturation(options.saturation) }
                     )
                 }
+                .scale(options.scale)
         ) {
             backgroundContent()
         }
@@ -46,14 +69,17 @@ fun BlurredBox(
 private fun BlurredBoxPreview() {
     AppTheme {
         val color = Color(0xFF00AA88)
-        val text = "Hello, World!"
+        val content = @Composable { Text(text = "Hello, World!", color = color) }
 
         BlurredBox(
-            backgroundContent = { Text(text = "  $text", color = color) },
-            foregroundContent = { Text(text = text, color = color) },
-            blurRadius = 1.dp,
-            alpha = 0.5f,
-            saturation = 0.5f,
+            backgroundContent = content,
+            foregroundContent = content,
+            options = BlurredBoxOptions(
+                blurRadius = 1.dp,
+                alpha = 0.5f,
+                saturation = 0.5f,
+                scale = 1.1f,
+            )
         )
     }
 }

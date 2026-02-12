@@ -54,7 +54,7 @@ private fun ResultsSummary(result: QuizResult) {
     }
 
     val tint = when(result.isCorrect) {
-        true -> MaterialTheme.colorScheme.primaryContainer
+        true -> MaterialTheme.colorScheme.secondary
         false -> MaterialTheme.colorScheme.error
     }
 

@@ -111,7 +111,7 @@ fun FileInput(
                         else -> R.string.file_input_change
                     }
                 ),
-                buttonClass = ButtonClass.SECONDARY,
+                // buttonClass = ButtonClass.SECONDARY, TODO:
             )
 
             when(pathToSelectedFile) {

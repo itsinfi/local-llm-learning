@@ -1,8 +1,9 @@
 package de.raum7.local_llm_learning.ui.screens.quiz.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,14 +12,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,8 +31,12 @@ import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.Question
+import de.raum7.local_llm_learning.ui.shared.components.CustomCard
 import de.raum7.local_llm_learning.ui.shared.components.CustomElevatedButton
+import de.raum7.local_llm_learning.ui.shared.components.CustomRadioButton
+import de.raum7.local_llm_learning.ui.shared.components.StatInfoItem
 import de.raum7.local_llm_learning.ui.theme.AppTheme
+import de.raum7.local_llm_learning.ui.theme.bodyFontFamily
 
 @Composable
 fun AnsweringPhaseCard(
@@ -38,56 +45,79 @@ fun AnsweringPhaseCard(
     elapsedTime: Long,
     onAnswerSelected: (Answer) -> Unit,
     onContinue: () -> Unit,
-    padding: PaddingValues
+    modifier: Modifier = Modifier,
 ) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        modifier = Modifier
-            .padding(padding)
+    CustomCard(
+        modifier = modifier
             .padding(horizontal = 16.dp)
             .padding(top = 64.dp),
     ) {
-        LazyColumn (
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            item {
-                TimerText(elapsedTime)
-            }
+        AnsweringPhaseCardContent(
+            question = question,
+            selectedAnswer = selectedAnswer,
+            elapsedTime = elapsedTime,
+            onAnswerSelected = onAnswerSelected,
+            onContinue = onContinue,
+        )
+    }
+}
 
-            item {
-                QuestionTitle(question)
-            }
+@Composable
+private fun AnsweringPhaseCardContent(
+    question: Question,
+    selectedAnswer: Answer?,
+    elapsedTime: Long,
+    onAnswerSelected: (Answer) -> Unit,
+    onContinue: () -> Unit,
+) {
+    LazyColumn (
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.padding(16.dp)
+    ) {
+        item {
+            QuizTimer(elapsedTime)
+        }
 
-            items(question.answers) { answer: Answer ->
-                AnswerSelection(answer, isSelected = answer == selectedAnswer, onClick = { onAnswerSelected(answer) })
-            }
+        item {
+            QuestionTitle(question)
+        }
 
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    CustomElevatedButton(
-                        label = stringResource(R.string.quiz_continue),
-                        isEnabled = selectedAnswer != null,
-                        onclick = onContinue,
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                    )
-                }
-            }
+        items(question.answers) { answer: Answer ->
+            AnswerSelection(answer, isSelected = answer == selectedAnswer, onClick = { onAnswerSelected(answer) })
+        }
+
+        item {
+            ButtonSection(isEnabled = selectedAnswer != null, onContinue = onContinue)
         }
     }
 }
 
 @Composable
-fun QuestionTitle(question: Question) {
+private fun QuizTimer(
+    elapsedNanoSeconds: Long,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+    ) {
+        StatInfoItem(
+            icon = Icons.Outlined.Timer,
+            contentDescription = stringResource(R.string.quiz_your_time),
+            value = elapsedNanoSeconds / 1_000_000_000.0,
+            unit = "s",
+            modifier = Modifier.align(Alignment.Center),
+        )
+    }
+}
+
+@Composable
+private fun QuestionTitle(question: Question) {
     Text(
         text = question.question,
-        style = MaterialTheme.typography.headlineMedium,
+        style = MaterialTheme.typography.bodyLarge.copy(fontFamily = bodyFontFamily),
         maxLines = 4,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.padding(bottom = 32.dp)
@@ -95,35 +125,67 @@ fun QuestionTitle(question: Question) {
 }
 
 @Composable
-fun AnswerSelection(
+private fun AnswerSelection(
     answer: Answer,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
-            .fillMaxWidth()
+    val shape = CardDefaults.shape
+
+    Box(
+        Modifier
             .padding(bottom = 16.dp)
+            .clip(shape)
             .selectable(
                 selected = isSelected,
                 onClick = onClick,
-                role = Role.RadioButton
+                role = Role.RadioButton,
+            )
+            .background(
+                color = Color(0xFFFFFF).copy(alpha = 0.05f),
+                shape = shape,
+            )
+            .border(
+                width = 1.dp,
+                color = when(isSelected) {
+                    true -> MaterialTheme.colorScheme.primary
+                    false -> MaterialTheme.colorScheme.surfaceVariant
+                },
+                shape = shape,
             )
     ) {
-        RadioButton(
-            selected = isSelected,
-            onClick = null,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            CustomRadioButton(isSelected)
 
-        Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
-            text = answer.answer,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 4,
-            overflow = TextOverflow.Ellipsis,
+            Text(
+                text = answer.answer,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ButtonSection(isEnabled: Boolean, onContinue: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        CustomElevatedButton(
+            label = stringResource(R.string.quiz_continue),
+            isEnabled = isEnabled,
+            onclick = onContinue,
+            modifier = Modifier.align(Alignment.CenterEnd),
         )
     }
 }
@@ -138,7 +200,6 @@ fun AnsweringPhaseCardPreview_Unselected() {
             elapsedTime = 1000L,
             onAnswerSelected = {},
             onContinue = {},
-            padding = PaddingValues.Zero,
         )
     }
 }
@@ -153,7 +214,6 @@ fun AnsweringPhaseCardPreview_Selected() {
             elapsedTime = 1000L,
             onAnswerSelected = {},
             onContinue = {},
-            padding = PaddingValues.Zero,
         )
     }
 }

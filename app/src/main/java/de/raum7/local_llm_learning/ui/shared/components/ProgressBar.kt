@@ -1,4 +1,4 @@
-package de.raum7.local_llm_learning.ui.screens.library.components
+package de.raum7.local_llm_learning.ui.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,8 +21,9 @@ fun ProgressBar(
     perc: Float,
     size: Dp = 20.dp,
     shape: Shape = RectangleShape,
+    modifier: Modifier = Modifier,
 ) {
-    Box {
+    Box(modifier) {
         Box(
             modifier = Modifier
                 .height(size)
@@ -38,27 +39,24 @@ fun ProgressBar(
                 )
         )
 
-        if (perc > 0) {
-            Box(
-                modifier = Modifier
-                    .height(size)
-                    .fillMaxWidth(perc)
-                    .background(
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = shape,
-                    )
-            )
-        } else {
-            Box(
-                modifier = Modifier
+        Box(
+            modifier = when(perc) {
+                0f -> Modifier
                     .height(size)
                     .width(size)
                     .background(
                         color = MaterialTheme.colorScheme.onSurface.copy(0.5f),
                         shape = shape,
                     )
-            )
-        }
+                else -> Modifier
+                    .height(size)
+                    .fillMaxWidth(perc)
+                    .background(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = shape,
+                    )
+            }
+        )
     }
 }
 

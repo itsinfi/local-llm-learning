@@ -128,7 +128,7 @@ fun AssistantScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun AssistantScreenPreview_InitialDescription() {
+private fun AssistantScreenPreview_InitialDescription() {
     AppTheme {
         AssistantScreen(
             AssistantUiState(

@@ -8,6 +8,7 @@ import de.raum7.local_llm_learning.data.base.BaseUiState
 import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 
 data class QuizUiState(
+    val material: LearningMaterial,
     val phase: QuizPhase,
     val question: Question,
     val selectedAnswer: Answer?,
@@ -20,7 +21,7 @@ data class QuizUiState(
         fun from(
             learningMaterial: LearningMaterial,
             questionId: String?,
-            startedAt: Long = System.nanoTime()
+            startedAt: Long = System.nanoTime(),
         ): QuizUiState {
 
             val question = when(questionId) {
@@ -34,6 +35,7 @@ data class QuizUiState(
             )
 
             return QuizUiState(
+                material = learningMaterial,
                 phase = QuizPhase.ANSWERING,
                 question = questionWithShuffledAnswers,
                 selectedAnswer = null,
@@ -48,7 +50,7 @@ data class QuizUiState(
         fun from(
             learningMaterial: LearningMaterial,
             questionIndex: Int = 0,
-            startedAt: Long = System.nanoTime()
+            startedAt: Long = System.nanoTime(),
         ): QuizUiState {
 
             val question = learningMaterial.questions[questionIndex]
@@ -58,6 +60,7 @@ data class QuizUiState(
             )
 
             return QuizUiState(
+                material = learningMaterial,
                 phase = QuizPhase.ANSWERING,
                 question = questionWithShuffledAnswers,
                 selectedAnswer = null,
