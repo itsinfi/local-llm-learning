@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.Flow
 interface LearningMaterialDao {
 
     @Query("SELECT * FROM learningmaterial")
-    suspend fun getAllMaterials(): Flow<List<LearningMaterial>>
+    suspend fun getAllMaterials(): List<LearningMaterial>
+
+    @Query("SELECT * FROM learningmaterial")
+    suspend fun getAllMaterialsAsFlow(): Flow<List<LearningMaterial>>
 
     @Query("SELECT * FROM learningmaterial WHERE id = :id")
     suspend fun getMaterialById(id: Int): LearningMaterial?

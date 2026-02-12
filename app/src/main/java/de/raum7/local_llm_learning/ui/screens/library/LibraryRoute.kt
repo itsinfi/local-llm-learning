@@ -2,12 +2,16 @@ package de.raum7.local_llm_learning.ui.screens.library
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.raum7.local_llm_learning.data.database.dao.LearningMaterialDao
+import de.raum7.local_llm_learning.data.database.dao.QuestionDao
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 
 @Composable
 fun LibraryRoute(
     navigateToAssistantCallback: () -> Unit,
-    navigateToQuizCallback: (String) -> Unit,
+    navigateToQuizCallback: (Int) -> Unit,
+    learningMaterialDao: LearningMaterialDao,
+    questionDao: QuestionDao,
 ) {
     val data = MOCK_LEARNING_MATERIALS
 
@@ -15,7 +19,7 @@ fun LibraryRoute(
         factory = LibraryViewModelFactory(
             navigateToAssistantCallback,
             navigateToQuizCallback,
-            repository = LibraryRepository(data),
+            repository = LibraryRepository(learningMaterialDao, questionDao),
         )
     )
 

@@ -21,4 +21,7 @@ interface QuestionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertQuestions(questions: List<Question>)
+
+    @Query("SELECT COUNT(id) from question WHERE learningMaterialId = :learningMaterialId")
+    suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int
 }

@@ -65,7 +65,7 @@ private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "${learningMaterial.questions.size} ${stringResource(R.string.library_questions)}",
+            text = "${learningMaterial.questionCount} ${stringResource(R.string.library_questions)}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
             maxLines = 1,

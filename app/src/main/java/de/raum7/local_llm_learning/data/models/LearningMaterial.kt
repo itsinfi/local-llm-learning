@@ -10,6 +10,7 @@ data class LearningMaterial (
     val id: Int = 0,
     val title: String,
     //val questions: List<Question>,
+    val questionCount: Int?,
     val progress: Double,
 ) : BaseModel() {
 //    override fun equals(other: Any?): Boolean {
