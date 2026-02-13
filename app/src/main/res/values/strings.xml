@@ -31,6 +31,15 @@
     </string>
     <string name="assistant_goal">Zielsetzung (optional)</string>
     <string name="assistant_goal_placeholder">Was möchtest du mit dem Lernen erreichen?</string>
+    <string name="assistant_generating">Generierung läuft</string>
+    <string name="assistant_please_wait">Bitte warten</string>
+    <string name="assisant_result">Generiertes Lernmaterial</string>
+    <string name="assisant_result_save">Speichern</string>
+    <string name="assisant_back_to_library">Zurück zur Bibliothek</string>
+    <string name="assisant_result_parsing_error">Ausgabe konnte nicht geparsed werden. Rohtext</string>
+    <string name="assisant_result_no_result_error">Kein Ergebnis erhalten.</string>
+    <string name="assisant_result_correct">Richtig</string>
+    <string name="assisant_result_answer">Antwort</string>
 
     <string name="quiz">Quiz</string>
     <string name="quiz_continue">Weiter</string>

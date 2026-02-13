@@ -142,7 +142,7 @@ private fun AnswerSelection(
                 role = Role.RadioButton,
             )
             .background(
-                color = Color(0xFFFFFF).copy(alpha = 0.05f),
+                color = Color.White.copy(alpha = 0.05f),
                 shape = shape,
             )
             .border(

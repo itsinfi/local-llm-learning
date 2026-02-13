@@ -37,7 +37,7 @@ fun InitialDescriptionForm(
 
 @Preview(showBackground = true)
 @Composable
-fun InitialDescriptionFormPreview_Filled() {
+fun InitialDescriptionFormPreview_Empty() {
     AppTheme {
         Column {
             InitialDescriptionForm(
@@ -53,7 +53,7 @@ fun InitialDescriptionFormPreview_Filled() {
 
 @Preview(showBackground = true)
 @Composable
-fun InitialDescriptionFormPreview_Selected() {
+fun InitialDescriptionFormPreview_Filled() {
     AppTheme {
         Column {
             InitialDescriptionForm(

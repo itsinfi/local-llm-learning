@@ -22,7 +22,7 @@ fun InfoTextBlock(title: String, content: String) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
-        val color = Color(0xFFFFFFFF)
+        val color = Color.White
 
         Text(
             text = title,

@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.screens.assistant.components.AssistantCard
 import de.raum7.local_llm_learning.ui.screens.assistant.components.FurtherSpecificationForm
@@ -112,12 +113,12 @@ fun AssistantScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Generierung läuft",
+                        text = stringResource(R.string.assistant_generating),
                         color = Color.White
                     )
 
                     Text(
-                        text = "Bitte warten",
+                        text = stringResource(R.string.assistant_please_wait),
                         color = Color.White
                     )
                 }
@@ -128,7 +129,7 @@ fun AssistantScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun AssistantScreenPreview_InitialDescription() {
+private fun AssistantScreenPreview_InitialDescriptionEmpty() {
     AppTheme {
         AssistantScreen(
             AssistantUiState(
@@ -157,6 +158,211 @@ private fun AssistantScreenPreview_InitialDescription() {
                 furtherSpecification = FurtherSpecificationUiState(
                     topicSpecification = "",
                     goal = "",
+                ),
+                isGenerating = false,
+            ),
+            onContinue = {},
+            onBack = {},
+            onChanged = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantScreenPreview_InitialDescriptionFilled() {
+    AppTheme {
+        AssistantScreen(
+            AssistantUiState(
+                assistantCard = AssistantCardUiState(
+                    phase = AssistantPhase.INITIAL_DESCRIPTION,
+                    isContinueEnabled = true,
+                ),
+                initialDescription = InitialDescriptionUiState(
+                    filePath = "lorem-ipsum/dolor-sit-amet-consectetur-adipiscing-elit-sed.pdf".toUri(),
+                    prompt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                ),
+                parameterSelection = ParameterSelectionUiState(
+                    questionCount = SelectionUiState(
+                        options = QuestionCount.entries.map { it.value.toString() },
+                        selected = DEFAULT_QUESTION_COUNT.value.toString(),
+                        expanded = false,
+                        translations = null,
+                    ),
+                    depthOfTopic = SelectionUiState(
+                        options = DepthOfTopic.entries.map { it.toString() },
+                        selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
+                        expanded = false,
+                        translations = DepthOfTopic.getTranslations(),
+                    )
+                ),
+                furtherSpecification = FurtherSpecificationUiState(
+                    topicSpecification = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    goal = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                ),
+                isGenerating = false,
+            ),
+            onContinue = {},
+            onBack = {},
+            onChanged = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantScreenPreview_ParameterSelection() {
+    AppTheme {
+        AssistantScreen(
+            AssistantUiState(
+                assistantCard = AssistantCardUiState(
+                    phase = AssistantPhase.PARAMETER_SELECTION,
+                    isContinueEnabled = true,
+                ),
+                initialDescription = InitialDescriptionUiState(
+                    filePath = null,
+                    prompt = "",
+                ),
+                parameterSelection = ParameterSelectionUiState(
+                    questionCount = SelectionUiState(
+                        options = QuestionCount.entries.map { it.value.toString() },
+                        selected = DEFAULT_QUESTION_COUNT.value.toString(),
+                        expanded = false,
+                        translations = null,
+                    ),
+                    depthOfTopic = SelectionUiState(
+                        options = DepthOfTopic.entries.map { it.toString() },
+                        selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
+                        expanded = false,
+                        translations = DepthOfTopic.getTranslations(),
+                    )
+                ),
+                furtherSpecification = FurtherSpecificationUiState(
+                    topicSpecification = "",
+                    goal = "",
+                ),
+                isGenerating = false,
+            ),
+            onContinue = {},
+            onBack = {},
+            onChanged = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantScreenPreview_FurtherSpecificationEmpty() {
+    AppTheme {
+        AssistantScreen(
+            AssistantUiState(
+                assistantCard = AssistantCardUiState(
+                    phase = AssistantPhase.FURTHER_SPECIFICATION,
+                    isContinueEnabled = true,
+                ),
+                initialDescription = InitialDescriptionUiState(
+                    filePath = null,
+                    prompt = "",
+                ),
+                parameterSelection = ParameterSelectionUiState(
+                    questionCount = SelectionUiState(
+                        options = QuestionCount.entries.map { it.value.toString() },
+                        selected = DEFAULT_QUESTION_COUNT.value.toString(),
+                        expanded = false,
+                        translations = null,
+                    ),
+                    depthOfTopic = SelectionUiState(
+                        options = DepthOfTopic.entries.map { it.toString() },
+                        selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
+                        expanded = false,
+                        translations = DepthOfTopic.getTranslations(),
+                    )
+                ),
+                furtherSpecification = FurtherSpecificationUiState(
+                    topicSpecification = "",
+                    goal = "",
+                ),
+                isGenerating = false,
+            ),
+            onContinue = {},
+            onBack = {},
+            onChanged = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantScreenPreview_FurtherSpecificationFilled() {
+    AppTheme {
+        AssistantScreen(
+            AssistantUiState(
+                assistantCard = AssistantCardUiState(
+                    phase = AssistantPhase.FURTHER_SPECIFICATION,
+                    isContinueEnabled = true,
+                ),
+                initialDescription = InitialDescriptionUiState(
+                    filePath = "lorem-ipsum/dolor-sit-amet-consectetur-adipiscing-elit-sed.pdf".toUri(),
+                    prompt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                ),
+                parameterSelection = ParameterSelectionUiState(
+                    questionCount = SelectionUiState(
+                        options = QuestionCount.entries.map { it.value.toString() },
+                        selected = DEFAULT_QUESTION_COUNT.value.toString(),
+                        expanded = false,
+                        translations = null,
+                    ),
+                    depthOfTopic = SelectionUiState(
+                        options = DepthOfTopic.entries.map { it.toString() },
+                        selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
+                        expanded = false,
+                        translations = DepthOfTopic.getTranslations(),
+                    )
+                ),
+                furtherSpecification = FurtherSpecificationUiState(
+                    topicSpecification = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    goal = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                ),
+                isGenerating = false,
+            ),
+            onContinue = {},
+            onBack = {},
+            onChanged = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantScreenPreview_Generating() {
+    AppTheme {
+        AssistantScreen(
+            AssistantUiState(
+                assistantCard = AssistantCardUiState(
+                    phase = AssistantPhase.FURTHER_SPECIFICATION,
+                    isContinueEnabled = true,
+                ),
+                initialDescription = InitialDescriptionUiState(
+                    filePath = "lorem-ipsum/dolor-sit-amet-consectetur-adipiscing-elit-sed.pdf".toUri(),
+                    prompt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                ),
+                parameterSelection = ParameterSelectionUiState(
+                    questionCount = SelectionUiState(
+                        options = QuestionCount.entries.map { it.value.toString() },
+                        selected = DEFAULT_QUESTION_COUNT.value.toString(),
+                        expanded = false,
+                        translations = null,
+                    ),
+                    depthOfTopic = SelectionUiState(
+                        options = DepthOfTopic.entries.map { it.toString() },
+                        selected = DEFAULT_DEPTH_OF_TOPIC.toString(),
+                        expanded = false,
+                        translations = DepthOfTopic.getTranslations(),
+                    )
+                ),
+                furtherSpecification = FurtherSpecificationUiState(
+                    topicSpecification = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    goal = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                 ),
                 isGenerating = true,
             ),

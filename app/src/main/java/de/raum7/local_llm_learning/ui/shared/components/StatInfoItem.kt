@@ -33,7 +33,7 @@ fun StatInfoItem(
     modifier: Modifier = Modifier,
 ) {
     val color = MaterialTheme.colorScheme.onSurface.copy(0.5f)
-    val backgroundColor = Color(0xFFFFFF).copy(0.1f)
+    val backgroundColor = Color.White.copy(0.1f)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
