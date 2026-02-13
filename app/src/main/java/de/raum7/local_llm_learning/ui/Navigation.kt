@@ -20,10 +20,10 @@ object Routes {
     const val ASSISTANT = "assistant"
 
     const val QUIZ = "quiz/{learningMaterialId}"
-    fun quiz(learningMaterialId: String): String = "quiz/$learningMaterialId"
+    fun quiz(learningMaterialId: Int): String = "quiz/$learningMaterialId"
 
     const val EDIT_QUESTION = "editQuestion/{learningMaterialId}/{questionId}"
-    fun editQuestion(learningMaterialId: String, questionId: String): String = "editQuestion/$learningMaterialId/$questionId"
+    fun editQuestion(learningMaterialId: Int, questionId: Int): String = "editQuestion/$learningMaterialId/$questionId"
 }
 
 @Composable
@@ -39,7 +39,7 @@ fun AppNavHost(questionDao: QuestionDao, answerDao: AnswerDao, learningMaterialD
         composable(Routes.LIBRARY) {
             LibraryRoute(
                 navigateToAssistantCallback = { navController.navigate(Routes.ASSISTANT) },
-                navigateToQuizCallback = { learningMaterialId: String -> navController.navigate("quiz/$learningMaterialId") },
+                navigateToQuizCallback = { learningMaterialId: Int -> navController.navigate("quiz/$learningMaterialId") },
                 learningMaterialDao = learningMaterialDao,
                 questionDao = questionDao,
             )
@@ -53,20 +53,20 @@ fun AppNavHost(questionDao: QuestionDao, answerDao: AnswerDao, learningMaterialD
         // Quiz Screen Route
         composable(
             Routes.QUIZ,
-            listOf(navArgument("learningMaterialId") { type = NavType.StringType })
+            listOf(navArgument("learningMaterialId") { type = NavType.IntType })
         ) { backStackEntry ->
-            val learningMaterialId = backStackEntry.arguments?.getString("learningMaterialId")
+            val learningMaterialId = backStackEntry.arguments?.getInt("learningMaterialId")
                 ?: error("Missing learningMaterialId")
 
             QuizRoute(
                 learningMaterialId, // TODO: fix to integer
                 navigateToEditQuestionCallback = {
-                    learningMaterialId: String, questionId: String ->
+                        learningMaterialId: Int, questionId: Int ->
                     navController.navigate(Routes.editQuestion(learningMaterialId, questionId))
                 },
-                questionDao: QuestionDao,
-                answerDao: AnswerDao,
-                learningMaterialDao: LearningMaterialDao,
+                questionDao,
+                answerDao,
+                learningMaterialDao,
             )
         }
 
@@ -74,13 +74,13 @@ fun AppNavHost(questionDao: QuestionDao, answerDao: AnswerDao, learningMaterialD
         composable(
             Routes.EDIT_QUESTION,
             listOf(
-                navArgument("learningMaterialId") { type = NavType.StringType },
-                navArgument("questionId") { type = NavType.StringType }
+                navArgument("learningMaterialId") { type = NavType.IntType },
+                navArgument("questionId") { type = NavType.IntType }
             )
         ) { backStackEntry ->
-            val learningMaterialId = backStackEntry.arguments?.getString("learningMaterialId")
+            val learningMaterialId = backStackEntry.arguments?.getInt("learningMaterialId")
                 ?: error("Missing learningMaterialId")
-            val questionId = backStackEntry.arguments?.getString("questionId")
+            val questionId = backStackEntry.arguments?.getInt("questionId")
                 ?: error("Missing questionId")
 
             EditQuestionRoute(learningMaterialId, questionId, questionDao, answerDao)

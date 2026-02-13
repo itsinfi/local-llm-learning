@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class EditQuestionViewModel(
     learningMaterialId: Int,
@@ -17,7 +18,7 @@ class EditQuestionViewModel(
 ) : BaseViewModel(repository) {
 
     init {
-        viewModelScope.launch {
+        runBlocking {
             val question: Question = this@EditQuestionViewModel.repository.getQuestion(questionId)
             val answers: List<Answer> = this@EditQuestionViewModel.repository.getAnswersForQuestion(questionId)
             val initialState = EditQuestionUiState.from(question, answers)

@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class LibraryViewModel(
     private val navigateToAssistantCallback: () -> Unit,
@@ -12,7 +13,7 @@ class LibraryViewModel(
 ) : BaseViewModel(repository) {
 
     init {
-        viewModelScope.launch {
+        runBlocking {
             val learningMaterial: List<LearningMaterial> = this@LibraryViewModel.repository.getLearningMaterials()
             val learningMaterialQuestionCounts = learningMaterial.associate { it.id to repository.getQuestionCountForLearningMaterial(it.id) }
             val initialState = LibraryUiState.from(learningMaterial, learningMaterialQuestionCounts)

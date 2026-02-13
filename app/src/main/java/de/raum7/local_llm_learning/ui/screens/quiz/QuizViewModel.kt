@@ -10,6 +10,7 @@ import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.UUID
 
 class QuizViewModel(
@@ -20,7 +21,7 @@ class QuizViewModel(
     private var learningMaterial: LearningMaterial = TODO()
 
     init {
-        viewModelScope.launch() {
+        runBlocking {
             this@QuizViewModel.learningMaterial = this@QuizViewModel.repository.getLearningMaterialById(learningMaterialId)
             val question = repository.getNextQuestionById(-1, this@QuizViewModel.learningMaterial.id)
             val answers = repository.getAnswersForQuestion(question.id)
