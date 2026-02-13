@@ -135,7 +135,7 @@ private fun AssistantScreenPreview_InitialDescriptionEmpty() {
             AssistantUiState(
                 assistantCard = AssistantCardUiState(
                     phase = AssistantPhase.INITIAL_DESCRIPTION,
-                    isContinueEnabled = true,
+                    isContinueEnabled = false,
                 ),
                 initialDescription = InitialDescriptionUiState(
                     filePath = null,

@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.Icon
@@ -50,7 +50,7 @@ private fun ResultsSummary(result: QuizResult) {
 
     val imageVector = when(result.isCorrect) {
         true -> Icons.Default.CheckCircle
-        false -> Icons.Default.Error
+        false -> Icons.Default.Cancel
     }
 
     val tint = when(result.isCorrect) {

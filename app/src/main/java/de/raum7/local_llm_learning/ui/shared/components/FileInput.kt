@@ -71,6 +71,9 @@ fun FileInput(
     pathToSelectedFile: Uri?,
     onFileSelected: (Uri) -> Unit,
     mimeTypes: Map<String, String> = DEFAULT_MIME_TYPES,
+    buttonStyle: ButtonStyle = ButtonStyle.from(
+        colorFill = ButtonColorFill.OUTLINE,
+    ),
 ) {
     val context = LocalContext.current
 
@@ -111,7 +114,7 @@ fun FileInput(
                         else -> R.string.file_input_change
                     }
                 ),
-                // buttonClass = ButtonClass.SECONDARY, TODO:
+                style = buttonStyle,
             )
 
             when(pathToSelectedFile) {

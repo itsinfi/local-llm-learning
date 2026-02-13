@@ -9,6 +9,9 @@ import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.screens.assistant.MIME_TYPES
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
 import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescriptionUiState
+import de.raum7.local_llm_learning.ui.shared.components.ButtonColorFill
+import de.raum7.local_llm_learning.ui.shared.components.ButtonStyle
+import de.raum7.local_llm_learning.ui.shared.components.ButtonType
 import de.raum7.local_llm_learning.ui.shared.components.FileInput
 import de.raum7.local_llm_learning.ui.shared.components.TextInput
 import de.raum7.local_llm_learning.ui.theme.AppTheme
@@ -32,6 +35,16 @@ fun InitialDescriptionForm(
         mimeTypes = MIME_TYPES,
         pathToSelectedFile = uiState.filePath,
         onFileSelected = { uri -> onChanged(AssistantUiStateChange(filePath = uri)) },
+        buttonStyle = when(uiState.filePath) {
+            null -> ButtonStyle.from(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.FILLED,
+            )
+            else -> ButtonStyle.from(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            )
+        },
     )
 }
 

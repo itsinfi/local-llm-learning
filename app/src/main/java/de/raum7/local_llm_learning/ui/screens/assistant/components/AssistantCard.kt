@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantCardUiState
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantPhase
-import de.raum7.local_llm_learning.ui.shared.components.ButtonClass
+import de.raum7.local_llm_learning.ui.shared.components.ButtonColorFill
+import de.raum7.local_llm_learning.ui.shared.components.ButtonStyle
+import de.raum7.local_llm_learning.ui.shared.components.CustomCard
 import de.raum7.local_llm_learning.ui.shared.components.CustomElevatedButton
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
@@ -35,15 +37,9 @@ fun AssistantCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val containerColor = MaterialTheme.colorScheme.surfaceContainer
-    val contentColor = MaterialTheme.colorScheme.onSurface
-
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = containerColor,
-            contentColor = contentColor,
-        ),
-        modifier = modifier,
+    CustomCard(
+        modifier = modifier
+            .verticalScroll(rememberScrollState()),
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
@@ -96,7 +92,6 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_continue),
                     isEnabled = canContinue,
                     onclick = onContinue,
-                    // buttonClass = ButtonClass.PRIMARY, TODO:
                     modifier = Modifier.align(Alignment.CenterEnd),
                 )
             }
@@ -110,8 +105,10 @@ private fun ButtonSection(
                 CustomElevatedButton(
                     label = stringResource(R.string.assistant_back),
                     isEnabled = canNavigate,
+                    style = ButtonStyle.from(
+                        colorFill = ButtonColorFill.OUTLINE
+                    ),
                     onclick = onBack,
-                    // buttonClass = ButtonClass.SECONDARY, TODO:
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -120,7 +117,6 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_generate),
                     isEnabled = canContinue,
                     onclick = onContinue,
-                    // buttonClass = ButtonClass.PRIMARY, TODO:
                 )
             }
 
@@ -134,7 +130,9 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_back),
                     isEnabled = canNavigate,
                     onclick = onBack,
-                    // buttonClass = ButtonClass.SECONDARY, TODO:
+                    style = ButtonStyle.from(
+                        colorFill = ButtonColorFill.OUTLINE
+                    ),
                 )
 
                 Spacer(Modifier.width(8.dp))
@@ -143,7 +141,6 @@ private fun ButtonSection(
                     label = stringResource(R.string.assistant_continue),
                     isEnabled = canContinue,
                     onclick = onContinue,
-                    // buttonClass = ButtonClass.PRIMARY, TODO:
                 )
             }
     }

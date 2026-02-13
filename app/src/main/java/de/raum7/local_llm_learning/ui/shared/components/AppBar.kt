@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import de.raum7.local_llm_learning.ui.theme.AppTheme
@@ -19,13 +20,14 @@ fun AppBar(
     title: String,
     navigationIcon: @Composable (() -> Unit) = {},
     actions: @Composable (RowScope.() -> Unit) = {},
+    textStyle: TextStyle = MaterialTheme.typography.headlineLarge,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineLarge,
+                style = textStyle,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )

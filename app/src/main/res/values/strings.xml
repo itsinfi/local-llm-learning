@@ -36,9 +36,11 @@
     <string name="assisant_result">Generiertes Lernmaterial</string>
     <string name="assisant_result_save">Speichern</string>
     <string name="assisant_back_to_library">Zurück zur Bibliothek</string>
-    <string name="assisant_result_parsing_error">Ausgabe konnte nicht geparsed werden. Rohtext</string>
+    <string name="assisant_result_parsing_error">Ausgabe konnte nicht geparsed werden.</string>
+    <string name="assisant_result_raw_text">Rohtext</string>
     <string name="assisant_result_no_result_error">Kein Ergebnis erhalten.</string>
     <string name="assisant_result_correct">Richtig</string>
+    <string name="assisant_result_incorrect">Falsch</string>
     <string name="assisant_result_answer">Antwort</string>
 
     <string name="quiz">Quiz</string>

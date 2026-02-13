@@ -12,27 +12,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
-enum class ButtonClass {
+enum class ButtonType {
     PRIMARY,
     SECONDARY,
     TERTIARY,
     ERROR,
 }
 
-enum class ButtonColorFillType {
+enum class ButtonColorFill {
     FILLED,
     OUTLINE,
 }
 
 data class ButtonStyle (
-    val buttonClass: ButtonClass,
-    val fillType: ButtonColorFillType,
+    val type: ButtonType,
+    val colorFill: ButtonColorFill,
 ) {
     companion object {
         val DEFAULT = ButtonStyle(
-            buttonClass = ButtonClass.PRIMARY,
-            fillType = ButtonColorFillType.FILLED,
+            type = ButtonType.PRIMARY,
+            colorFill = ButtonColorFill.FILLED,
         )
+
+        fun from(
+            type: ButtonType = DEFAULT.type,
+            colorFill: ButtonColorFill = DEFAULT.colorFill,
+        ): ButtonStyle {
+            return ButtonStyle(
+                type = type,
+                colorFill = colorFill,
+            )
+        }
     }
 }
 
@@ -45,22 +55,22 @@ fun CustomElevatedButton(
     style: ButtonStyle = ButtonStyle.DEFAULT,
 ) {
     // color definitions
-    val containerColor: Color = when(style.fillType) {
-        ButtonColorFillType.OUTLINE -> MaterialTheme.colorScheme.surfaceContainer
-        ButtonColorFillType.FILLED -> when(style.buttonClass) {
-            ButtonClass.PRIMARY -> MaterialTheme.colorScheme.primary
-            ButtonClass.SECONDARY -> MaterialTheme.colorScheme.secondary
-            ButtonClass.TERTIARY -> MaterialTheme.colorScheme.tertiary
-            ButtonClass.ERROR -> MaterialTheme.colorScheme.error
+    val containerColor: Color = when(style.colorFill) {
+        ButtonColorFill.OUTLINE -> MaterialTheme.colorScheme.surfaceContainer
+        ButtonColorFill.FILLED -> when(style.type) {
+            ButtonType.PRIMARY -> MaterialTheme.colorScheme.primary
+            ButtonType.SECONDARY -> MaterialTheme.colorScheme.secondary
+            ButtonType.TERTIARY -> MaterialTheme.colorScheme.tertiary
+            ButtonType.ERROR -> MaterialTheme.colorScheme.error
         }
     }
-    val contentColor: Color = when(style.fillType) {
-        ButtonColorFillType.OUTLINE -> MaterialTheme.colorScheme.onSurface
-        ButtonColorFillType.FILLED -> when(style.buttonClass) {
-            ButtonClass.PRIMARY -> MaterialTheme.colorScheme.onPrimary
-            ButtonClass.SECONDARY -> MaterialTheme.colorScheme.onSecondary
-            ButtonClass.TERTIARY -> MaterialTheme.colorScheme.onTertiary
-            ButtonClass.ERROR -> MaterialTheme.colorScheme.onError
+    val contentColor: Color = when(style.colorFill) {
+        ButtonColorFill.OUTLINE -> MaterialTheme.colorScheme.onSurface
+        ButtonColorFill.FILLED -> when(style.type) {
+            ButtonType.PRIMARY -> MaterialTheme.colorScheme.onPrimary
+            ButtonType.SECONDARY -> MaterialTheme.colorScheme.onSecondary
+            ButtonType.TERTIARY -> MaterialTheme.colorScheme.onTertiary
+            ButtonType.ERROR -> MaterialTheme.colorScheme.onError
         }
     }
     val disabledContainerColor: Color = containerColor.copy(alpha = 0.5f)
@@ -78,17 +88,17 @@ fun CustomElevatedButton(
         onclick,
         enabled = isEnabled,
         colors = colors,
-        border = when(style.fillType) {
-            ButtonColorFillType.OUTLINE -> BorderStroke(
+        border = when(style.colorFill) {
+            ButtonColorFill.OUTLINE -> BorderStroke(
                 width = 1.dp,
-                color = when(style.buttonClass) {
-                    ButtonClass.PRIMARY -> MaterialTheme.colorScheme.primary
-                    ButtonClass.SECONDARY -> MaterialTheme.colorScheme.secondary
-                    ButtonClass.TERTIARY -> MaterialTheme.colorScheme.tertiary
-                    ButtonClass.ERROR -> MaterialTheme.colorScheme.error
+                color = when(style.type) {
+                    ButtonType.PRIMARY -> MaterialTheme.colorScheme.primary
+                    ButtonType.SECONDARY -> MaterialTheme.colorScheme.secondary
+                    ButtonType.TERTIARY -> MaterialTheme.colorScheme.tertiary
+                    ButtonType.ERROR -> MaterialTheme.colorScheme.error
                 },
             )
-            ButtonColorFillType.FILLED -> null
+            ButtonColorFill.FILLED -> null
         },
         modifier = modifier,
     ) {
@@ -107,8 +117,8 @@ fun CustomElevatedButtonPreview_PrimaryEnabledFilled() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.PRIMARY,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -123,8 +133,8 @@ fun CustomElevatedButtonPreview_PrimaryDisabledFilled() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.PRIMARY,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -139,8 +149,8 @@ fun CustomElevatedButtonPreview_PrimaryEnabledOutline() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.PRIMARY,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -155,8 +165,8 @@ fun CustomElevatedButtonPreview_PrimaryDisabledOutline() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.PRIMARY,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -173,8 +183,8 @@ fun CustomElevatedButtonPreview_SecondaryEnabledFilled() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.SECONDARY,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -189,8 +199,8 @@ fun CustomElevatedButtonPreview_SecondaryDisabledFilled() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.SECONDARY,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -205,8 +215,8 @@ fun CustomElevatedButtonPreview_SecondaryEnabledOutline() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.SECONDARY,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -221,8 +231,8 @@ fun CustomElevatedButtonPreview_SecondaryDisabledOutline() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.SECONDARY,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -239,8 +249,8 @@ fun CustomElevatedButtonPreview_TertiaryEnabledFilled() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.TERTIARY,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -255,8 +265,8 @@ fun CustomElevatedButtonPreview_TertiaryDisabledFilled() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.TERTIARY,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -271,8 +281,8 @@ fun CustomElevatedButtonPreview_TertiaryEnabledOutline() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.TERTIARY,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -287,8 +297,8 @@ fun CustomElevatedButtonPreview_TertiaryDisabledOutline() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.TERTIARY,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -305,8 +315,8 @@ fun CustomElevatedButtonPreview_ErrorEnabledFilled() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.ERROR,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -321,8 +331,8 @@ fun CustomElevatedButtonPreview_ErrorDisabledFilled() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.ERROR,
-                fillType = ButtonColorFillType.FILLED,
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }
@@ -337,8 +347,8 @@ fun CustomElevatedButtonPreview_ErrorEnabledOutline() {
             isEnabled = true,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.ERROR,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }
@@ -353,8 +363,8 @@ fun CustomElevatedButtonPreview_ErrorDisabledOutline() {
             isEnabled = false,
             onclick = {},
             style = ButtonStyle(
-                buttonClass = ButtonClass.ERROR,
-                fillType = ButtonColorFillType.OUTLINE,
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
     }

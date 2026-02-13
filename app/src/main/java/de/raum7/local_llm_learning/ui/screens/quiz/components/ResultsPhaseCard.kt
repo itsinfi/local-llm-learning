@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_QUIZ_RESULTS
 import de.raum7.local_llm_learning.data.models.QuizResult
-import de.raum7.local_llm_learning.ui.shared.components.ButtonClass
-import de.raum7.local_llm_learning.ui.shared.components.ButtonColorFillType
+import de.raum7.local_llm_learning.ui.shared.components.ButtonType
+import de.raum7.local_llm_learning.ui.shared.components.ButtonColorFill
 import de.raum7.local_llm_learning.ui.shared.components.ButtonStyle
 import de.raum7.local_llm_learning.ui.shared.components.CustomCard
 import de.raum7.local_llm_learning.ui.shared.components.CustomCardColors
@@ -42,7 +42,7 @@ fun ResultsPhaseCard(
         ),
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .padding(top = 64.dp)
+            .padding(top = 64.dp),
     ) {
         ResultsPhaseCardContent(result, onEdit, onContinue)
     }
@@ -88,17 +88,17 @@ private fun ButtonSection(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        val buttonClass = when(isCorrect) {
-            true -> ButtonClass.SECONDARY
-            false -> ButtonClass.ERROR
+        val buttonType = when(isCorrect) {
+            true -> ButtonType.SECONDARY
+            false -> ButtonType.ERROR
         }
 
         CustomElevatedButton(
             label = stringResource(R.string.quiz_edit_button),
             onclick = onEdit,
-            style = ButtonStyle(
-                buttonClass = buttonClass,
-                fillType = ButtonColorFillType.OUTLINE,
+            style = ButtonStyle.from(
+                type = buttonType,
+                colorFill = ButtonColorFill.OUTLINE,
             ),
         )
 
@@ -107,9 +107,9 @@ private fun ButtonSection(
         CustomElevatedButton(
             label = stringResource(R.string.quiz_continue),
             onclick = onContinue,
-            style = ButtonStyle(
-                buttonClass = buttonClass,
-                fillType = ButtonColorFillType.FILLED,
+            style = ButtonStyle.from(
+                type = buttonType,
+                colorFill = ButtonColorFill.FILLED,
             ),
         )
     }

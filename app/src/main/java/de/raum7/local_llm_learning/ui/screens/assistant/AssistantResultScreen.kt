@@ -1,25 +1,21 @@
 package de.raum7.local_llm_learning.ui.screens.assistant
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.parsing.LearningMaterialJsonParser
-import de.raum7.local_llm_learning.ui.shared.components.AppBar
-import de.raum7.local_llm_learning.ui.shared.components.CustomElevatedButton
+import de.raum7.local_llm_learning.ui.screens.assistant.components.AssistantResultScreenAppBar
+import de.raum7.local_llm_learning.ui.screens.assistant.components.ErrorCard
+import de.raum7.local_llm_learning.ui.screens.assistant.components.QuestionCardList
+import de.raum7.local_llm_learning.ui.screens.assistant.components.SaveLearningMaterialEFAB
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 import org.json.JSONArray
 import org.json.JSONObject
@@ -37,69 +33,25 @@ fun AssistantResultScreen(
     }
 
     Scaffold(
-        topBar = { AppBar(title = stringResource(R.string.assisant_result)) }
+        topBar = { AssistantResultScreenAppBar(onBack = onBackToLibrary) },
+        floatingActionButton = {
+            SaveLearningMaterialEFAB(
+                onClick = onSaveToLibrary,
+                isEnabled = parsed != null,
+            )
+        }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(16.dp)
+                .padding(top = 32.dp)
+                .padding(horizontal = 32.dp)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            CustomElevatedButton(
-                label = stringResource(R.string.assisant_result_save),
-                onclick = onSaveToLibrary,
-                // buttonClass = ButtonClass.PRIMARY, TODO:
-                isEnabled = parsed != null
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CustomElevatedButton(
-                label = stringResource(R.string.assisant_back_to_library),
-                onclick = onBackToLibrary,
-                // buttonClass = ButtonClass.SECONDARY TODO:
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                if (parsed == null) {
-                    Text(
-                        text = "${stringResource(R.string.assisant_result_parsing_error)}:",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = resultText.ifBlank { stringResource(R.string.assisant_result_no_result_error) })
-                    return@Column
-                }
-
-                Text(
-                    text = parsed.title,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-
-                parsed.questions.forEachIndexed { index, q ->
-                    Text(
-                        text = "${index + 1}. ${q.question}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    q.answers.forEach { a ->
-                        val prefix = if (a.isCorrect)
-                            "${stringResource(R.string.assisant_result_correct)}: "
-                        else
-                            "${stringResource(R.string.assisant_result_answer)}: "
-                        Text(text = prefix + a.answer)
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+            when(parsed) {
+                null -> ErrorCard(resultText)
+                else -> QuestionCardList(parsed)
             }
         }
     }
