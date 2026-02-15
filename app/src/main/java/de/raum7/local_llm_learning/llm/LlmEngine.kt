@@ -12,10 +12,10 @@ data class LlmConfig(
     val contextLength: Int = 1024,
 
     // Anzahl CPU Threads für Inferenz
-    val threads: Int = 4,
+    val threads: Int = 6,
 
     // Sampling Temperatur, höher bedeutet variabler, niedriger deterministischer
-    val temperature: Float = 0.7f,
+    val temperature: Float = 0.2f,
 
     // Top P Sampling, begrenzt die Token Auswahl auf kumulative Wahrscheinlichkeit
     val topP: Float = 0.95f,
@@ -24,7 +24,7 @@ data class LlmConfig(
     val seed: Int = 0,
 
     // Maximale Anzahl zu generierender Tokens
-    val maxTokens: Int = 256
+    val maxTokens: Int = 700
 )
 
 /**

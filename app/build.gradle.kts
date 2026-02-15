@@ -8,6 +8,12 @@ android {
     namespace = "de.raum7.local_llm_learning"
     compileSdk = 36
 
+
+    androidResources {
+        noCompress += "gguf"
+    }
+
+
     defaultConfig {
         applicationId = "de.raum7.local_llm_learning"
         minSdk = 33 // 33 Normal 31 Altes Handy
@@ -53,15 +59,17 @@ android {
             isJniDebuggable = true
         }
         release {
+            isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // optional: Native Symbole behalten, wenn du Release Crashes analysieren willst
-            // ndk { debugSymbolLevel = "SYMBOL_TABLE" }
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+
 
     compileOptions {
         // Java 17 ist bei neueren Android Gradle Plugin Versionen der Standard

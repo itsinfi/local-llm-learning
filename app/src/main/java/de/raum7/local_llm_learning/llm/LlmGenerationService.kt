@@ -47,8 +47,8 @@ class LlmGenerationService : LifecycleService() {
 
     // Konfiguration für die Generierung
     private val config = LlmConfig(
-        contextLength = 2028,
-        threads = 4,
+        contextLength = 1024,
+        threads = 6,
         temperature = 0.2f,
         topP = 0.95f,
         seed = 0,
