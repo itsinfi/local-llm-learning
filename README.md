@@ -1,9 +1,12 @@
-*How to run?*
+# Local LLM Learning
+An Android app that enables the creation of learning materials via a locally installed LLM model and spaced repetition based learning.
+
+## How to run?*
 -   Install Android Studio (recommended vers. Meerkat 2024.3.1 Patch 2)
 -   Create an emulator (Android SDK 33 or higher)
 -   Run
 
-*Sources*
+## Sources
 -   [Jetpack Compose Documentation](https://developer.android.com/develop/ui/compose/documentation)
 -   [Google Material Design 3 Builder](https://material-foundation.github.io/material-theme-builder/)
 -   [Material Color Palette Generator](https://elementor.com/tools/material-color-palette-generator/)
