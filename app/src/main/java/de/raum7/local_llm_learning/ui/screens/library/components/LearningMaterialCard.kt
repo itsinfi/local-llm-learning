@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTION_COUNTS
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.ui.shared.components.CustomCard
 import de.raum7.local_llm_learning.ui.shared.components.ProgressBar
@@ -27,6 +28,7 @@ import kotlin.math.roundToInt
 @Composable
 fun LearningMaterialCard(
     learningMaterial: LearningMaterial,
+    questionCount: Int,
     onClick: () -> Unit,
 ) {
     CustomCard(
@@ -42,6 +44,7 @@ fun LearningMaterialCard(
     ) {
         LearningMaterialCardContent(
             learningMaterial,
+            questionCount,
             modifier = Modifier.padding(16.dp)
         )
     }
@@ -50,6 +53,7 @@ fun LearningMaterialCard(
 @Composable
 private fun LearningMaterialCardContent(
     learningMaterial: LearningMaterial,
+    questionCount: Int,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -66,17 +70,17 @@ private fun LearningMaterialCardContent(
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
-        LearningMaterialDetailInfo(learningMaterial)
+        LearningMaterialDetailInfo(learningMaterial, questionCount)
     }
 }
 
 @Composable
-private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
+private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial, questionCount: Int) {
     val size = 12.dp
     val shape = RoundedCornerShape(size)
 
     Text(
-        text = "${learningMaterial.questions.size} " +
+        text = "${questionCount} " +
             "${stringResource(R.string.library_questions)} • " +
             "${(learningMaterial.progress * 100).roundToInt()}% " +
             stringResource(R.string.library_progress),
@@ -100,6 +104,7 @@ fun LearningMaterialCardPreview() {
     AppTheme {
         LearningMaterialCard(
             learningMaterial = MOCK_LEARNING_MATERIALS[1],
+            questionCount = MOCK_QUESTION_COUNTS.getValue(1),
             onClick = {},
         )
     }

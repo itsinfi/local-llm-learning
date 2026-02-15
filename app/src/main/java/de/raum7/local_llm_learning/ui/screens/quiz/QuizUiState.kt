@@ -8,9 +8,10 @@ import de.raum7.local_llm_learning.data.base.BaseUiState
 import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 
 data class QuizUiState(
-    val material: LearningMaterial,
+    val learningMaterial: LearningMaterial,
     val phase: QuizPhase,
     val question: Question,
+    var answers: List<Answer>,
     val selectedAnswer: Answer?,
     val result: QuizResult?,
     val totalQuestions: Int,
@@ -20,52 +21,22 @@ data class QuizUiState(
     companion object {
         fun from(
             learningMaterial: LearningMaterial,
-            questionId: String?,
-            startedAt: Long = System.nanoTime(),
+            questionCount: Int,
+            question: Question,
+            answers: List<Answer>,
+            startedAt: Long = System.nanoTime()
         ): QuizUiState {
 
-            val question = when(questionId) {
-                null -> learningMaterial.questions[0]
-                else -> learningMaterial.questions.firstOrNull { it.id == questionId }
-                    ?: error("No question found with id $questionId")
-            }
-
-            val questionWithShuffledAnswers = question.copy(
-                answers = question.answers.shuffled()
-            )
+            val shuffledAnswers = answers.shuffled()
 
             return QuizUiState(
-                material = learningMaterial,
+                learningMaterial = learningMaterial,
                 phase = QuizPhase.ANSWERING,
-                question = questionWithShuffledAnswers,
+                question = question,
+                answers = shuffledAnswers,
                 selectedAnswer = null,
                 result = null,
-                totalQuestions = learningMaterial.questions.size,
-                startedAt,
-                elapsedTime = System.nanoTime() - startedAt,
-            )
-        }
-
-        // TODO: remove later
-        fun from(
-            learningMaterial: LearningMaterial,
-            questionIndex: Int = 0,
-            startedAt: Long = System.nanoTime(),
-        ): QuizUiState {
-
-            val question = learningMaterial.questions[questionIndex]
-
-            val questionWithShuffledAnswers = question.copy(
-                answers = question.answers.shuffled()
-            )
-
-            return QuizUiState(
-                material = learningMaterial,
-                phase = QuizPhase.ANSWERING,
-                question = questionWithShuffledAnswers,
-                selectedAnswer = null,
-                result = null,
-                totalQuestions = learningMaterial.questions.size,
+                totalQuestions = questionCount,
                 startedAt,
                 elapsedTime = System.nanoTime() - startedAt,
             )

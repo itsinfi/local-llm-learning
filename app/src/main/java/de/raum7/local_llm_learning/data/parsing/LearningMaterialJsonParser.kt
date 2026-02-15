@@ -1,15 +1,15 @@
 package de.raum7.local_llm_learning.data.parsing
 
+import android.util.Log
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.Question
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.UUID
 
 object LearningMaterialJsonParser {
 
-    fun parse(raw: String): LearningMaterial {
+    fun parse(raw: String): Pair<LearningMaterial, MutableMap<Question, List<Answer>>> {
         val json = extractAndSanitizeJson(raw)
         val root = JSONObject(json)
 
@@ -17,7 +17,7 @@ object LearningMaterialJsonParser {
         val questionsArr = root.optJSONArray("questions")
             ?: throw IllegalArgumentException("JSON missing 'questions' array")
 
-        val questions = mutableListOf<Question>()
+        val questionsWithAnswers = mutableMapOf<Question, List<Answer>>()
 
         for (i in 0 until questionsArr.length()) {
             val qObj = questionsArr.optJSONObject(i) ?: continue
@@ -42,7 +42,8 @@ object LearningMaterialJsonParser {
 
                 answers.add(
                     Answer(
-                        id = UUID.randomUUID().toString(),
+                        id = 0, // hardcoded 0 so room db auto generates primary key
+                        questionId = -1, // placeholder value for foreign key
                         answer = text,
                         isCorrect = correct
                     )
@@ -51,25 +52,26 @@ object LearningMaterialJsonParser {
 
             if (answers.isEmpty()) continue
 
-            questions.add(
-                Question(
-                    id = UUID.randomUUID().toString(),
-                    question = qText,
-                    answers = answers
-                )
-            )
+
+            questionsWithAnswers[Question(
+                id = 0, // hardcoded 0 so room db auto generates primary key
+                learningMaterialId = -1, // placeholder value for foreign key
+                question = qText
+            )] = answers
         }
 
-        if (questions.isEmpty()) {
+        if (questionsWithAnswers.isEmpty()) {
             throw IllegalArgumentException("No questions parsed from model output")
         }
 
-        return LearningMaterial(
-            id = UUID.randomUUID().toString(),
+        val learningMaterial = LearningMaterial(
+            id = 0, // hardcoded 0 so room db auto generates primary key
             title = title,
-            questions = questions,
             progress = 0.0
         )
+
+        val returnPair = Pair(learningMaterial, questionsWithAnswers)
+        return returnPair
     }
 
     private fun extractAndSanitizeJson(raw: String): String {

@@ -11,3 +11,4 @@ local.properties
 /.kotlin
 app/src/main/assets/models
 app/src/main/cpp/llama.cpp
+app/release

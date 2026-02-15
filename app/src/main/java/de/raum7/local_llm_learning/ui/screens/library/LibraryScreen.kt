@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTION_COUNTS
 import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.ui.screens.library.components.CreateLearningMaterialEFAB
 import de.raum7.local_llm_learning.ui.shared.components.EmptyPlaceholder
@@ -30,6 +31,7 @@ fun LibraryScreen(
         if (uiState.learningMaterials.isNotEmpty()) {
             LearningMaterialCardList(
                 uiState.learningMaterials,
+                uiState.learningMaterialsQuestionCounts,
                 onCardClick,
                 Modifier.padding(padding)
             )
@@ -47,7 +49,7 @@ fun LibraryScreen(
 private fun LibraryScreenPreview_NotEmpty() {
     AppTheme {
         LibraryScreen(
-            LibraryUiState(MOCK_LEARNING_MATERIALS),
+            LibraryUiState(MOCK_LEARNING_MATERIALS, MOCK_QUESTION_COUNTS),
             onCreateButtonClick = {},
             onCardClick = {}
         )
@@ -59,7 +61,7 @@ private fun LibraryScreenPreview_NotEmpty() {
 private fun LibraryScreenPreview_Empty() {
     AppTheme {
         LibraryScreen(
-            LibraryUiState(emptyList()),
+            LibraryUiState(emptyList(), emptyMap<Int, Int>()),
             onCreateButtonClick = {},
             onCardClick = {}
         )

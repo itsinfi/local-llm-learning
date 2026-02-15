@@ -56,6 +56,7 @@
     <string name="quiz_edit_button">Bearbeiten</string>
 
     <string name="edit_question">Frage bearbeiten</string>
+    <string name="confirm_edit">Speichern</string>
 
     <string name="file_input_select">Datei auswählen...</string>
     <string name="file_input_change">Datei ändern...</string>

@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 import de.raum7.local_llm_learning.data.mock.MOCK_QUIZ_RESULTS
 import de.raum7.local_llm_learning.data.models.Answer
@@ -34,7 +35,7 @@ fun QuizScreen(
     onEdit: () -> Unit
 ) {
     Scaffold(
-        topBar = { AppBar(title = uiState.material.title) },
+        topBar = { AppBar(title = uiState.learningMaterial.title) },
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
         Column(
@@ -45,7 +46,7 @@ fun QuizScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             ProgressBar(
-                perc = uiState.material.progress.toFloat(),
+                perc = uiState.learningMaterial.progress.toFloat(),
                 size = 10.dp,
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -56,6 +57,7 @@ fun QuizScreen(
             when (uiState.phase) {
                 QuizPhase.ANSWERING -> AnsweringPhaseCard(
                     question = uiState.question,
+                    answers = uiState.answers,
                     selectedAnswer = uiState.selectedAnswer,
                     elapsedTime = uiState.elapsedTime,
                     onAnswerSelected,
@@ -77,9 +79,10 @@ private fun QuizScreenPreview_Answering() {
     AppTheme {
         QuizScreen(
             uiState = QuizUiState(
-                material = MOCK_LEARNING_MATERIALS[0],
+                learningMaterial = MOCK_LEARNING_MATERIALS[0],
                 phase = QuizPhase.ANSWERING,
                 question = MOCK_QUIZ_RESULTS[0].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[0].selectedAnswer,
                 result = MOCK_QUIZ_RESULTS[0],
                 totalQuestions = 1,
@@ -99,9 +102,10 @@ private fun QuizScreenPreview_CorrectResult() {
     AppTheme {
         QuizScreen(
             uiState = QuizUiState(
-                material = MOCK_LEARNING_MATERIALS[0],
+                learningMaterial = MOCK_LEARNING_MATERIALS[0],
                 phase = QuizPhase.RESULTS,
                 question = MOCK_QUIZ_RESULTS[0].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[0].selectedAnswer,
                 result = MOCK_QUIZ_RESULTS[0],
                 totalQuestions = 1,
@@ -121,9 +125,10 @@ private fun QuizScreenPreview_IncorrectResult() {
     AppTheme {
         QuizScreen(
             uiState = QuizUiState(
-                material = MOCK_LEARNING_MATERIALS[0],
+                learningMaterial = MOCK_LEARNING_MATERIALS[0],
                 phase = QuizPhase.RESULTS,
                 question = MOCK_QUIZ_RESULTS[1].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[1].selectedAnswer,
                 result = MOCK_QUIZ_RESULTS[1],
                 totalQuestions = 1,
@@ -143,9 +148,10 @@ private fun QuizScreenPreview_Invalid() {
     AppTheme {
         QuizScreen(
             uiState = QuizUiState(
-                material = MOCK_LEARNING_MATERIALS[0],
+                learningMaterial = MOCK_LEARNING_MATERIALS[0],
                 phase = QuizPhase.RESULTS,
                 question = MOCK_QUIZ_RESULTS[0].question,
+                answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2],MOCK_ANSWERS[3]),
                 selectedAnswer = MOCK_QUIZ_RESULTS[0].selectedAnswer,
                 result = null,
                 totalQuestions = 1,

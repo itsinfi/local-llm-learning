@@ -26,13 +26,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTIONS
+import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.Question
 import de.raum7.local_llm_learning.ui.shared.components.CustomCard
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
 @Composable
-fun QuestionCard(i: Int, q: Question) {
+fun QuestionCard(i: Int, q: Question, answers: List<Answer>) {
     CustomCard(
         modifier = Modifier.padding(bottom = 16.dp),
     ) {
@@ -47,7 +50,7 @@ fun QuestionCard(i: Int, q: Question) {
             )
             Spacer(modifier = Modifier.height(6.dp))
 
-            q.answers.forEach { a ->
+            answers.forEach { a ->
                 val shape = CardDefaults.shape
                 
                 Spacer(Modifier.padding(top = 4.dp))
@@ -99,6 +102,6 @@ fun QuestionCard(i: Int, q: Question) {
 @Composable
 private fun QuestionCardPreview() {
     AppTheme {
-        QuestionCard(2, MOCK_LEARNING_MATERIALS[0].questions[0])
+        QuestionCard(2, MOCK_QUESTIONS[0], listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2], MOCK_ANSWERS[3]))
     }
 }

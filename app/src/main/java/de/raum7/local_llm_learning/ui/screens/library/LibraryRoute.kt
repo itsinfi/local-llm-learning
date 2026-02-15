@@ -1,24 +1,28 @@
 package de.raum7.local_llm_learning.ui.screens.library
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
-import de.raum7.local_llm_learning.data.store.LearningMaterialStore
+import androidx.lifecycle.viewmodel.compose.viewModel
+import de.raum7.local_llm_learning.data.database.dao.LearningMaterialDao
+import de.raum7.local_llm_learning.data.database.dao.QuestionDao
 
 @Composable
 fun LibraryRoute(
     navigateToAssistantCallback: () -> Unit,
-    navigateToQuizCallback: (String) -> Unit,
+    navigateToQuizCallback: (Int) -> Unit,
+    learningMaterialDao: LearningMaterialDao,
+    questionDao: QuestionDao,
 ) {
-    //val materials by LearningMaterialStore.items.collectAsState()
-    val materials = MOCK_LEARNING_MATERIALS // TODO: revert
+    val viewModel: LibraryViewModel = viewModel(
+        factory = LibraryViewModelFactory(
+            navigateToAssistantCallback,
+            navigateToQuizCallback,
+            repository = LibraryRepository(learningMaterialDao, questionDao),
+        )
+    )
 
     LibraryScreen(
-        uiState = LibraryUiState.from(materials),
-        onCreateButtonClick = navigateToAssistantCallback,
-        onCardClick = { learningMaterial ->
-            navigateToQuizCallback(learningMaterial.id)
-        }
+        uiState = viewModel.uiState as LibraryUiState,
+        onCreateButtonClick = viewModel::onCreateButtonClick,
+        onCardClick = viewModel::onCardClick,
     )
 }

@@ -27,7 +27,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
-import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTIONS
 import de.raum7.local_llm_learning.data.models.Answer
 import de.raum7.local_llm_learning.data.models.Question
 import de.raum7.local_llm_learning.ui.shared.components.CustomCard
@@ -40,6 +41,7 @@ import de.raum7.local_llm_learning.ui.theme.bodyFontFamily
 @Composable
 fun AnsweringPhaseCard(
     question: Question,
+    answers: List<Answer>,
     selectedAnswer: Answer?,
     elapsedTime: Long,
     onAnswerSelected: (Answer) -> Unit,
@@ -53,6 +55,7 @@ fun AnsweringPhaseCard(
     ) {
         AnsweringPhaseCardContent(
             question = question,
+            answers = answers,
             selectedAnswer = selectedAnswer,
             elapsedTime = elapsedTime,
             onAnswerSelected = onAnswerSelected,
@@ -64,6 +67,7 @@ fun AnsweringPhaseCard(
 @Composable
 private fun AnsweringPhaseCardContent(
     question: Question,
+    answers: List<Answer>,
     selectedAnswer: Answer?,
     elapsedTime: Long,
     onAnswerSelected: (Answer) -> Unit,
@@ -79,7 +83,7 @@ private fun AnsweringPhaseCardContent(
 
         QuestionTitle(question)
 
-        question.answers.map { answer: Answer ->
+        answers.map { answer: Answer ->
             AnswerSelection(answer, isSelected = answer == selectedAnswer, onClick = { onAnswerSelected(answer) })
         }
 
@@ -108,7 +112,7 @@ private fun QuizTimer(
 }
 
 @Composable
-private fun QuestionTitle(question: Question) {
+fun QuestionTitle(question: Question) {
     Text(
         text = question.question,
         style = MaterialTheme.typography.bodyLarge.copy(fontFamily = bodyFontFamily),
@@ -189,7 +193,8 @@ private fun ButtonSection(isEnabled: Boolean, onContinue: () -> Unit) {
 fun AnsweringPhaseCardPreview_Unselected() {
     AppTheme {
         AnsweringPhaseCard(
-            question = MOCK_LEARNING_MATERIALS[0].questions[0],
+            question = MOCK_QUESTIONS[0],
+            answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2], MOCK_ANSWERS[3]),
             selectedAnswer = null,
             elapsedTime = 1000L,
             onAnswerSelected = {},
@@ -203,8 +208,9 @@ fun AnsweringPhaseCardPreview_Unselected() {
 fun AnsweringPhaseCardPreview_Selected() {
     AppTheme {
         AnsweringPhaseCard(
-            question = MOCK_LEARNING_MATERIALS[0].questions[0],
-            selectedAnswer = MOCK_LEARNING_MATERIALS[0].questions[0].answers[0],
+            question = MOCK_QUESTIONS[0],
+            answers = listOf(MOCK_ANSWERS[0], MOCK_ANSWERS[1], MOCK_ANSWERS[2], MOCK_ANSWERS[3]),
+            selectedAnswer = MOCK_ANSWERS[0],
             elapsedTime = 1000L,
             onAnswerSelected = {},
             onContinue = {},
