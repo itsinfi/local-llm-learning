@@ -61,7 +61,7 @@ private fun LibraryScreenPreview_NotEmpty() {
 private fun LibraryScreenPreview_Empty() {
     AppTheme {
         LibraryScreen(
-            LibraryUiState(emptyList(), emptyMap<Int, Int>()),
+            LibraryUiState(emptyList(), emptyMap()),
             onCreateButtonClick = {},
             onCardClick = {}
         )
