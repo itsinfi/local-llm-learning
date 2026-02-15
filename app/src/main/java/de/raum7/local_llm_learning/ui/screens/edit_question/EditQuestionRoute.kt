@@ -13,13 +13,15 @@ fun EditQuestionRoute(
     questionId: Int,
     questionDao: QuestionDao,
     answerDao: AnswerDao,
+    navigateToQuizCallback: (Int) -> Unit,
 ) {
 
     val viewModel: EditQuestionViewModel = viewModel(
         factory = EditQuestionViewModelFactory(
             learningMaterialId = learningMaterialId,
             questionId = questionId,
-            repository = EditQuestionRepository(questionDao, answerDao)
+            repository = EditQuestionRepository(questionDao, answerDao),
+            navigateToQuizCallback = navigateToQuizCallback,
         )
     )
 

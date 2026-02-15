@@ -16,8 +16,6 @@ class QuizViewModel(
     private val repository: QuizRepository
 ) : BaseViewModel(repository) {
 
-//    private var learningMaterial: LearningMaterial = TODO() remove
-
     init {
         runBlocking {
             val learningMaterial = this@QuizViewModel.repository.getLearningMaterialById(learningMaterialId)
@@ -110,7 +108,7 @@ class QuizViewModel(
 
             // TODO: only temporary code, please add question selection via spaced repetition
             val question = repository.getNextQuestionById(state.question.id, state.learningMaterial.id)
-            val answers = repository.getAnswersForQuestion(state.question.id)
+            val answers = repository.getAnswersForQuestion(question.id)
             val questionCount = repository.getQuestionCountForLearningMaterial(state.learningMaterial.id)
 
             // TODO: use from function signature with questionId as a parameter

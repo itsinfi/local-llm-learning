@@ -19,16 +19,6 @@ fun QuizRoute(
     answerDao: AnswerDao,
     learningMaterialDao: LearningMaterialDao,
 ) {
-    /*val data by LearningMaterialStore.items.collectAsState(initial = emptyList())
-
-    val materialExists = data.any { it.id == learningMaterialId }
-    if (!materialExists) {
-        androidx.compose.material3.Text("Lernmaterial nicht gefunden")
-        return
-    }*/
-
-    val data = MOCK_LEARNING_MATERIALS // TODO: remove
-
 
     val viewModel: QuizViewModel = viewModel(
         factory = QuizViewModelFactory(

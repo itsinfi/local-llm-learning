@@ -6,7 +6,8 @@ import de.raum7.local_llm_learning.data.base.BaseViewModelFactory
 class EditQuestionViewModelFactory(
     private val learningMaterialId: Int,
     private val questionId: Int,
-    private val repository: EditQuestionRepository
+    private val repository: EditQuestionRepository,
+    private val navigateToQuizCallback: (Int) -> Unit,
 
 ) : BaseViewModelFactory(repository) {
 
@@ -15,7 +16,8 @@ class EditQuestionViewModelFactory(
             return EditQuestionViewModel(
                 learningMaterialId,
                 questionId,
-                repository
+                repository,
+                navigateToQuizCallback
             )
         }
         throw IllegalArgumentException("Unknown BaseViewModel class")
