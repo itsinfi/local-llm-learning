@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTIONS
 import de.raum7.local_llm_learning.data.parsing.LearningMaterialJsonParser
 import de.raum7.local_llm_learning.ui.screens.assistant.components.AssistantResultScreenAppBar
 import de.raum7.local_llm_learning.ui.screens.assistant.components.ErrorCard
@@ -85,86 +87,86 @@ private fun AssistantResultScreenPreview_ParsingError() {
     }
 }
 // TODO: fix preview
-//@Preview(showBackground = true)
-//@Composable
-//private fun AssistantResultScreenPreview_Success() {
-//    AppTheme {
-//        AppTheme {
-//            val jsonObject = JSONObject()
-//                .put("title", MOCK_LEARNING_MATERIALS[1].title)
-//                .put("questions", JSONArray()
-//                    .put(JSONObject()
-//                        .put("question", MOCK_LEARNING_MATERIALS[1].questions[0].question)
-//                        .put("answers", JSONArray()
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[0].answers[0].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[0].answers[0].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[0].answers[1].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[0].answers[1].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[0].answers[2].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[0].answers[2].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[0].answers[3].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[0].answers[3].isCorrect)
-//                            )
-//                        )
-//                    )
-//                    .put(JSONObject()
-//                        .put("question", MOCK_LEARNING_MATERIALS[1].questions[0].question)
-//                        .put("answers", JSONArray()
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[1].answers[0].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[1].answers[0].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[1].answers[1].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[1].answers[1].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[1].answers[2].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[1].answers[2].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[1].answers[3].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[1].answers[3].isCorrect)
-//                            )
-//                        )
-//                    )
-//                    .put(JSONObject()
-//                        .put("question", MOCK_LEARNING_MATERIALS[1].questions[2].question)
-//                        .put("answers", JSONArray()
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[2].answers[0].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[2].answers[0].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[2].answers[1].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[2].answers[1].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[2].answers[2].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[2].answers[2].isCorrect)
-//                            )
-//                            .put(JSONObject()
-//                                .put("answer", MOCK_LEARNING_MATERIALS[1].questions[2].answers[3].answer)
-//                                .put("isCorrect", MOCK_LEARNING_MATERIALS[1].questions[2].answers[3].isCorrect)
-//                            )
-//                        )
-//                    )
-//                )
-//
-//            val parsed = jsonObject.toString()
-//
-//            AssistantResultScreen(
-//                resultText = parsed,
-//                onSaveToLibrary = {},
-//                onBackToLibrary = {},
-//            )
-//        }
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+private fun AssistantResultScreenPreview_Success() {
+    AppTheme {
+        AppTheme {
+            val jsonObject = JSONObject()
+                .put("title", MOCK_LEARNING_MATERIALS[1].title)
+                .put("questions", JSONArray()
+                    .put(JSONObject()
+                        .put("question", MOCK_QUESTIONS[4].question)
+                        .put("answers", JSONArray()
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[13].answer)
+                                .put("isCorrect", MOCK_ANSWERS[13].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[14].answer)
+                                .put("isCorrect", MOCK_ANSWERS[14].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[15].answer)
+                                .put("isCorrect", MOCK_ANSWERS[15].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[16].answer)
+                                .put("isCorrect", MOCK_ANSWERS[16].isCorrect)
+                            )
+                        )
+                    )
+                    .put(JSONObject()
+                        .put("question", MOCK_QUESTIONS[5].question)
+                        .put("answers", JSONArray()
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[17].answer)
+                                .put("isCorrect", MOCK_ANSWERS[17].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[18].answer)
+                                .put("isCorrect", MOCK_ANSWERS[18].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[19].answer)
+                                .put("isCorrect", MOCK_ANSWERS[19].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[20].answer)
+                                .put("isCorrect", MOCK_ANSWERS[20].isCorrect)
+                            )
+                        )
+                    )
+                    .put(JSONObject()
+                        .put("question", MOCK_QUESTIONS[6].question)
+                        .put("answers", JSONArray()
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[21].answer)
+                                .put("isCorrect", MOCK_ANSWERS[21].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[22].answer)
+                                .put("isCorrect", MOCK_ANSWERS[22].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[23].answer)
+                                .put("isCorrect", MOCK_ANSWERS[23].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[24].answer)
+                                .put("isCorrect", MOCK_ANSWERS[24].isCorrect)
+                            )
+                        )
+                    )
+                )
+
+            val parsed = jsonObject.toString()
+
+            AssistantResultScreen(
+                resultText = parsed,
+                onSaveToLibrary = {},
+                onBackToLibrary = {},
+            )
+        }
+    }
+}
