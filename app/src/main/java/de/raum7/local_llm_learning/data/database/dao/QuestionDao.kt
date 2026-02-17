@@ -25,9 +25,6 @@ interface QuestionDao {
     @Query("SELECT COUNT(id) from question WHERE learningMaterialId = :learningMaterialId")
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int
 
-    @Query("SELECT * FROM question WHERE id > :id AND learningMaterialId = :learningMaterialId ORDER BY id asc LIMIT 1")
-    suspend fun getNextQuestionById(id: Int, learningMaterialId: Int): Question
-
     @Query("SELECT * FROM question")
     suspend fun getAllQuestions(): List<Question>
 
@@ -40,14 +37,8 @@ interface QuestionDao {
     @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId ORDER BY priority desc LIMIT 1")
     suspend fun getHighestPriorityQuestion(learningMaterialId: Int): Question
 
-    @Query("SELECT * FROM question WHERE id != :id AND learningMaterialId = :learningMaterialId ORDER BY priority desc LIMIT 1")
-    suspend fun getNextHighestPriorityQuestion(id: Int, learningMaterialId: Int): Question
-
     @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId and priority IS null LIMIT 1")
     suspend fun getMissingPriorityQuestion(learningMaterialId: Int): Question?
-
-    @Query("SELECT * FROM question WHERE id != :id AND learningMaterialId = :learningMaterialId and priority IS null LIMIT 1")
-    suspend fun getNextMissingPriorityQuestion(id: Int, learningMaterialId: Int): Question?
 
     @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId AND rt NOT null")
     suspend fun getAnsweredQuestions(learningMaterialId: Int): List<Question>

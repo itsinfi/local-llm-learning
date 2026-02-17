@@ -17,8 +17,6 @@ class QuizRepository(
 
     suspend fun getLearningMaterialById(id: Int): LearningMaterial = learningMaterialDao.getMaterialById(id)
 
-    suspend fun getNextQuestionById(id: Int, learningMaterialId: Int): Question = questionDao.getNextQuestionById(id, learningMaterialId)
-
     suspend fun getAnswersForQuestion(id: Int): List<Answer> = answerDao.getAnswersForQuestion(id)
 
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int = questionDao.getQuestionCountForLearningMaterial(learningMaterialId)
@@ -29,20 +27,14 @@ class QuizRepository(
 
     suspend fun updateQuestions(questions: List<Question>) = questionDao.updateQuestions(questions)
 
-    suspend fun getHighestPriorityQuestion(learningMaterialId: Int): Question = questionDao.getHighestPriorityQuestion(learningMaterialId)
-
-    suspend fun getNextHighestPriorityQuestion(id: Int, learningMaterialId: Int): Question = questionDao.getNextHighestPriorityQuestion(id, learningMaterialId)
-
-    suspend fun getMissingPriorityQuestion(learningMaterialId: Int): Question? = questionDao.getMissingPriorityQuestion(learningMaterialId)
-
-    suspend fun getFirstQuestion(learningMaterialId: Int): Question {
-        var question: Question? = questionDao.getMissingPriorityQuestion(learningMaterialId)
+    suspend fun getNextQuestion(learningMaterialId: Int, lookForMissingPriority: Boolean): Question {
+        // if lookForMissingPriority is true, look for a question with priority == null first, else skip that query
+        val question: Question? = if (lookForMissingPriority) {
+            questionDao.getMissingPriorityQuestion(learningMaterialId)
+        } else {
+            questionDao.getHighestPriorityQuestion(learningMaterialId)
+        }
         return question ?: questionDao.getHighestPriorityQuestion(learningMaterialId)
-    }
-
-    suspend fun getNextQuestion(id: Int, learningMaterialId: Int): Question {
-        var question: Question? = questionDao.getNextMissingPriorityQuestion(id, learningMaterialId)
-        return question ?: questionDao.getNextHighestPriorityQuestion(id, learningMaterialId)
     }
 
     suspend fun getAnsweredQuestions(learningMaterialId: Int) = questionDao.getAnsweredQuestions(learningMaterialId)

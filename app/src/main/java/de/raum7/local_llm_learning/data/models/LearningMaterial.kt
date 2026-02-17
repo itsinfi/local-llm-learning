@@ -10,6 +10,5 @@ data class LearningMaterial (
     val id: Int = 0,
     val title: String,
     val progress: Double,
-    var currentTrial: Int = 0,
 ) : BaseModel() {
 }

@@ -27,9 +27,8 @@ class QuizViewModel(
 
     init {
         runBlocking {
-            // TODO: get question by priority
             val learningMaterial = this@QuizViewModel.repository.getLearningMaterialById(learningMaterialId)
-            val question = repository.getNextQuestionById(-1, learningMaterial.id)
+            val question = repository.getNextQuestion(learningMaterial.id, DEFAULT_PRIORITY==null) // look for question with priority == null if default priority is null
             val answers = repository.getAnswersForQuestion(question.id)
             val questionCount = repository.getQuestionCountForLearningMaterial(learningMaterial.id)
             val initialState = QuizUiState.from(learningMaterial, questionCount, question, answers)
@@ -105,31 +104,26 @@ class QuizViewModel(
             previousNanoSeconds = elapsed
         )
 
-        // calculate priority for current question TODO: calculate priority for all questions
+        // calculate priority for current question
         /*
         steps:
         1. update question specific parameters
         2. increment lastPresented for each question except current one
-        3. calculate priority for each question except those not answered yet
+        3. calculate priority for each question except for those not answered yet
          */
-        // TODO: remove val trial = state.learningMaterial.currentTrial
-        // update question specific parameters
-        state.question.accuracy = if(selectedAnswer == correctAnswer) {
+        question.accuracy = if(selectedAnswer == correctAnswer) {
             0
         } else {
             1
         }
-        state.question.trialsSinceLastPresented = 0
-        state.question.rt = elapsed.toDouble() * 0.000000001
+        question.trialsSinceLastPresented = 0
+        question.rt = elapsed.toDouble() * 0.000000001
 
-        // calculate every priority
-        Log.d("DEBUG LOG", "before priority calculation")
         runBlocking {
-            Log.d("DEBUG LOG", "during priority calculation")
-            repository.updateQuestion(state.question)
+            repository.updateQuestion(question)
             val questions = repository.getAnsweredQuestions(state.learningMaterial.id)
             questions.forEach {
-                if (it.id != state.question.id) {
+                if (it.id != question.id) {
                     it.trialsSinceLastPresented++
                 }
                 it.priority = calculatePriority(it)
@@ -137,26 +131,11 @@ class QuizViewModel(
             }
             repository.updateQuestions(questions)
         }
-        Log.d("DEBUG LOG", "after priority calculation")
-        // TODO remove deprecated code
-//        state.question.priority = calculatePriority(question, trial, elapsed.toDouble() * 0.000000001)
-
-//        state.question.trialsSinceLastPresented = trial // not incremented because question was presented in trial that has been passed, not in next trial (trial + 1)
-//        state.learningMaterial.currentTrial = trial + 1 // incremented because trial has been passed
-
-        // TODO remove debug log
-//        Log.d("DEBUG_LOG", "Question: " + state.question.question + "priority: " + state.question.priority)
-        // update learningMaterial (incremented trial) and question (updated priority and lastPresented
-//        viewModelScope.launch {
-//            repository.updateLearningMaterial(state.learningMaterial)
-//            repository.updateQuestion(state.question)
-//        }
 
         _uiState.value = state.copy(
             phase = QuizPhase.RESULTS,
             result = result,
             elapsedTime = elapsed,
-//            learningMaterial = state.learningMaterial,
         )
     }
 
@@ -165,13 +144,7 @@ class QuizViewModel(
             // TODO: find solution with loading state and loading icon
             val state = this@QuizViewModel.uiState as QuizUiState
 
-            // TODO: only temporary code, please add question selection via spaced repetition
-//            val question = repository.getNextQuestionById(state.question.id, state.learningMaterial.id)
-            // retrieve question with highest priority (or null priority if default priority is set to null)
-            val question = when(DEFAULT_PRIORITY) {
-                null -> repository.getNextQuestion(state.question.id, state.learningMaterial.id)
-                else -> repository.getNextHighestPriorityQuestion(state.question.id, state.learningMaterial.id)
-            }
+            val question = repository.getNextQuestion(state.learningMaterial.id, DEFAULT_PRIORITY==null) // look for question with priority == null if default priority is null
 
             val answers = repository.getAnswersForQuestion(question.id)
             val questionCount = repository.getQuestionCountForLearningMaterial(state.learningMaterial.id)
@@ -191,9 +164,7 @@ class QuizViewModel(
     }
 
     private fun calculatePriority(question: Question): Double {
-//        val n = trial - (question.trialsSinceLastPresented ?: trial) // set n to 0 if question hasn't been presented once
         val priority: Double = A * (question.trialsSinceLastPresented - ENFORCED_DELAY) * (B * (1-question.accuracy) * ln(question.rt!! / R) + question.accuracy * W)
-        // TODO remove debug log
         Log.d("DEBUG LOG", "priority for question " + question.id + " " + question.question)
         Log.d("DEBUG LOG", priority.toString() + " = " + A.toString() + " * " + " ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " )  + " + question.accuracy + " * " + W + " )")
 
