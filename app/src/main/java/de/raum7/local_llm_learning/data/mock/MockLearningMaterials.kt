@@ -20,5 +20,11 @@ val MOCK_LEARNING_MATERIALS: List<LearningMaterial> = listOf(
         id = 2,
         title = "Dungeons and Dragons",
         progress = 0.0,
+    ),
+
+    LearningMaterial(
+        id = 4,
+        title = "Alles zusammen",
+        progress = 0.0,
     )
 )

@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import de.raum7.local_llm_learning.data.models.LearningMaterial
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LearningMaterialDao {
@@ -21,5 +21,8 @@ interface LearningMaterialDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertMaterial(learningMaterial: LearningMaterial): Long
+
+    @Update
+    suspend fun updateLearningMaterial(learningMaterial: LearningMaterial)
 
 }

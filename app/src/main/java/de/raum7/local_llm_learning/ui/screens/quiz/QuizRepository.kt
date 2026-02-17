@@ -22,4 +22,28 @@ class QuizRepository(
     suspend fun getAnswersForQuestion(id: Int): List<Answer> = answerDao.getAnswersForQuestion(id)
 
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int = questionDao.getQuestionCountForLearningMaterial(learningMaterialId)
+
+    suspend fun updateLearningMaterial(learningMaterial: LearningMaterial) = learningMaterialDao.updateLearningMaterial(learningMaterial)
+
+    suspend fun updateQuestion(question: Question) = questionDao.updateQuestion(question)
+
+    suspend fun updateQuestions(questions: List<Question>) = questionDao.updateQuestions(questions)
+
+    suspend fun getHighestPriorityQuestion(learningMaterialId: Int): Question = questionDao.getHighestPriorityQuestion(learningMaterialId)
+
+    suspend fun getNextHighestPriorityQuestion(id: Int, learningMaterialId: Int): Question = questionDao.getNextHighestPriorityQuestion(id, learningMaterialId)
+
+    suspend fun getMissingPriorityQuestion(learningMaterialId: Int): Question? = questionDao.getMissingPriorityQuestion(learningMaterialId)
+
+    suspend fun getFirstQuestion(learningMaterialId: Int): Question {
+        var question: Question? = questionDao.getMissingPriorityQuestion(learningMaterialId)
+        return question ?: questionDao.getHighestPriorityQuestion(learningMaterialId)
+    }
+
+    suspend fun getNextQuestion(id: Int, learningMaterialId: Int): Question {
+        var question: Question? = questionDao.getNextMissingPriorityQuestion(id, learningMaterialId)
+        return question ?: questionDao.getNextHighestPriorityQuestion(id, learningMaterialId)
+    }
+
+    suspend fun getAnsweredQuestions(learningMaterialId: Int) = questionDao.getAnsweredQuestions(learningMaterialId)
 }

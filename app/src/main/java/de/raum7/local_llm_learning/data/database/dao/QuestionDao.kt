@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import de.raum7.local_llm_learning.data.models.Question
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface QuestionDao {
@@ -30,4 +30,25 @@ interface QuestionDao {
 
     @Query("SELECT * FROM question")
     suspend fun getAllQuestions(): List<Question>
+
+    @Update
+    suspend fun updateQuestion(question: Question)
+
+    @Update
+    suspend fun updateQuestions(questions: List<Question>)
+
+    @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId ORDER BY priority desc LIMIT 1")
+    suspend fun getHighestPriorityQuestion(learningMaterialId: Int): Question
+
+    @Query("SELECT * FROM question WHERE id != :id AND learningMaterialId = :learningMaterialId ORDER BY priority desc LIMIT 1")
+    suspend fun getNextHighestPriorityQuestion(id: Int, learningMaterialId: Int): Question
+
+    @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId and priority IS null LIMIT 1")
+    suspend fun getMissingPriorityQuestion(learningMaterialId: Int): Question?
+
+    @Query("SELECT * FROM question WHERE id != :id AND learningMaterialId = :learningMaterialId and priority IS null LIMIT 1")
+    suspend fun getNextMissingPriorityQuestion(id: Int, learningMaterialId: Int): Question?
+
+    @Query("SELECT * FROM question WHERE learningMaterialId = :learningMaterialId AND rt NOT null")
+    suspend fun getAnsweredQuestions(learningMaterialId: Int): List<Question>
 }

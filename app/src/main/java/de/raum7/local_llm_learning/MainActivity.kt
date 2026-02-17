@@ -31,9 +31,7 @@ class MainActivity : ComponentActivity() {
         val TAG ="log"
         runBlocking {
             MOCK_LEARNING_MATERIALS.forEach { learningMaterialDao.upsertMaterial(it) }
-//            // TODO why do insertions crash?, also why did generated question not contain any answers?
             MOCK_QUESTIONS.forEach { questionDao.upsertQuestion(it) }
-//            questionDao.upsertQuestions(MOCK_QUESTIONS)
             answerDao.upsertAnswers(MOCK_ANSWERS)
             Log.d(TAG, "Questions:" + questionDao.getAllQuestions())
             Log.d(TAG, "Answers:" + answerDao.getAllAnswers())
