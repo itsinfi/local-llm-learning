@@ -10,5 +10,5 @@ abstract class BaseViewModel(
     protected val _uiState: MutableState<BaseUiState> = mutableStateOf(
         BaseUiState.from(this.repository)
     )
-    open val uiState: BaseUiState get() = _uiState.value
+    protected val uiState: BaseUiState get() = _uiState.value
 }
