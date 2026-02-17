@@ -37,12 +37,6 @@ class MainActivity : ComponentActivity() {
             Log.d(TAG, "Answers:" + answerDao.getAllAnswers())
         }
 
-
-
-
-//        // Wichtig: Store laden, bevor Compose startet
-//        LearningMaterialStore.init(applicationContext)
-
         enableEdgeToEdge()
 
         val startDestination =

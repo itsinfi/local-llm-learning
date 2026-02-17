@@ -163,7 +163,13 @@ fun AppNavHost(startDestination: String = Routes.LIBRARY, questionDao: QuestionD
                 questionId = questionId,
                 questionDao = questionDao,
                 answerDao = answerDao,
-                navigateToQuizCallback = { learningMaterialId: Int -> navController.navigate("quiz/$learningMaterialId") },
+                navigateToQuizCallback = {
+                    learningMaterialId: Int -> navController.navigate("quiz/$learningMaterialId") {
+                        popUpTo(navController.graph.startDestinationId) {
+                        inclusive = false
+                        }
+                    }
+                },
             )
         }
     }

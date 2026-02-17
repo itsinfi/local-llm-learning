@@ -119,6 +119,7 @@ class QuizViewModel(
         question.trialsSinceLastPresented = 0
         question.rt = elapsed.toDouble() * 0.000000001
 
+        Log.d("PriorityCalculation", "Priority Calculation---------------------------------")
         runBlocking {
             repository.updateQuestion(question)
             val questions = repository.getAnsweredQuestions(state.learningMaterial.id)
@@ -165,8 +166,8 @@ class QuizViewModel(
 
     private fun calculatePriority(question: Question): Double {
         val priority: Double = A * (question.trialsSinceLastPresented - ENFORCED_DELAY) * (B * (1-question.accuracy) * ln(question.rt!! / R) + question.accuracy * W)
-        Log.d("DEBUG LOG", "priority for question " + question.id + " " + question.question)
-        Log.d("DEBUG LOG", priority.toString() + " = " + A.toString() + " * " + " ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " )  + " + question.accuracy + " * " + W + " )")
+        Log.d("PriorityCalculation", "priority for question " + question.id + " " + question.question)
+        Log.d("PriorityCalculation", priority.toString() + " = " + A.toString() + " * " + " ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " )  + " + question.accuracy + " * " + W + " )")
 
         return priority
     }

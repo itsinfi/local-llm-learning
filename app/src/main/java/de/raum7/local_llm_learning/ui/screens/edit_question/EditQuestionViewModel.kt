@@ -36,7 +36,14 @@ class EditQuestionViewModel(
     }
 
     fun onQuestionSave(answers: List<Answer>) {
+        val state = uiState as EditQuestionUiState
+        var question = Question(
+            id = state.question.id,
+            learningMaterialId = state.question.learningMaterialId,
+            question = state.question.question,
+        )
         runBlocking {
+            this@EditQuestionViewModel.repository.updateQuestion(question)
             this@EditQuestionViewModel.repository.upsertAnswers(answers)
         }
         navigateToQuizCallback(this.learningMaterialId)

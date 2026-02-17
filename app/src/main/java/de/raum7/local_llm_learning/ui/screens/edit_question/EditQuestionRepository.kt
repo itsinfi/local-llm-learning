@@ -16,4 +16,6 @@ class EditQuestionRepository(
     suspend fun getAnswersForQuestion(questionId: Int): List<Answer> = answerDao.getAnswersForQuestion(questionId)
 
     suspend fun upsertAnswers(answers: List<Answer>) = answerDao.upsertAnswers(answers)
+
+    suspend fun updateQuestion(question: Question) = questionDao.updateQuestion(question)
 }
