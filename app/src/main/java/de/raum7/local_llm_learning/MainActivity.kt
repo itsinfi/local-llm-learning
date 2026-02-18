@@ -30,9 +30,9 @@ class MainActivity : ComponentActivity() {
         //TODO remove temp mock data
         val TAG ="log"
         runBlocking {
-            MOCK_LEARNING_MATERIALS.forEach { learningMaterialDao.upsertMaterial(it) }
-            MOCK_QUESTIONS.forEach { questionDao.upsertQuestion(it) }
-            answerDao.upsertAnswers(MOCK_ANSWERS)
+            MOCK_LEARNING_MATERIALS.forEach { learningMaterialDao.insertMaterial(it) }
+            MOCK_QUESTIONS.forEach { questionDao.insertQuestion(it) }
+            answerDao.insertAnswers(MOCK_ANSWERS)
             Log.d(TAG, "Questions:" + questionDao.getAllQuestions())
             Log.d(TAG, "Answers:" + answerDao.getAllAnswers())
         }

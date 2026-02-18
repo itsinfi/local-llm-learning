@@ -143,7 +143,7 @@ fun AppNavHost(startDestination: String = Routes.LIBRARY, questionDao: QuestionD
                 navigateToLibraryCallback = {
                     navController.navigate(Routes.LIBRARY) {
                     popUpTo(navController.graph.startDestinationId) {
-                        inclusive = false
+                        inclusive = true
                     }
                 }
                 },
@@ -174,7 +174,7 @@ fun AppNavHost(startDestination: String = Routes.LIBRARY, questionDao: QuestionD
                 navigateToQuizCallback = {
                     learningMaterialId: Int -> navController.navigate("quiz/$learningMaterialId") {
                         popUpTo(navController.graph.startDestinationId) {
-                        inclusive = false
+                        inclusive = true
                         }
                     }
                 },

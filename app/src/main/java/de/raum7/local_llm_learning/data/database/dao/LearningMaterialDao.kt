@@ -22,6 +22,9 @@ interface LearningMaterialDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertMaterial(learningMaterial: LearningMaterial): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertMaterial(learningMaterial: LearningMaterial): Long
+
     @Update
     suspend fun updateLearningMaterial(learningMaterial: LearningMaterial)
 

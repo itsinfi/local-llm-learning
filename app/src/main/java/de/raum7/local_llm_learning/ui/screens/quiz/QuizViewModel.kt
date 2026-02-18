@@ -143,7 +143,7 @@ class QuizViewModel(
             question.streak = 0
         }
         // force max streak if response time is smaller than weighting constant r which would result in the question not showing up anymore anyway
-        if (question.rt!! < R) {
+        if (question.rt!! < R && question.accuracy == 0) {
             question.streak = TARGET_STREAK
         }
 
