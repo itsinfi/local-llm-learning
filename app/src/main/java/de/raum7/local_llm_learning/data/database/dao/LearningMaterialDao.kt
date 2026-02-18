@@ -13,8 +13,8 @@ interface LearningMaterialDao {
     @Query("SELECT * FROM learningmaterial")
     suspend fun getAllMaterials(): List<LearningMaterial>
 
-//    @Query("SELECT * FROM learningmaterial")
-//    fun getAllMaterialsAsFlow(): Flow<List<LearningMaterial>>
+    @Query("SELECT progress from learningmaterial where id = :id")
+    suspend fun getProgress(id: Int): Double
 
     @Query("SELECT * FROM learningmaterial WHERE id = :id")
     suspend fun getMaterialById(id: Int): LearningMaterial

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.models.Answer
+import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.Question
 import de.raum7.local_llm_learning.data.models.QuizResult
 import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
@@ -16,20 +17,28 @@ import de.raum7.local_llm_learning.data.spaced_repitition.ENFORCED_DELAY
 import de.raum7.local_llm_learning.data.spaced_repitition.A
 import de.raum7.local_llm_learning.data.spaced_repitition.B
 import de.raum7.local_llm_learning.data.spaced_repitition.DEFAULT_PRIORITY
+import de.raum7.local_llm_learning.data.spaced_repitition.MAX_RESPONSE_TIME
 import de.raum7.local_llm_learning.data.spaced_repitition.R
+import de.raum7.local_llm_learning.data.spaced_repitition.TARGET_STREAK
 import de.raum7.local_llm_learning.data.spaced_repitition.W
 import kotlin.math.ln
 
 class QuizViewModel(
     learningMaterialId: Int,
-    private val repository: QuizRepository
+    private val repository: QuizRepository,
+    private val navigateToLibraryCallback: () -> Unit,
 ) : BaseViewModel(repository) {
 
     init {
         runBlocking {
+            val progress = repository.getProgress(learningMaterialId)
+            // reset everything if progress has reached 100%
+            if (progress == 1.0) {
+                resetLearningMaterial(learningMaterialId)
+            }
             val learningMaterial = this@QuizViewModel.repository.getLearningMaterialById(learningMaterialId)
             val question = repository.getNextQuestion(learningMaterial.id, DEFAULT_PRIORITY==null) // look for question with priority == null if default priority is null
-            val answers = repository.getAnswersForQuestion(question.id)
+            val answers = repository.getAnswersForQuestion(question!!.id)
             val questionCount = repository.getQuestionCountForLearningMaterial(learningMaterial.id)
             val initialState = QuizUiState.from(learningMaterial, questionCount, question, answers)
             this@QuizViewModel._uiState.value = initialState
@@ -125,6 +134,18 @@ class QuizViewModel(
         }
         question.trialsSinceLastPresented = 0
         question.rt = elapsed.toDouble() * 0.000000001
+        if (question.rt!! <= MAX_RESPONSE_TIME && question.accuracy == 0) {
+            if (question.streak < 3) {
+                question.streak++
+            }
+
+        } else {
+            question.streak = 0
+        }
+        // force max streak if response time is smaller than weighting constant r which would result in the question not showing up anymore anyway
+        if (question.rt!! < R) {
+            question.streak = TARGET_STREAK
+        }
 
         Log.d("PriorityCalculation", "Priority Calculation---------------------------------")
         var learningMaterial = state.learningMaterial
@@ -140,11 +161,8 @@ class QuizViewModel(
             }
             repository.updateQuestions(questions)
 
-            // calculate and update progress of learning material
-            val totalQuestionCount = repository.getQuestionCount(learningMaterial.id)
-            val masteredQuestionCount = repository.getMasteredQuestionCount(learningMaterial.id)
-            val learningMaterialProgress = masteredQuestionCount.toDouble() / totalQuestionCount.toDouble()
-            learningMaterial.progress = learningMaterialProgress
+
+            learningMaterial.progress = repository.calculateMaterialProgress(learningMaterial.id)
             repository.updateLearningMaterial(learningMaterial)
 
         }
@@ -163,34 +181,63 @@ class QuizViewModel(
             val state = this@QuizViewModel.uiState as QuizUiState
 
             val question = repository.getNextQuestion(state.learningMaterial.id, DEFAULT_PRIORITY==null) // look for question with priority == null if default priority is null
+            if (question == null) {
+                // head to library
+                navigateToLibraryCallback()
+            } else {
+                // start next question as usual
+                val answers = repository.getAnswersForQuestion(question!!.id)
+                val questionCount = repository.getQuestionCountForLearningMaterial(state.learningMaterial.id)
 
-            val answers = repository.getAnswersForQuestion(question.id)
-            val questionCount = repository.getQuestionCountForLearningMaterial(state.learningMaterial.id)
+                // TODO: use from function signature with questionId as a parameter
+                val newState = QuizUiState.from(
+                    state.learningMaterial,
+                    questionCount,
+                    question,
+                    answers
+                )
 
-            // TODO: use from function signature with questionId as a parameter
-            val newState = QuizUiState.from(
-                state.learningMaterial,
-                questionCount,
-                question,
-                answers
-            )
+                _uiState.value = newState
+                startTimer(newState.startedAt)
+            }
 
-            _uiState.value = newState
-            startTimer(newState.startedAt)
         }
 
     }
 
     private fun calculatePriority(question: Question): Double {
         val priority: Double = A * (question.trialsSinceLastPresented - ENFORCED_DELAY) * (B * (1-question.accuracy) * ln(question.rt!! / R) + question.accuracy * W)
-        Log.d("PriorityCalculation", "priority for question " + question.id + ": " + question.question)
-        Log.d("PriorityCalculation", priority.toString() + " = " + A.toString() + " * ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " ) + " + question.accuracy + " * " + W + " )")
-
+        Log.d("PriorityCalculation", "priority p and streak s for question " + question.id + ": " + question.question)
+        Log.d("PriorityCalculation", "p: " + priority.toString() + " = " + A.toString() + " * ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " ) + " + question.accuracy + " * " + W + " )")
+        Log.d("PriorityCalculation", "s: " + question.streak)
         // alternative priority function with differing log function:
 //        val priority: Double = A * (question.trialsSinceLastPresented - ENFORCED_DELAY) * (B * (1-question.accuracy) * log(question.rt!!, R) + question.accuracy * W)
 //        Log.d("PriorityCalculation", "priority for question " + question.id + ": " + question.question)
 //        Log.d("PriorityCalculation", priority.toString() + " = " + A.toString() + " * ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * log( " + question.rt + " , " + R + " ) + " + question.accuracy + " * " + W + " )")
 
         return priority
+    }
+
+    private fun resetLearningMaterial(learningMaterialId: Int) {
+        runBlocking {
+            val oldLearningMaterial = repository.getLearningMaterialById(learningMaterialId)
+            val newLearningMaterial = LearningMaterial(
+                id = oldLearningMaterial.id,
+                title = oldLearningMaterial.title
+            )
+            // reset learningMaterial
+            repository.updateLearningMaterial(newLearningMaterial)
+            // get all questions for learningMaterial
+            val questions = repository.getQuestionsForLearningMaterial(newLearningMaterial.id)
+            questions.forEach {
+                val resetQuestion = Question(
+                    id = it.id,
+                    learningMaterialId = it.learningMaterialId,
+                    question = it.question,
+                )
+                // reset question
+                repository.updateQuestion(resetQuestion)
+            }
+        }
     }
 }

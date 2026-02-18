@@ -28,6 +28,7 @@ data class Question (
     var trialsSinceLastPresented: Int = 0, // parameter N, saves the last trial this question was presented
     var accuracy: Int = 1, // used in determining priority, accuracy of user answer from last presentation, must be set to 0 when answered correctly, otherwise 1
     var rt: Double? = null, // response time of user for answering this question in seconds
+    var streak: Int = 0, // streak of consecutive correct answers given in less than MAX_RESPONSE_TIME
 
 ): BaseModel() {
 

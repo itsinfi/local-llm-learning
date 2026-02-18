@@ -140,6 +140,13 @@ fun AppNavHost(startDestination: String = Routes.LIBRARY, questionDao: QuestionD
                 questionDao,
                 answerDao,
                 learningMaterialDao,
+                navigateToLibraryCallback = {
+                    navController.navigate(Routes.LIBRARY) {
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = false
+                    }
+                }
+                },
             )
         }
 
@@ -161,6 +168,7 @@ fun AppNavHost(startDestination: String = Routes.LIBRARY, questionDao: QuestionD
             EditQuestionRoute(
                 learningMaterialId = learningMaterialId,
                 questionId = questionId,
+                learningMaterialDao = learningMaterialDao,
                 questionDao = questionDao,
                 answerDao = answerDao,
                 navigateToQuizCallback = {

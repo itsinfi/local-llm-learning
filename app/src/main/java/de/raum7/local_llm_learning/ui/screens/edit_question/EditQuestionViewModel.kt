@@ -43,8 +43,11 @@ class EditQuestionViewModel(
             question = state.question.question,
         )
         runBlocking {
+            var learningMaterial = repository.getLearningMaterialById(question.learningMaterialId)
             this@EditQuestionViewModel.repository.updateQuestion(question)
             this@EditQuestionViewModel.repository.upsertAnswers(answers)
+            learningMaterial.progress = repository.calculateMaterialProgress(learningMaterial.id)
+            repository.updateLearningMaterial(learningMaterial)
         }
         navigateToQuizCallback(this.learningMaterialId)
 
