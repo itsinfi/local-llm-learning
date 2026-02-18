@@ -1,3 +1,4 @@
+// app/src/main/cpp/llama_jni.cpp
 #include <jni.h>
 #include <string>
 #include <vector>
@@ -6,27 +7,12 @@
 #include <android/log.h>
 #include <cstdint>
 #include <time.h>
-#include <cstdio>
 
 #include "llama.h"
 
 #define LOG_TAG "llama_jni"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-
-/*
-    Reset Strategie
-
-    Standard: Snapshot Restore, garantiert kompatibel
-    Optional: KV Cache Clear, schneller pro Anfrage, aber nur wenn deine llama.cpp Version die Funktion hat
-
-    Wenn deine llama.cpp Version llama_kv_cache_clear(ctx) hat, setze USE_KV_CACHE_CLEAR auf 1.
-    Falls der Build dann fehlschlaegt, setze wieder auf 0 und poste mir die Compiler Fehlermeldung,
-    dann passe ich den Reset an die API deiner llama.cpp Version an.
-*/
-#ifndef USE_KV_CACHE_CLEAR
-#define USE_KV_CACHE_CLEAR 0
-#endif
 
 static long long now_ms() {
     timespec ts;
@@ -46,6 +32,8 @@ struct EngineState {
 
     llama_sampler * sampler = nullptr;
 
+    llama_context_params cparams; // cached init params for fast context recreation
+
     uint32_t seed = 0;
 
     int32_t nPast = 0;
@@ -53,13 +41,10 @@ struct EngineState {
 
     float temperature = 0.2f;
     float topP = 0.95f;
-
-    int32_t maxTokens = 700;
+    int32_t maxTokens = 800;
 
     bool started = false;
     bool finished = false;
-
-    std::vector<uint8_t> base_state;
 };
 
 static std::string jstringToStdString(JNIEnv * env, jstring s) {
@@ -81,21 +66,6 @@ static llama_sampler * buildSampler(uint32_t seed, float temperature, float topP
     return chain;
 }
 
-static bool snapshotBaseState(EngineState & st) {
-    const size_t sz = llama_state_get_size(st.ctx);
-    if (sz == 0) return false;
-
-    st.base_state.resize(sz);
-    const size_t got = llama_state_get_data(st.ctx, st.base_state.data(), st.base_state.size());
-    return got == st.base_state.size();
-}
-
-static bool restoreBaseState(EngineState & st) {
-    if (st.base_state.empty()) return false;
-    const size_t set = llama_state_set_data(st.ctx, st.base_state.data(), st.base_state.size());
-    return set == st.base_state.size();
-}
-
 static std::string applyChatTemplate(EngineState & st, const std::string & userPrompt) {
     llama_chat_message msg;
     msg.role = "user";
@@ -105,7 +75,7 @@ static std::string applyChatTemplate(EngineState & st, const std::string & userP
     if (!tmpl || tmpl[0] == '\0') return userPrompt;
 
     int32_t cap = 4096;
-    std::vector<char> buf((size_t)cap);
+    std::vector<char> buf((size_t) cap);
 
     while (true) {
         const int32_t n = llama_chat_apply_template(
@@ -118,10 +88,10 @@ static std::string applyChatTemplate(EngineState & st, const std::string & userP
         );
 
         if (n < 0) return userPrompt;
-        if (n < cap) return std::string(buf.data(), (size_t)n);
+        if (n < cap) return std::string(buf.data(), (size_t) n);
 
         cap = n + 1;
-        buf.resize((size_t)cap);
+        buf.resize((size_t) cap);
     }
 }
 
@@ -131,23 +101,23 @@ static std::vector<llama_token> tokenize(EngineState & st, const std::string & t
     int32_t n = llama_tokenize(
             st.vocab,
             text.c_str(),
-            (int32_t)text.size(),
+            (int32_t) text.size(),
             tokens.data(),
-            (int32_t)tokens.size(),
+            (int32_t) tokens.size(),
             true,
             true
     );
 
     if (n < 0) {
         const int32_t need = -n;
-        tokens.resize((size_t)need);
+        tokens.resize((size_t) need);
 
         n = llama_tokenize(
                 st.vocab,
                 text.c_str(),
-                (int32_t)text.size(),
+                (int32_t) text.size(),
                 tokens.data(),
-                (int32_t)tokens.size(),
+                (int32_t) tokens.size(),
                 true,
                 true
         );
@@ -158,7 +128,7 @@ static std::vector<llama_token> tokenize(EngineState & st, const std::string & t
         return tokens;
     }
 
-    tokens.resize((size_t)n);
+    tokens.resize((size_t) n);
     return tokens;
 }
 
@@ -170,24 +140,14 @@ static std::string tokenToText(EngineState & st, llama_token tok) {
             st.vocab,
             tok,
             out.data(),
-            (int32_t)out.size(),
+            (int32_t) out.size(),
             0,
             false
     );
 
     if (n <= 0) return "";
-    out.resize((size_t)n);
+    out.resize((size_t) n);
     return out;
-}
-
-static void resetContextForNewRequest(EngineState & st) {
-#if USE_KV_CACHE_CLEAR
-    llama_kv_cache_clear(st.ctx);
-#else
-    (void) restoreBaseState(st);
-#endif
-    st.nPast = 0;
-    st.generated = 0;
 }
 
 extern "C" JNIEXPORT jlong JNICALL
@@ -211,15 +171,19 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeInit(
     llama_model_params mparams = llama_model_default_params();
     llama_context_params cparams = llama_context_default_params();
 
-    mparams.use_mmap  = true;
+    mparams.use_mmap = true;
     mparams.use_mlock = false;
 
-    cparams.n_ctx = (uint32_t)contextLength;
-    cparams.n_threads = (int32_t)threads;
-    cparams.n_threads_batch = (int32_t)threads;
+    cparams.n_ctx = (uint32_t) contextLength;
+    cparams.n_batch = (uint32_t) contextLength;
+    cparams.n_ubatch = (uint32_t) contextLength;
+    cparams.n_seq_max = 1;
+    cparams.n_threads = (int32_t) threads;
+    cparams.n_threads_batch = (int32_t) threads;
 
     auto * st = new EngineState();
-    st->seed = (uint32_t)seed;
+    st->seed = (uint32_t) seed;
+    st->cparams = cparams;
 
     const long long t_load0 = now_ms();
     st->model = llama_model_load_from_file(mp.c_str(), mparams);
@@ -245,23 +209,18 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeInit(
     st->vocab = llama_model_get_vocab(st->model);
     st->sampler = buildSampler(st->seed, st->temperature, st->topP);
 
-    const long long t_snap0 = now_ms();
-    const bool snapOk = snapshotBaseState(*st);
-    const long long t_snap1 = now_ms();
-
     const long long t1 = now_ms();
 
     LOGI(
-            "nativeInit ok. model=%s n_ctx=%d threads=%d timing_ms total=%lld load_model=%lld init_ctx=%lld snapshot=%lld snap_ok=%d use_kv_clear=%d",
+            "nativeInit ok. model=%s n_ctx=%d n_batch=%d n_ubatch=%d threads=%d timing_ms total=%lld load_model=%lld init_ctx=%lld",
             mp.c_str(),
-            (int)contextLength,
-            (int)threads,
+            (int) contextLength,
+            (int) cparams.n_batch,
+            (int) cparams.n_ubatch,
+            (int) threads,
             (t1 - t0),
             (t_load1 - t_load0),
-            (t_ctx1 - t_ctx0),
-            (t_snap1 - t_snap0),
-            snapOk ? 1 : 0,
-            (int)USE_KV_CACHE_CLEAR
+            (t_ctx1 - t_ctx0)
     );
 
     return reinterpret_cast<jlong>(st);
@@ -292,6 +251,31 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeFree(
     LOGI("nativeFree done");
 }
 
+static bool recreateContextLocked(EngineState & st) {
+    if (!st.model) return false;
+
+    if (st.ctx) {
+        llama_free(st.ctx);
+        st.ctx = nullptr;
+    }
+
+    st.ctx = llama_init_from_model(st.model, st.cparams);
+    if (!st.ctx) {
+        return false;
+    }
+
+    // vocab belongs to model, but keep pointer refreshed
+    st.vocab = llama_model_get_vocab(st.model);
+
+    // clear memory explicitly to ensure clean start
+    llama_memory_t mem = llama_get_memory(st.ctx);
+    llama_memory_clear(mem, true);
+
+    st.nPast = 0;
+    st.generated = 0;
+    return true;
+}
+
 extern "C" JNIEXPORT jint JNICALL
 Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeStartGenerate(
         JNIEnv * env,
@@ -313,13 +297,12 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeStartGenerate(
     st->abort.store(false);
     st->finished = false;
     st->started = true;
-    st->generated = 0;
-    st->nPast = 0;
 
-    st->temperature = (float)temperature;
-    st->topP = (float)topP;
-    st->maxTokens = (int32_t)maxTokens;
+    st->temperature = (float) temperature;
+    st->topP = (float) topP;
+    st->maxTokens = (int32_t) maxTokens;
 
+    // sampler reset
     if (st->sampler) {
         llama_sampler_free(st->sampler);
         st->sampler = nullptr;
@@ -327,7 +310,11 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeStartGenerate(
     st->sampler = buildSampler(st->seed, st->temperature, st->topP);
 
     const long long t_reset0 = now_ms();
-    resetContextForNewRequest(*st);
+    if (!recreateContextLocked(*st)) {
+        LOGE("Failed to recreate context");
+        st->finished = true;
+        return -6;
+    }
     const long long t_reset1 = now_ms();
 
     const long long t_fmt0 = now_ms();
@@ -344,30 +331,58 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeStartGenerate(
         return -3;
     }
 
-    llama_batch batch = llama_batch_init((int32_t)tokens.size(), 0, 1);
-    batch.n_tokens = (int32_t)tokens.size();
-
-    for (int32_t i = 0; i < batch.n_tokens; i++) {
-        batch.token[i] = tokens[(size_t)i];
-        batch.pos[i] = i;
-        batch.n_seq_id[i] = 1;
-        batch.seq_id[i][0] = 0;
-        batch.logits[i] = (i == batch.n_tokens - 1);
+    const int32_t n_ctx = (int32_t) llama_n_ctx(st->ctx);
+    if ((int32_t) tokens.size() >= n_ctx) {
+        LOGE("Prompt too long tokens=%d n_ctx=%d", (int) tokens.size(), (int) n_ctx);
+        st->finished = true;
+        return -5;
     }
+
+    const int32_t n_batch = (int32_t) llama_n_batch(st->ctx);
 
     const long long t_dec0 = now_ms();
-    const int rc = llama_decode(st->ctx, batch);
+    int32_t idx = 0;
+    while (idx < (int32_t) tokens.size()) {
+        const int32_t remaining = (int32_t) tokens.size() - idx;
+        const int32_t chunk = remaining < n_batch ? remaining : n_batch;
+
+        llama_batch batch = llama_batch_init(chunk, 0, 1);
+        batch.embd = nullptr;
+        batch.n_tokens = chunk;
+
+        for (int32_t i = 0; i < chunk; i++) {
+            const int32_t pos = idx + i;
+            batch.token[i] = tokens[(size_t) pos];
+            batch.pos[i] = (llama_pos) pos;
+            batch.n_seq_id[i] = 1;
+            batch.seq_id[i][0] = 0;
+            batch.logits[i] = (pos == (int32_t) tokens.size() - 1) ? 1 : 0;
+        }
+
+        const int rc = llama_decode(st->ctx, batch);
+        llama_batch_free(batch);
+
+        if (rc != 0) {
+            const long long t_dec1 = now_ms();
+            LOGE(
+                    "Decode prompt failed rc=%d decode_ms=%lld tokens=%d n_batch=%d idx=%d chunk=%d",
+                    rc,
+                    (t_dec1 - t_dec0),
+                    (int) tokens.size(),
+                    (int) n_batch,
+                    (int) idx,
+                    (int) chunk
+            );
+            st->finished = true;
+            return -4;
+        }
+
+        idx += chunk;
+    }
     const long long t_dec1 = now_ms();
 
-    llama_batch_free(batch);
-
-    if (rc != 0) {
-        LOGE("Decode prompt failed rc=%d decode_ms=%lld", rc, (t_dec1 - t_dec0));
-        st->finished = true;
-        return -4;
-    }
-
-    st->nPast = (int32_t)tokens.size();
+    st->nPast = (int32_t) tokens.size();
+    st->generated = 0;
 
     LOGI(
             "startGenerate timing_ms reset=%lld template=%lld tokenize=%lld decode_prompt=%lld prompt_tokens=%d",
@@ -375,7 +390,7 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeStartGenerate(
             (t_fmt1 - t_fmt0),
             (t_tok1 - t_tok0),
             (t_dec1 - t_dec0),
-            (int)tokens.size()
+            (int) tokens.size()
     );
 
     return 0;
@@ -410,12 +425,13 @@ Java_de_raum7_local_1llm_1learning_llm_LlamaNative_nativeNextToken(
     }
 
     llama_batch batch = llama_batch_init(1, 0, 1);
+    batch.embd = nullptr;
     batch.n_tokens = 1;
     batch.token[0] = next;
-    batch.pos[0] = st->nPast;
+    batch.pos[0] = (llama_pos) st->nPast;
     batch.n_seq_id[0] = 1;
     batch.seq_id[0][0] = 0;
-    batch.logits[0] = true;
+    batch.logits[0] = 1;
 
     const int rc = llama_decode(st->ctx, batch);
     llama_batch_free(batch);
