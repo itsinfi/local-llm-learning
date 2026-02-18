@@ -86,7 +86,14 @@ class QuizViewModel(
         val elapsed = endedAt - state.startedAt
 
 
+
         val question = state.question
+
+        val previousElapsed = if (question.rt == null) {
+            elapsed
+        } else {
+            question.rt!! * 1_000_000_000.0
+        }
 
         val selectedAnswer = state.selectedAnswer
             ?: error("No answer selected")
@@ -101,7 +108,7 @@ class QuizViewModel(
             selectedAnswer = selectedAnswer,
             correctAnswer = correctAnswer,
             elapsedNanoSeconds = elapsed,
-            previousNanoSeconds = elapsed
+            previousNanoSeconds = previousElapsed.toLong(),
         )
 
         // calculate priority for current question
