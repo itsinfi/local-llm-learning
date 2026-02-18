@@ -120,9 +120,10 @@ class QuizViewModel(
         question.rt = elapsed.toDouble() * 0.000000001
 
         Log.d("PriorityCalculation", "Priority Calculation---------------------------------")
+        var learningMaterial = state.learningMaterial
         runBlocking {
             repository.updateQuestion(question)
-            val questions = repository.getAnsweredQuestions(state.learningMaterial.id)
+            val questions = repository.getAnsweredQuestions(learningMaterial.id)
             questions.forEach {
                 if (it.id != question.id) {
                     it.trialsSinceLastPresented++
@@ -131,12 +132,21 @@ class QuizViewModel(
 
             }
             repository.updateQuestions(questions)
+
+            // calculate and update progress of learning material
+            val totalQuestionCount = repository.getQuestionCount(learningMaterial.id)
+            val masteredQuestionCount = repository.getMasteredQuestionCount(learningMaterial.id)
+            val learningMaterialProgress = masteredQuestionCount.toDouble() / totalQuestionCount.toDouble()
+            learningMaterial.progress = learningMaterialProgress
+            repository.updateLearningMaterial(learningMaterial)
+
         }
 
         _uiState.value = state.copy(
             phase = QuizPhase.RESULTS,
             result = result,
             elapsedTime = elapsed,
+            learningMaterial = learningMaterial
         )
     }
 
@@ -166,8 +176,13 @@ class QuizViewModel(
 
     private fun calculatePriority(question: Question): Double {
         val priority: Double = A * (question.trialsSinceLastPresented - ENFORCED_DELAY) * (B * (1-question.accuracy) * ln(question.rt!! / R) + question.accuracy * W)
-        Log.d("PriorityCalculation", "priority for question " + question.id + " " + question.question)
-        Log.d("PriorityCalculation", priority.toString() + " = " + A.toString() + " * " + " ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " )  + " + question.accuracy + " * " + W + " )")
+        Log.d("PriorityCalculation", "priority for question " + question.id + ": " + question.question)
+        Log.d("PriorityCalculation", priority.toString() + " = " + A.toString() + " * ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * ln( " + question.rt + " / " + R + " ) + " + question.accuracy + " * " + W + " )")
+
+        // alternative priority function with differing log function:
+//        val priority: Double = A * (question.trialsSinceLastPresented - ENFORCED_DELAY) * (B * (1-question.accuracy) * log(question.rt!!, R) + question.accuracy * W)
+//        Log.d("PriorityCalculation", "priority for question " + question.id + ": " + question.question)
+//        Log.d("PriorityCalculation", priority.toString() + " = " + A.toString() + " * ( " + question.trialsSinceLastPresented + " - " + ENFORCED_DELAY + " ) * ( " + B + " * " + " ( 1 - " + question.accuracy + " ) * log( " + question.rt + " , " + R + " ) + " + question.accuracy + " * " + W + " )")
 
         return priority
     }

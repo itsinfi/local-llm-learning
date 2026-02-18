@@ -19,6 +19,10 @@ class QuizRepository(
 
     suspend fun getAnswersForQuestion(id: Int): List<Answer> = answerDao.getAnswersForQuestion(id)
 
+    suspend fun getQuestionCount(learningMaterialId: Int) = questionDao.getQuestionCountForLearningMaterial(learningMaterialId)
+
+    suspend fun getMasteredQuestionCount(learningMaterialId: Int) = questionDao.getMasteredQuestionCount(learningMaterialId)
+
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int = questionDao.getQuestionCountForLearningMaterial(learningMaterialId)
 
     suspend fun updateLearningMaterial(learningMaterial: LearningMaterial) = learningMaterialDao.updateLearningMaterial(learningMaterial)

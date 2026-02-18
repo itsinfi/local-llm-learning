@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import de.raum7.local_llm_learning.data.models.Question
+import de.raum7.local_llm_learning.data.spaced_repitition.MAX_RESPONSE_TIME
 
 @Dao
 interface QuestionDao {
@@ -24,6 +25,9 @@ interface QuestionDao {
 
     @Query("SELECT COUNT(id) from question WHERE learningMaterialId = :learningMaterialId")
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int
+
+    @Query("SELECT COUNT(id) from question WHERE learningMaterialId = :learningMaterialId AND accuracy = 0 AND rt <= $MAX_RESPONSE_TIME")
+    suspend fun getMasteredQuestionCount(learningMaterialId: Int): Int
 
     @Query("SELECT * FROM question")
     suspend fun getAllQuestions(): List<Question>

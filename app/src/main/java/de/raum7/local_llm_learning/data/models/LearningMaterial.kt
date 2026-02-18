@@ -9,6 +9,6 @@ data class LearningMaterial (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
-    val progress: Double,
+    var progress: Double= 0.0,
 ) : BaseModel() {
 }
