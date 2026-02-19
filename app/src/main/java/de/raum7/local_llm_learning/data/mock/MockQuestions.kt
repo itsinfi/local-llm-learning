@@ -47,5 +47,50 @@ val MOCK_QUESTIONS: List<Question> = listOf(
         id = 22,
         learningMaterialId = 2,
         question = "Welche Klasse wirkt typischerweise Zauber?",
+    ),
+    Question(
+        id = 30,
+        learningMaterialId = 4,
+        question = "Welches Schwert wurde hauptsächlich von Rittern verwendet?",
+    ),
+    Question(
+        id = 31,
+        learningMaterialId = 4,
+        question = "Wofür war ein Zweihänder bekannt?",
+    ),
+    Question(
+        id = 32,
+        learningMaterialId = 4,
+        question = "Welches Material wurde häufig für Klingen verwendet?",
+    ),
+    Question(
+        id = 33,
+        learningMaterialId = 4,
+        question = "Was moduliert bei der Frequenzmodulation den Träger?",
+    ),
+    Question(
+        id = 34,
+        learningMaterialId = 4,
+        question = "Welcher Synthesizer machte FM populär?",
+    ),
+    Question(
+        id = 35,
+        learningMaterialId = 4,
+        question = "FM-Synthese ist besonders bekannt für…",
+    ),
+    Question(
+        id = 36,
+        learningMaterialId = 4,
+        question = "Welche Würfelart wird in D&D am häufigsten benutzt?",
+    ),
+    Question(
+        id = 37,
+        learningMaterialId = 4,
+        question = "Was ist die Rolle des Dungeon Masters?",
+    ),
+    Question(
+        id = 38,
+        learningMaterialId = 4,
+        question = "Welche Klasse wirkt typischerweise Zauber?",
     )
 )

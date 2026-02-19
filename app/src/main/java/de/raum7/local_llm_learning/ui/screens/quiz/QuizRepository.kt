@@ -17,9 +17,37 @@ class QuizRepository(
 
     suspend fun getLearningMaterialById(id: Int): LearningMaterial = learningMaterialDao.getMaterialById(id)
 
-    suspend fun getNextQuestionById(id: Int, learningMaterialId: Int): Question = questionDao.getNextQuestionById(id, learningMaterialId)
+    suspend fun getQuestionsForLearningMaterial(learningMaterialId: Int): List<Question> = questionDao.getQuestionsForLearningMaterial(learningMaterialId)
+
+    suspend fun getProgress(id: Int): Double = learningMaterialDao.getProgress(id)
 
     suspend fun getAnswersForQuestion(id: Int): List<Answer> = answerDao.getAnswersForQuestion(id)
 
+    suspend fun getQuestionCount(learningMaterialId: Int) = questionDao.getQuestionCountForLearningMaterial(learningMaterialId)
+
+    suspend fun getCurrentProgression(learningMaterialId: Int) = questionDao.getCurrentProgression(learningMaterialId)
+
+    suspend fun getMasteredQuestionCount(learningMaterialId: Int) = questionDao.getMasteredQuestionCount(learningMaterialId)
+
     suspend fun getQuestionCountForLearningMaterial(learningMaterialId: Int): Int = questionDao.getQuestionCountForLearningMaterial(learningMaterialId)
+
+    suspend fun updateLearningMaterial(learningMaterial: LearningMaterial) = learningMaterialDao.updateLearningMaterial(learningMaterial)
+
+    suspend fun updateQuestion(question: Question) = questionDao.updateQuestion(question)
+
+    suspend fun updateQuestions(questions: List<Question>) = questionDao.updateQuestions(questions)
+
+    suspend fun getNextQuestion(learningMaterialId: Int, lookForMissingPriority: Boolean): Question? {
+        // if lookForMissingPriority is true, look for a question with priority == null first, else skip that query
+        val question: Question? = if (lookForMissingPriority) {
+            questionDao.getMissingPriorityQuestion(learningMaterialId) ?: questionDao.getHighestPriorityQuestion(learningMaterialId)
+        } else {
+            questionDao.getHighestPriorityQuestion(learningMaterialId)
+        }
+        return question
+    }
+
+    suspend fun getAnsweredQuestions(learningMaterialId: Int) = questionDao.getAnsweredQuestions(learningMaterialId)
+
+    suspend fun calculateMaterialProgress(learningMaterialId: Int): Double = questionDao.calculateMaterialProgress(learningMaterialId)
 }

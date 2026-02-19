@@ -30,20 +30,12 @@ class MainActivity : ComponentActivity() {
         //TODO remove temp mock data
         val TAG ="log"
         runBlocking {
-            MOCK_LEARNING_MATERIALS.forEach { learningMaterialDao.upsertMaterial(it) }
-//            // TODO why do insertions crash?, also why did generated question not contain any answers?
-            MOCK_QUESTIONS.forEach { questionDao.upsertQuestion(it) }
-//            questionDao.upsertQuestions(MOCK_QUESTIONS)
-            answerDao.upsertAnswers(MOCK_ANSWERS)
+            MOCK_LEARNING_MATERIALS.forEach { learningMaterialDao.insertMaterial(it) }
+            MOCK_QUESTIONS.forEach { questionDao.insertQuestion(it) }
+            answerDao.insertAnswers(MOCK_ANSWERS)
             Log.d(TAG, "Questions:" + questionDao.getAllQuestions())
             Log.d(TAG, "Answers:" + answerDao.getAllAnswers())
         }
-
-
-
-
-//        // Wichtig: Store laden, bevor Compose startet
-//        LearningMaterialStore.init(applicationContext)
 
         enableEdgeToEdge()
 

@@ -18,6 +18,9 @@ interface AnswerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAnswers(answers: List<Answer>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAnswers(answers: List<Answer>)
+
     @Query("SELECT * FROM answer")
     suspend fun getAllAnswers(): List<Answer>
 }

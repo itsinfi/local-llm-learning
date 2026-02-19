@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.raum7.local_llm_learning.data.database.dao.AnswerDao
+import de.raum7.local_llm_learning.data.database.dao.LearningMaterialDao
 import de.raum7.local_llm_learning.data.database.dao.QuestionDao
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 
@@ -11,15 +12,18 @@ import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
 fun EditQuestionRoute(
     learningMaterialId: Int,
     questionId: Int,
+    learningMaterialDao: LearningMaterialDao,
     questionDao: QuestionDao,
     answerDao: AnswerDao,
+    navigateToQuizCallback: (Int) -> Unit,
 ) {
 
     val viewModel: EditQuestionViewModel = viewModel(
         factory = EditQuestionViewModelFactory(
             learningMaterialId = learningMaterialId,
             questionId = questionId,
-            repository = EditQuestionRepository(questionDao, answerDao)
+            repository = EditQuestionRepository(learningMaterialDao, questionDao, answerDao),
+            navigateToQuizCallback = navigateToQuizCallback,
         )
     )
 

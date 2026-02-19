@@ -12,9 +12,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class EditQuestionViewModel(
-    learningMaterialId: Int,
-    questionId: Int,
-    private val repository: EditQuestionRepository
+    val learningMaterialId: Int,
+    val questionId: Int,
+    private val repository: EditQuestionRepository,
+    private val navigateToQuizCallback: (Int) -> Unit,
 ) : BaseViewModel(repository) {
 
     init {
@@ -35,9 +36,20 @@ class EditQuestionViewModel(
     }
 
     fun onQuestionSave(answers: List<Answer>) {
-        viewModelScope.launch {
+        val state = uiState as EditQuestionUiState
+        var question = Question(
+            id = state.question.id,
+            learningMaterialId = state.question.learningMaterialId,
+            question = state.question.question,
+        )
+        runBlocking {
+            var learningMaterial = repository.getLearningMaterialById(question.learningMaterialId)
+            this@EditQuestionViewModel.repository.updateQuestion(question)
             this@EditQuestionViewModel.repository.upsertAnswers(answers)
+            learningMaterial.progress = repository.calculateMaterialProgress(learningMaterial.id)
+            repository.updateLearningMaterial(learningMaterial)
         }
+        navigateToQuizCallback(this.learningMaterialId)
 
     }
 }

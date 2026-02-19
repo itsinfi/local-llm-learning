@@ -6,13 +6,15 @@ import de.raum7.local_llm_learning.data.base.BaseViewModelFactory
 class QuizViewModelFactory(
     private val learningMaterialId: Int,
     private val repository: QuizRepository,
+    private val navigateToLibraryCallback: () -> Unit,
 ) : BaseViewModelFactory(repository) {
 
     override fun createBaseViewModel(modelClass: Class<out BaseViewModel>): BaseViewModel {
         if (modelClass.isAssignableFrom(QuizViewModel::class.java)) {
             return QuizViewModel(
                 learningMaterialId,
-                repository
+                repository,
+                navigateToLibraryCallback
             )
         }
         throw IllegalArgumentException("Unknown BaseViewModel class")
