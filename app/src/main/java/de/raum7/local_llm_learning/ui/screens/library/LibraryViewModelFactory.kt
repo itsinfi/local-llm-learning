@@ -5,7 +5,7 @@ import de.raum7.local_llm_learning.data.base.BaseViewModelFactory
 
 class LibraryViewModelFactory(
     private val navigateToAssistantCallback: () -> Unit,
-    private val navigateToQuizCallback: (String) -> Unit,
+    private val navigateToQuizCallback: (Int) -> Unit,
     private val repository: LibraryRepository
 ) : BaseViewModelFactory(repository) {
 

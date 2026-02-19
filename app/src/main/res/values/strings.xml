@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Local LLM Learning</string>
 
-    <string name="library">Learning Material Library</string>
+    <string name="library">Bereit fürs Level Up?</string>
     <string name="library_no_material">Noch nichts hier :C</string>
     <string name="library_questions">Fragen</string>
     <string name="library_progress">Fortschritt</string>
     <string name="library_add_learning_material">Erstelle neue Lernmaterialien</string>
 
-    <string name="assistant">Learning Material Creation Assistant</string>
+    <string name="assistant">Assistant</string>
     <string name="assistant_initial_description">Was möchtest du lernen?</string>
     <string name="assistant_parameter_selection">Parameter</string>
     <string name="assistant_further_specification">Weitere Angaben</string>
@@ -31,8 +31,19 @@
     </string>
     <string name="assistant_goal">Zielsetzung (optional)</string>
     <string name="assistant_goal_placeholder">Was möchtest du mit dem Lernen erreichen?</string>
+    <string name="assistant_generating">Generierung läuft</string>
+    <string name="assistant_please_wait">Bitte warten</string>
+    <string name="assisant_result">Generiertes Lernmaterial</string>
+    <string name="assisant_result_save">Speichern</string>
+    <string name="assisant_back_to_library">Zurück zur Bibliothek</string>
+    <string name="assisant_result_parsing_error">Ausgabe konnte nicht geparsed werden.</string>
+    <string name="assisant_result_raw_text">Rohtext</string>
+    <string name="assisant_result_no_result_error">Kein Ergebnis erhalten.</string>
+    <string name="assisant_result_correct">Richtig</string>
+    <string name="assisant_result_incorrect">Falsch</string>
+    <string name="assisant_result_answer">Antwort</string>
 
-    <string name="quiz">Spaced Repetition Algorithm Single Choice Question Based Quiz</string>
+    <string name="quiz">Quiz</string>
     <string name="quiz_continue">Weiter</string>
     <string name="quiz_correct_result">Richtig!</string>
     <string name="quiz_incorrect_result">Falsch!</string>
@@ -45,6 +56,7 @@
     <string name="quiz_edit_button">Bearbeiten</string>
 
     <string name="edit_question">Frage bearbeiten</string>
+    <string name="confirm_edit">Speichern</string>
 
     <string name="file_input_select">Datei auswählen...</string>
     <string name="file_input_change">Datei ändern...</string>

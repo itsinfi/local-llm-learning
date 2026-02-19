@@ -3,26 +3,32 @@ package de.raum7.local_llm_learning.ui.screens.quiz
 import androidx.lifecycle.viewModelScope
 import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.models.Answer
-import de.raum7.local_llm_learning.data.models.LearningMaterial
 import de.raum7.local_llm_learning.data.models.QuizResult
 import de.raum7.local_llm_learning.ui.screens.quiz.types.QuizPhase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.UUID
 
 class QuizViewModel(
-    learningMaterialId: String,
+    learningMaterialId: Int,
     private val repository: QuizRepository
 ) : BaseViewModel(repository) {
 
-    private val learningMaterial: LearningMaterial =
-        repository.getLearningMaterialById(learningMaterialId)
+//    private var learningMaterial: LearningMaterial = TODO() remove
 
     init {
-        val initialState = QuizUiState.from(learningMaterial)
-        _uiState.value = initialState
-        startTimer(initialState.startedAt)
+        runBlocking {
+            val learningMaterial = this@QuizViewModel.repository.getLearningMaterialById(learningMaterialId)
+            val question = repository.getNextQuestionById(-1, learningMaterial.id)
+            val answers = repository.getAnswersForQuestion(question.id)
+            val questionCount = repository.getQuestionCountForLearningMaterial(learningMaterial.id)
+            val initialState = QuizUiState.from(learningMaterial, questionCount, question, answers)
+            this@QuizViewModel._uiState.value = initialState
+            startTimer(initialState.startedAt)
+        }
+
     }
 
     private var timerJob: Job? = null
@@ -73,8 +79,12 @@ class QuizViewModel(
         val elapsed = endedAt - state.startedAt
 
         val question = state.question
-        val selectedAnswer = state.selectedAnswer ?: return
-        val correctAnswer = question.answers.first { it.isCorrect }
+
+        val selectedAnswer = state.selectedAnswer
+            ?: error("No answer selected")
+
+        val correctAnswer = state.answers.firstOrNull { it.isCorrect }
+            ?: error("No correct answer found")
 
         val result = QuizResult(
             id = UUID.randomUUID().toString(),
@@ -94,18 +104,26 @@ class QuizViewModel(
     }
 
     private fun showNextQuestion() {
-        val state = uiState as QuizUiState
+        viewModelScope.launch {
+            // TODO: find solution with loading state and loading icon
+            val state = this@QuizViewModel.uiState as QuizUiState
 
-        val nextIndex =
-            (learningMaterial.questions.indexOf(state.question) + 1) %
-                    learningMaterial.questions.size
+            // TODO: only temporary code, please add question selection via spaced repetition
+            val question = repository.getNextQuestionById(state.question.id, state.learningMaterial.id)
+            val answers = repository.getAnswersForQuestion(state.question.id)
+            val questionCount = repository.getQuestionCountForLearningMaterial(state.learningMaterial.id)
 
-        val newState = QuizUiState.from(
-            learningMaterial = learningMaterial,
-            questionIndex = nextIndex
-        )
+            // TODO: use from function signature with questionId as a parameter
+            val newState = QuizUiState.from(
+                state.learningMaterial,
+                questionCount,
+                question,
+                answers
+            )
 
-        _uiState.value = newState
-        startTimer(newState.startedAt)
+            _uiState.value = newState
+            startTimer(newState.startedAt)
+        }
+
     }
 }

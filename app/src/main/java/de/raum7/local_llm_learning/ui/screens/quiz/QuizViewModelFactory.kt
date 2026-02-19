@@ -4,7 +4,7 @@ import de.raum7.local_llm_learning.data.base.BaseViewModel
 import de.raum7.local_llm_learning.data.base.BaseViewModelFactory
 
 class QuizViewModelFactory(
-    private val learningMaterialId: String,
+    private val learningMaterialId: Int,
     private val repository: QuizRepository,
 ) : BaseViewModelFactory(repository) {
 

@@ -1,22 +1,26 @@
 package de.raum7.local_llm_learning.ui.screens.assistant
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.raum7.local_llm_learning.data.mock.MOCK_ANSWERS
+import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTIONS
 import de.raum7.local_llm_learning.data.parsing.LearningMaterialJsonParser
-import de.raum7.local_llm_learning.ui.shared.components.AppBar
-import de.raum7.local_llm_learning.ui.shared.components.ButtonClass
-import de.raum7.local_llm_learning.ui.shared.components.CustomElevatedButton
+import de.raum7.local_llm_learning.ui.screens.assistant.components.AssistantResultScreenAppBar
+import de.raum7.local_llm_learning.ui.screens.assistant.components.ErrorCard
+import de.raum7.local_llm_learning.ui.screens.assistant.components.QuestionCardList
+import de.raum7.local_llm_learning.ui.screens.assistant.components.SaveLearningMaterialEFAB
+import de.raum7.local_llm_learning.ui.theme.AppTheme
+import org.json.JSONArray
+import org.json.JSONObject
 
 @Composable
 fun AssistantResultScreen(
@@ -31,67 +35,138 @@ fun AssistantResultScreen(
     }
 
     Scaffold(
-        topBar = { AppBar(title = "Generiertes Lernmaterial") }
+        topBar = { AssistantResultScreenAppBar(onBack = onBackToLibrary) },
+        floatingActionButton = {
+            SaveLearningMaterialEFAB(
+                onClick = onSaveToLibrary,
+                isEnabled = parsed != null,
+            )
+        }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(16.dp)
+                .padding(top = 32.dp)
+                .padding(horizontal = 32.dp)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            CustomElevatedButton(
-                label = "In Bibliothek speichern",
-                onclick = onSaveToLibrary,
-                buttonClass = ButtonClass.PRIMARY,
-                isEnabled = parsed != null
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            CustomElevatedButton(
-                label = "Zur Bibliothek",
-                onclick = onBackToLibrary,
-                buttonClass = ButtonClass.SECONDARY
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                if (parsed == null) {
-                    Text(
-                        text = "Ausgabe konnte nicht geparsed werden. Rohtext:",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = resultText.ifBlank { "Kein Ergebnis erhalten." })
-                    return@Column
-                }
-
-                Text(
-                    text = parsed.title,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-
-                parsed.questions.forEachIndexed { index, q ->
-                    Text(
-                        text = "${index + 1}. ${q.question}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    q.answers.forEach { a ->
-                        val prefix = if (a.isCorrect) "Richtig: " else "Antwort: "
-                        Text(text = prefix + a.answer)
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+            when(parsed) {
+                null -> ErrorCard(resultText)
+                else -> QuestionCardList(parsed)
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantResultScreenPreview_NoResult() {
+    AppTheme {
+        AssistantResultScreen(
+            resultText = "",
+            onSaveToLibrary = {},
+            onBackToLibrary = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AssistantResultScreenPreview_ParsingError() {
+    AppTheme {
+        AssistantResultScreen(
+            resultText = "Frage 1: Lorem ipsum dolor sit amet\n" +
+                    "Antwort: Lorem ipsum dolor sit amet\n" +
+                    "Richtig: Lorem ipsum dolor sit amet\n" +
+                    "Antwort: Lorem ipsum dolor sit amet\n" +
+                    "Antwort: Lorem ipsum dolor sit amet",
+            onSaveToLibrary = {},
+            onBackToLibrary = {},
+        )
+    }
+}
+// TODO: fix preview
+@Preview(showBackground = true)
+@Composable
+private fun AssistantResultScreenPreview_Success() {
+    AppTheme {
+        AppTheme {
+            val jsonObject = JSONObject()
+                .put("title", MOCK_LEARNING_MATERIALS[1].title)
+                .put("questions", JSONArray()
+                    .put(JSONObject()
+                        .put("question", MOCK_QUESTIONS[4].question)
+                        .put("answers", JSONArray()
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[13].answer)
+                                .put("isCorrect", MOCK_ANSWERS[13].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[14].answer)
+                                .put("isCorrect", MOCK_ANSWERS[14].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[15].answer)
+                                .put("isCorrect", MOCK_ANSWERS[15].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[16].answer)
+                                .put("isCorrect", MOCK_ANSWERS[16].isCorrect)
+                            )
+                        )
+                    )
+                    .put(JSONObject()
+                        .put("question", MOCK_QUESTIONS[5].question)
+                        .put("answers", JSONArray()
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[17].answer)
+                                .put("isCorrect", MOCK_ANSWERS[17].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[18].answer)
+                                .put("isCorrect", MOCK_ANSWERS[18].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[19].answer)
+                                .put("isCorrect", MOCK_ANSWERS[19].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[20].answer)
+                                .put("isCorrect", MOCK_ANSWERS[20].isCorrect)
+                            )
+                        )
+                    )
+                    .put(JSONObject()
+                        .put("question", MOCK_QUESTIONS[6].question)
+                        .put("answers", JSONArray()
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[21].answer)
+                                .put("isCorrect", MOCK_ANSWERS[21].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[22].answer)
+                                .put("isCorrect", MOCK_ANSWERS[22].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[23].answer)
+                                .put("isCorrect", MOCK_ANSWERS[23].isCorrect)
+                            )
+                            .put(JSONObject()
+                                .put("answer", MOCK_ANSWERS[24].answer)
+                                .put("isCorrect", MOCK_ANSWERS[24].isCorrect)
+                            )
+                        )
+                    )
+                )
+
+            val parsed = jsonObject.toString()
+
+            AssistantResultScreen(
+                resultText = parsed,
+                onSaveToLibrary = {},
+                onBackToLibrary = {},
+            )
         }
     }
 }

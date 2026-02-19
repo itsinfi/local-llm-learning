@@ -1,11 +1,11 @@
 package de.raum7.local_llm_learning.ui.screens.library.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,31 +18,48 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.data.mock.MOCK_LEARNING_MATERIALS
+import de.raum7.local_llm_learning.data.mock.MOCK_QUESTION_COUNTS
 import de.raum7.local_llm_learning.data.models.LearningMaterial
+import de.raum7.local_llm_learning.ui.shared.components.CustomCard
+import de.raum7.local_llm_learning.ui.shared.components.ProgressBar
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 import kotlin.math.roundToInt
 
 @Composable
-fun LearningMaterialCard(learningMaterial: LearningMaterial, onClick: () -> Unit) {
-    Card (
-        onClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
+fun LearningMaterialCard(
+    learningMaterial: LearningMaterial,
+    questionCount: Int,
+    onClick: () -> Unit,
+) {
+    CustomCard(
+        onClick = onClick,
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = CardDefaults.shape,
+            ),
     ) {
-        LearningMaterialCardContent(learningMaterial)
+        LearningMaterialCardContent(
+            learningMaterial,
+            questionCount,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 
 @Composable
-private fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
+private fun LearningMaterialCardContent(
+    learningMaterial: LearningMaterial,
+    questionCount: Int,
+    modifier: Modifier = Modifier,
+) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.padding(16.dp),
+        modifier = modifier,
     ) {
         Text(
             text = learningMaterial.title,
@@ -53,33 +70,32 @@ private fun LearningMaterialCardContent(learningMaterial: LearningMaterial) {
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
-        LearningMaterialDetailInfo(learningMaterial)
+        LearningMaterialDetailInfo(learningMaterial, questionCount)
     }
 }
 
 @Composable
-private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial) {
-    Row (
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Text(
-            text = "${learningMaterial.questions.size} ${stringResource(R.string.library_questions)}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Text(
-            text ="${(learningMaterial.progress * 100).roundToInt()}% ${stringResource(
-                R.string.library_progress)}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75.toFloat()),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
+private fun LearningMaterialDetailInfo(learningMaterial: LearningMaterial, questionCount: Int) {
+    val size = 12.dp
+    val shape = RoundedCornerShape(size)
+
+    Text(
+        text = "${questionCount} " +
+            "${stringResource(R.string.library_questions)} • " +
+            "${(learningMaterial.progress * 100).roundToInt()}% " +
+            stringResource(R.string.library_progress),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.5f),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.padding(bottom = 8.dp),
+    )
+
+    ProgressBar(
+        perc = learningMaterial.progress.toFloat(),
+        size = size,
+        shape = shape,
+    )
 }
 
 @Preview(showBackground = true)
@@ -88,6 +104,7 @@ fun LearningMaterialCardPreview() {
     AppTheme {
         LearningMaterialCard(
             learningMaterial = MOCK_LEARNING_MATERIALS[1],
+            questionCount = MOCK_QUESTION_COUNTS.getValue(1),
             onClick = {},
         )
     }

@@ -1,5 +1,6 @@
 package de.raum7.local_llm_learning.ui.shared.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -8,16 +9,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import de.raum7.local_llm_learning.ui.theme.AppTheme
 
-enum class ButtonClass {
+enum class ButtonType {
     PRIMARY,
     SECONDARY,
+    TERTIARY,
+    ERROR,
 }
 
-enum class ButtonStatus {
-    SUCCESS,
-    ERROR,
+enum class ButtonColorFill {
+    FILLED,
+    OUTLINE,
+}
+
+data class ButtonStyle (
+    val type: ButtonType,
+    val colorFill: ButtonColorFill,
+) {
+    companion object {
+        val DEFAULT = ButtonStyle(
+            type = ButtonType.PRIMARY,
+            colorFill = ButtonColorFill.FILLED,
+        )
+
+        fun from(
+            type: ButtonType = DEFAULT.type,
+            colorFill: ButtonColorFill = DEFAULT.colorFill,
+        ): ButtonStyle {
+            return ButtonStyle(
+                type = type,
+                colorFill = colorFill,
+            )
+        }
+    }
 }
 
 @Composable
@@ -26,123 +52,320 @@ fun CustomElevatedButton(
     onclick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    buttonClass: ButtonClass = ButtonClass.PRIMARY,
-    buttonStatus: ButtonStatus = ButtonStatus.SUCCESS,
+    style: ButtonStyle = ButtonStyle.DEFAULT,
 ) {
     // color definitions
-    val containerColor: Color = MaterialTheme.colorScheme.primaryContainer
-    val contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
+    val containerColor: Color = when(style.colorFill) {
+        ButtonColorFill.OUTLINE -> MaterialTheme.colorScheme.surfaceContainer
+        ButtonColorFill.FILLED -> when(style.type) {
+            ButtonType.PRIMARY -> MaterialTheme.colorScheme.primary
+            ButtonType.SECONDARY -> MaterialTheme.colorScheme.secondary
+            ButtonType.TERTIARY -> MaterialTheme.colorScheme.tertiary
+            ButtonType.ERROR -> MaterialTheme.colorScheme.error
+        }
+    }
+    val contentColor: Color = when(style.colorFill) {
+        ButtonColorFill.OUTLINE -> MaterialTheme.colorScheme.onSurface
+        ButtonColorFill.FILLED -> when(style.type) {
+            ButtonType.PRIMARY -> MaterialTheme.colorScheme.onPrimary
+            ButtonType.SECONDARY -> MaterialTheme.colorScheme.onSecondary
+            ButtonType.TERTIARY -> MaterialTheme.colorScheme.onTertiary
+            ButtonType.ERROR -> MaterialTheme.colorScheme.onError
+        }
+    }
     val disabledContainerColor: Color = containerColor.copy(alpha = 0.5f)
     val disabledContentColor: Color = contentColor.copy(alpha = 0.5f)
 
-    val containerColorError: Color = MaterialTheme.colorScheme.error
-    val contentColorError: Color = MaterialTheme.colorScheme.onError
-    val disabledContainerColorError: Color = containerColorError.copy(alpha = 0.5f)
-    val disabledContentColorError: Color = contentColorError.copy(alpha = 0.5f)
-
-    val containerColorSecondary: Color = MaterialTheme.colorScheme.secondary
-    val contentColorSecondary: Color = MaterialTheme.colorScheme.onSecondary
-    val disabledContainerColorSecondary: Color = containerColorSecondary.copy(alpha = 0.5f)
-    val disabledContentColorSecondary: Color = contentColorSecondary.copy(alpha = 0.5f)
-
-    val containerColorErrorSecondary: Color = MaterialTheme.colorScheme.onError
-    val contentColorErrorSecondary: Color = MaterialTheme.colorScheme.error
-    val disabledContainerColorErrorSecondary: Color = containerColorErrorSecondary.copy(alpha = 0.5f)
-    val disabledContentColorErrorSecondary: Color = contentColorErrorSecondary.copy(alpha = 0.5f)
-
     // color selection
-    val colors: ButtonColors = when(buttonClass) {
-        ButtonClass.PRIMARY -> when(buttonStatus) {
-            ButtonStatus.SUCCESS -> ButtonColors(
-                containerColor = containerColor,
-                contentColor = contentColor,
-                disabledContainerColor = disabledContainerColor,
-                disabledContentColor = disabledContentColor,
-            )
-
-            ButtonStatus.ERROR -> ButtonColors(
-                containerColor = containerColorError,
-                contentColor = contentColorError,
-                disabledContainerColor = disabledContainerColorError,
-                disabledContentColor = disabledContentColorError,
-            )
-        }
-
-        ButtonClass.SECONDARY -> when(buttonStatus) {
-            ButtonStatus.SUCCESS -> ButtonColors(
-                containerColor = containerColorSecondary,
-                contentColor = contentColorSecondary,
-                disabledContainerColor = disabledContainerColorSecondary,
-                disabledContentColor = disabledContentColorSecondary,
-            )
-
-            ButtonStatus.ERROR -> ButtonColors(
-                containerColor = containerColorErrorSecondary,
-                contentColor = contentColorErrorSecondary,
-                disabledContainerColor = disabledContainerColorErrorSecondary,
-                disabledContentColor = disabledContentColorErrorSecondary,
-            )
-        }
-    }
+    val colors = ButtonColors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        disabledContainerColor = disabledContainerColor,
+        disabledContentColor = disabledContentColor,
+    )
 
     ElevatedButton(
         onclick,
         enabled = isEnabled,
         colors = colors,
-        modifier = modifier
+        border = when(style.colorFill) {
+            ButtonColorFill.OUTLINE -> BorderStroke(
+                width = 1.dp,
+                color = when(style.type) {
+                    ButtonType.PRIMARY -> MaterialTheme.colorScheme.primary
+                    ButtonType.SECONDARY -> MaterialTheme.colorScheme.secondary
+                    ButtonType.TERTIARY -> MaterialTheme.colorScheme.tertiary
+                    ButtonType.ERROR -> MaterialTheme.colorScheme.error
+                },
+            )
+            ButtonColorFill.FILLED -> null
+        },
+        modifier = modifier,
     ) {
         Text(text = label)
     }
 }
 
+// PRIMARY
+
 @Preview(showBackground = false)
 @Composable
-fun CustomElevatedButtonPreview_EnabledNoError() {
+fun CustomElevatedButtonPreview_PrimaryEnabledFilled() {
     AppTheme {
         CustomElevatedButton(
             label = "Something",
             isEnabled = true,
             onclick = {},
-            buttonStatus = ButtonStatus.SUCCESS,
+            style = ButtonStyle(
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.FILLED,
+            ),
         )
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun CustomElevatedButtonPreview_DisabledNoError() {
+fun CustomElevatedButtonPreview_PrimaryDisabledFilled() {
     AppTheme {
         CustomElevatedButton(
             label = "Something",
             isEnabled = false,
             onclick = {},
-            buttonStatus = ButtonStatus.SUCCESS,
+            style = ButtonStyle(
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.FILLED,
+            ),
         )
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun CustomElevatedButtonPreview_EnabledError() {
+fun CustomElevatedButtonPreview_PrimaryEnabledOutline() {
     AppTheme {
         CustomElevatedButton(
             label = "Something",
             isEnabled = true,
             onclick = {},
-            buttonStatus = ButtonStatus.ERROR,
+            style = ButtonStyle(
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
         )
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun CustomElevatedButtonPreview_DisabledError() {
+fun CustomElevatedButtonPreview_PrimaryDisabledOutline() {
     AppTheme {
         CustomElevatedButton(
             label = "Something",
             isEnabled = false,
             onclick = {},
-            buttonStatus = ButtonStatus.ERROR,
+            style = ButtonStyle(
+                type = ButtonType.PRIMARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
+        )
+    }
+}
+
+// SECONDARY
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_SecondaryEnabledFilled() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = true,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.FILLED,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_SecondaryDisabledFilled() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = false,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.FILLED,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_SecondaryEnabledOutline() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = true,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_SecondaryDisabledOutline() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = false,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
+        )
+    }
+}
+
+// TERTIARY
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_TertiaryEnabledFilled() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = true,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.FILLED,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_TertiaryDisabledFilled() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = false,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.FILLED,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_TertiaryEnabledOutline() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = true,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_TertiaryDisabledOutline() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = false,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.TERTIARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
+        )
+    }
+}
+
+// ERROR
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_ErrorEnabledFilled() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = true,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.FILLED,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_ErrorDisabledFilled() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = false,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.FILLED,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_ErrorEnabledOutline() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = true,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+fun CustomElevatedButtonPreview_ErrorDisabledOutline() {
+    AppTheme {
+        CustomElevatedButton(
+            label = "Something",
+            isEnabled = false,
+            onclick = {},
+            style = ButtonStyle(
+                type = ButtonType.ERROR,
+                colorFill = ButtonColorFill.OUTLINE,
+            ),
         )
     }
 }

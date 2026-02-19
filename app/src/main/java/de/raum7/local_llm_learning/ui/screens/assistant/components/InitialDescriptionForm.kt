@@ -11,6 +11,9 @@ import de.raum7.local_llm_learning.R
 import de.raum7.local_llm_learning.ui.screens.assistant.MIME_TYPES
 import de.raum7.local_llm_learning.ui.screens.assistant.types.AssistantUiStateChange
 import de.raum7.local_llm_learning.ui.screens.assistant.types.InitialDescriptionUiState
+import de.raum7.local_llm_learning.ui.shared.components.ButtonColorFill
+import de.raum7.local_llm_learning.ui.shared.components.ButtonStyle
+import de.raum7.local_llm_learning.ui.shared.components.ButtonType
 import de.raum7.local_llm_learning.ui.shared.components.FileInput
 import de.raum7.local_llm_learning.ui.shared.components.TextInput
 import de.raum7.local_llm_learning.ui.theme.AppTheme
@@ -20,8 +23,6 @@ fun InitialDescriptionForm(
     uiState: InitialDescriptionUiState,
     onChanged: (AssistantUiStateChange) -> Unit,
 ) {
-    val context = LocalContext.current
-
     TextInput(
         title = stringResource(R.string.assistant_prompt),
         placeholder = stringResource(R.string.assistant_prompt_placeholder),
@@ -33,26 +34,23 @@ fun InitialDescriptionForm(
         placeholder = stringResource(R.string.assistant_file_placeholder),
         mimeTypes = MIME_TYPES,
         pathToSelectedFile = uiState.filePath,
-        onFileSelected = { uri ->
-            if (uri != null) {
-                try {
-                    context.contentResolver.takePersistableUriPermission(
-                        uri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    )
-                } catch (_: SecurityException) {
-                    // Wenn der Picker keine persistente Permission liefert, bleibt es bei der temporären Leseberechtigung
-                }
-            }
-
-            onChanged(AssistantUiStateChange(filePath = uri))
+        onFileSelected = { uri -> onChanged(AssistantUiStateChange(filePath = uri)) },
+        buttonStyle = when(uiState.filePath) {
+            null -> ButtonStyle.from(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.FILLED,
+            )
+            else -> ButtonStyle.from(
+                type = ButtonType.SECONDARY,
+                colorFill = ButtonColorFill.OUTLINE,
+            )
         },
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun InitialDescriptionFormPreview_Filled() {
+fun InitialDescriptionFormPreview_Empty() {
     AppTheme {
         Column {
             InitialDescriptionForm(
@@ -68,7 +66,7 @@ fun InitialDescriptionFormPreview_Filled() {
 
 @Preview(showBackground = true)
 @Composable
-fun InitialDescriptionFormPreview_Selected() {
+fun InitialDescriptionFormPreview_Filled() {
     AppTheme {
         Column {
             InitialDescriptionForm(
