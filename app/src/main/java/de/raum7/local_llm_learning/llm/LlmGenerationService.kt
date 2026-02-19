@@ -48,12 +48,12 @@ class LlmGenerationService : LifecycleService() {
     private var isReady = false
 
     private val config = LlmConfig(
-        contextLength = 4096,
+        contextLength = 4096, //4096 | 2062
         threads = 6,
-        temperature = 0.2f,
+        temperature = 0.3f,
         topP = 0.95f,
         seed = 0,
-        maxTokens = 800
+        maxTokens = 1000
     )
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

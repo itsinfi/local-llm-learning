@@ -131,15 +131,21 @@ class AssistantViewModel(
     }
 
     private fun extractJsonObject(raw: String): String {
-        val s = raw.trim()
-        val start = s.indexOf('{')
-        val end = s.lastIndexOf('}')
+        val marker = "<END_JSON>"
+        val trimmed = raw.trim()
+        val beforeMarker = if (trimmed.contains(marker)) {
+            trimmed.substringBefore(marker).trim()
+        } else trimmed
+
+        val start = beforeMarker.indexOf('{')
+        val end = beforeMarker.lastIndexOf('}')
         return if (start >= 0 && end > start) {
-            s.substring(start, end + 1).trim()
+            beforeMarker.substring(start, end + 1).trim()
         } else {
-            s
+            beforeMarker
         }
     }
+
 
     private fun registerReceiver() {
         val filter = IntentFilter(LlmGenerationService.ACTION_RESULT)
@@ -453,15 +459,30 @@ At the very end output exactly the marker <END_JSON>.
         val goal = state.furtherSpecification.goal.trim()
 
         return """
-You are an independent reviewer. The draft is likely wrong.
+You are an independent reviewer. The draft may be wrong.
 
-Rules
-1 Ignore the draft CORRECT label. Determine the correct option yourself from factual correctness.
-2 If none of the four options is fully correct, you MUST rewrite the answers so that exactly one becomes fully correct.
-3 If more than one option is partially correct, you MUST rewrite options so only one is unambiguously correct.
-4 If you are not confident about the factual correctness, replace the entire question with a simpler one you are confident about.
-5 Never use vague answers. Use concrete statements.
-6 Output only the final corrected question in the required format.
+Absolute output constraints
+1 Output ONLY the corrected questions in the exact format below.
+2 Output MUST start with "TITLE:" and MUST contain exactly $expectedCount questions.
+3 Do not output any explanations, notes, headings, or review text.
+4 Do not repeat questions. Each Qn appears exactly once.
+5 At the very end output exactly the marker <END_JSON>.
+
+FORMAT (only allowed lines)
+TITLE: <short title>
+Q1: <question>
+A: <answer>
+B: <answer>
+C: <answer>
+D: <answer>
+CORRECT: <A|B|C|D>
+
+Review rules
+1 Ignore the draft CORRECT label. Determine the correct option yourself.
+2 If none of the four options is fully correct, rewrite the answers so exactly one is fully correct.
+3 If more than one option is partially correct, rewrite options so only one is unambiguously correct.
+4 If you are not confident, replace the entire question with a simpler one you are confident about.
+5 Never use vague answers like "They are different". Each option must be a specific checkable statement.
 
 ${buildSourceMaterialBlock()}
 
@@ -472,32 +493,49 @@ Additional specification: $spec
 Learning goal: $goal
 
 DRAFT INPUT
-""".trimIndent() + "\n" + draft.trim() + "\n\nAt the very end output exactly the marker <END_JSON>."
+${draft.trim()}
+""".trimIndent()
     }
 
     private fun buildPromptJson(expectedCount: Int, validated: String): String {
         return """
-Convert the input questions into valid JSON.
+Convert the input questions into valid JSON for this exact schema.
+
+Target JSON schema (this is the only allowed structure)
+{
+  "title": "string",
+  "questions": [
+    {
+      "question": "string",
+      "answers": [
+        { "text": "string", "correct": true },
+        { "text": "string", "correct": false },
+        { "text": "string", "correct": false },
+        { "text": "string", "correct": false }
+      ]
+    }
+  ]
+}
 
 Absolute output constraints
-1 Output ONLY JSON and then a newline with <END_JSON>.
+1 Output ONLY a single JSON object, then a newline with <END_JSON>.
 2 The first character must be { and the last character before the marker must be }.
-3 Do not output markdown. Do not use triple backticks. Do not add any intro text.
-4 Use double quotes only.
-5 correct must be true or false only.
-6 No trailing commas.
+3 Do not output markdown. Do not output triple backticks. Do not add any other text.
+4 Use only these keys exactly: title, questions, question, answers, text, correct.
+5 Never output keys like TITLE, Q1, A, B, C, D, CORRECT. Do not use uppercase keys.
+6 correct must be a boolean true or false, not a string.
+7 No trailing commas.
+8 questions array length must be exactly $expectedCount.
 
-Strict mapping rules
-1 title is the text after "TITLE:".
-2 question is the text after "Q1:" (or Q<number>: for more questions).
-3 answers are the exact texts after "A:", "B:", "C:", "D:" in this order.
-4 Do not replace answers with placeholders. Copy the actual answer texts.
-5 The CORRECT letter defines which answer has correct true.
-6 questions length must be exactly $expectedCount.
-7 Do not translate. Keep the same language as the input.
-8 Do not include any text outside the JSON except the marker line.
+Mapping rules from the INPUT format
+1 title is the text after TITLE:
+2 For each Qn block
+   question is the text after Qn:
+   answers are the texts after A:, B:, C:, D: in this order
+   set correct true only for the letter in CORRECT:
+3 Copy texts exactly. Do not replace with placeholders.
 
-If any answer text contains a double quote, escape it as \" inside the JSON string.
+If an answer contains a double quote, escape it as \" inside the JSON string.
 
 INPUT
 """.trimIndent() + "\n" + validated.trim() + "\n"
