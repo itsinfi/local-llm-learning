@@ -135,7 +135,7 @@ class QuizViewModel(
         question.trialsSinceLastPresented = 0
         question.rt = elapsed.toDouble() * 0.000000001
         if (question.rt!! <= MAX_RESPONSE_TIME && question.accuracy == 0) {
-            if (question.streak < 3) {
+            if (question.streak < TARGET_STREAK) {
                 question.streak++
             }
 
